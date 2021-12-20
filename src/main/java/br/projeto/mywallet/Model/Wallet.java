@@ -4,11 +4,14 @@
  */
 package br.projeto.mywallet.Model;
 
+import java.util.List;
+
 /**
  *
  * @author wilson
  */
 public class Wallet {
     private Double allMoney;
+    private List<Spend> spends;
     
 }
