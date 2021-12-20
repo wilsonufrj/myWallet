@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Controller;
+package br.projeto.mywallet.Model;
 
 /**
  *
  * @author wilson
  */
-public class SpendController {
-    //Recuperar todos os gastos
+public class Wallet {
+    private Double allMoney;
+    
 }
