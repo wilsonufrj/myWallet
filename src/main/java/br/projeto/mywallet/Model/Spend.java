@@ -5,6 +5,11 @@
 package br.projeto.mywallet.Model;
 
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import lombok.Data;
 
 /**
@@ -13,9 +18,16 @@ import lombok.Data;
  */
 
 @Data
+@Entity
 public class Spend {
+    
+    
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Double value;
-    private Date dia;
+    private String day;
     private String location;
     private String description;
     
