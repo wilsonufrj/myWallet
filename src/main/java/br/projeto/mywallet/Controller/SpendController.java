@@ -5,12 +5,13 @@ import br.projeto.mywallet.repository.SpendRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -21,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/spend")
 public class SpendController {
-    //Recuperar todos os gastos
-    //Fazer um crud dos gastos
     
     @Autowired
     private SpendRepository spendRepository;
@@ -33,22 +32,29 @@ public class SpendController {
     }
     
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED )
-    public Spend addSpend(@RequestBody Spend spend){
-        return spendRepository.save(spend);
+    public ResponseEntity<Spend> addSpend(@RequestBody Spend spend){
+        Spend spendAux =  spendRepository.save(spend);
+        return ResponseEntity.status(HttpStatus.CREATED).body(spendAux);
     }
     
-    //Fazer o READ, UPDATE e DELETE
     
-//    @DeleteMapping(path={"/id"})
-//    public Spend deleteSpend(Long id){
-//        return spendRepository.findById(id)
-//                .map(record-> {
-//                    spendRepository.deleteById(id);
-//                    return Spend;
-//                })
-//                
-//                
-//                
-//    }
+    @GetMapping(path={"/{id}"})
+    public ResponseEntity<Spend> readSpend(@PathVariable Long id){
+        return spendRepository.findById(id)
+                .map(spend ->ResponseEntity.ok().body(spend))
+                .orElse(ResponseEntity.notFound().build());
+    }
+    
+    public ResponseEntity<Spend> updateSpend(@PathVariable Long id, Spend spend){
+        return spendRepository.findBy(id)
+                .map(spendFind->{
+                    
+                    //Atribuir ao atual spend o valor atualizado
+                    
+                   return ResponseEntity.status(HttpStatus.CREATED).body(spend);
+                });
+    }
+    
+    //Fazer o  UPDATE e DELETE
+    
 }
