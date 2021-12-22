@@ -30,5 +30,8 @@ public class Spend {
     private String day;
     private String location;
     private String description;
+    private boolean itMonthly;
+    
+    
     
 }
