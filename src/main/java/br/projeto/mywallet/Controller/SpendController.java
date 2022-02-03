@@ -71,7 +71,7 @@ public class SpendController {
         return spendRepository.findById(id)
                 .map(spendFounded-> {
                     spendRepository.delete(spendFounded);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.ok().body("Gasto excluido");
                 }).orElse(ResponseEntity.notFound().build());
     }
     

@@ -45,12 +45,12 @@ public class GainController {
                 .orElse(ResponseEntity.notFound().build());
     }
     
-    @PutMapping(path={"{/id}"})
+    @PutMapping(path={"/{id}"})
     public ResponseEntity<Gain> updateGain(@PathVariable Long id,@RequestBody Gain gain){
         return gainRepository.findById(id)
                 .map(gainFound ->{
                     gainFound.setValue(gain.getValue());
-                    gainFound.setDia(gain.getDia());
+                    gainFound.setDay(gain.getDay());
                     gainFound.setDescription(gain.getDescription());
                     gainFound.setItMonthly(gain.isItMonthly());
                     
@@ -67,7 +67,7 @@ public class GainController {
         return gainRepository.findById(id)
                 .map(gainFound->{
                     gainRepository.delete(gainFound);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.ok().body("Ganho excluido");
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

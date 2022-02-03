@@ -5,15 +5,24 @@
 package br.projeto.mywallet.Model;
 
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import lombok.Data;
 
 /**
  *
  * @author wilson
  */
+@Data
+@Entity
 public class Wallet {
+    
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private Double allMoney;
-    private List<Spend> spends;
-    private List<Gain> gains;
+
     
 }
