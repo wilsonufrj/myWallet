@@ -1,0 +1,17 @@
+.title{
+    width: 100%;
+    text-align: center;
+}
+
+.adicionar{
+    display: flex;
+    flex-direction: line;
+    justify-content: center;
+}
+
+.adicionar div{
+    margin: 10px;
+}
+
+
+
