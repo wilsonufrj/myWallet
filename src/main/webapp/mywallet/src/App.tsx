@@ -6,6 +6,7 @@ import SideBar from './pages/SideBar/App';
 import "primereact/resources/themes/lara-light-indigo/theme.css";  //theme
 import "primereact/resources/primereact.min.css";                  //core css
 import "primeicons/primeicons.css";     
+import Adding from './pages/Adding/App';
 
 
 function App() {
@@ -14,6 +15,8 @@ function App() {
       <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='sidebar' element={<SideBar/>}/>
+          <Route path='adding' element={<Adding/>}/>
+
       </Routes>
     </BrowserRouter>
   );

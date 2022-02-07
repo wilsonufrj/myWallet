@@ -3,10 +3,11 @@ import "./style.css";
 
 import { Chart } from 'primereact/chart';
 import { Button } from 'primereact/button';
+
 function Home() {
 
     const chartData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','September','October','November','December'],
         datasets: [{
             type: 'line',
             label: 'Dataset 1',
@@ -102,13 +103,18 @@ function Home() {
                         <h2>Adicionar Gastos</h2>
                         <Button icon='pi pi-times' className='p-button-danger'/>
                     </div>
-                    
+                    <div>
+                        <h2>Ver gastos do mês</h2>
+                        <Button icon='pi pi-search' className='p-button-info'/>
+                    </div>
+                    <div>
+                        <h2>Ver ganhos dos mês</h2>
+                        <Button icon='pi pi-search' className='p-button-info'/>
+                    </div>
                 </div>
                 
                 
-                
-                
-                
+
             </div>
             
             
