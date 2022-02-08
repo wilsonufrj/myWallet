@@ -1,6 +1,12 @@
-.form{
-    width: 25%;
-    height: 25%;
-    display: flex;
+.formPosition{
+    display:flex;
     flex-direction: column;
+    gap: 5px 3px;
+}
+
+.teste{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
 }

@@ -3,6 +3,7 @@ import "./style.css";
 
 import { Chart } from 'primereact/chart';
 import { Button } from 'primereact/button';
+import { Link } from "react-router-dom";
 
 function Home() {
 
@@ -96,8 +97,12 @@ function Home() {
                 
                 <div className="adicionar">
                     <div>
-                        <h2>Adicionar Ganho</h2>
-                        <Button icon='pi pi-plus' className='p-button-success'/>
+                        <h2>Adicionar Ganhos</h2>
+                        <Link style={{textDecorationLine:'none'}} to={"/adding"}>
+                            <Button icon='pi pi-plus' className='p-button-success'/>
+                        </Link>
+                        
+                        
                     </div>
                     <div>
                         <h2>Adicionar Gastos</h2>

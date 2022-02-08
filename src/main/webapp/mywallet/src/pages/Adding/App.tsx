@@ -1,10 +1,12 @@
 import {Form} from "../components/form/App";
-
+import './styles.css'
 const Adding=()=>{
     return(
-        <div>
-            <h2>Adding</h2>
-            <Form/>
+        <div style={{ display:"flex" ,alignItems:"center",justifyContent:"center",height:"800px"}}>
+            <div className="formBox">
+                <Form/>
+            </div>
+            
         </div>
     )
 }

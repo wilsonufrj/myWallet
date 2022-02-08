@@ -16,7 +16,6 @@ function App() {
           <Route path='/' element={<Home/>}/>
           <Route path='sidebar' element={<SideBar/>}/>
           <Route path='adding' element={<Adding/>}/>
-
       </Routes>
     </BrowserRouter>
   );
