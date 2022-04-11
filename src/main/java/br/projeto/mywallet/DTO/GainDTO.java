@@ -1,38 +1,24 @@
-package br.projeto.mywallet.Model;
+package br.projeto.mywallet.DTO;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import br.projeto.mywallet.DTO.GainDTO;
+@AllArgsConstructor
+@NoArgsConstructor
 
-/**
- *
- * @author wilson
- */
+public class GainDTO {
 
-@Entity
-@Table(name="gains")
-public class Gain {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double value;
     private String day;
     private String description;
     private boolean itMonthly;
 
-    public Long getId() {
+    public Long getId(){
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Double getValue() {
         return value;
     }
@@ -63,13 +49,5 @@ public class Gain {
 
     public void setItMonthly(boolean itMonthly) {
         this.itMonthly = itMonthly;
-    }
-
-    public GainDTO convertDTO(){
-        return new GainDTO(this.id,
-                            this.value,
-                            this.day,
-                            this.description,
-                            this.itMonthly);
     }
 }

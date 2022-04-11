@@ -15,7 +15,7 @@ import lombok.Data;
  *
  * @author wilson
  */
-@Data
+
 @Entity
 public class Wallet {
     
@@ -23,6 +23,5 @@ public class Wallet {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private Double allMoney;
-
     
 }

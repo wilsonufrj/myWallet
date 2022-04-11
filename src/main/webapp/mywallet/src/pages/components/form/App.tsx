@@ -11,6 +11,7 @@ import { IGanho } from '../../../Data/IGanho';
 
 
 import './style.css'
+import { Link } from 'react-router-dom';
 
 export const Form=()=>{
     const [data,setData] = useState<IGanho>({
@@ -19,7 +20,7 @@ export const Form=()=>{
         description:'',
         isMonthly:false 
     });
-    
+
 
     return(
         <div >
@@ -49,7 +50,9 @@ export const Form=()=>{
                         checked={data.isMonthly} 
                         onChange={(e) => setData({...data,isMonthly:e.value})}/>
                     <Button type='submit' className='p-button-success teste'>Adicionar</Button>
-                    <Button type='submit' className='p-button-danger teste'>Cancelar</Button>  
+                    <Link style={{textDecorationLine:"none"}} to={'/'}>
+                        <Button type='submit' className='p-button-danger teste'>Cancelar</Button>
+                    </Link>
                 </form>
             </Card>
         </div>

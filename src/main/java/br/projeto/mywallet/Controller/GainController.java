@@ -1,8 +1,8 @@
 package br.projeto.mywallet.Controller;
 
 import br.projeto.mywallet.Model.Gain;
-import br.projeto.mywallet.repository.GainRepository;
-import java.util.List;
+import br.projeto.mywallet.Service.IServiceGain;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,53 +23,35 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/gain")
 public class GainController {
-    
+
     @Autowired
-    private GainRepository gainRepository;
+    private IServiceGain gainService;
     
     @GetMapping
-    public List<Gain> allGain(){
-        return gainRepository.findAll();
+    public ResponseEntity allGain(){
+        return ResponseEntity.ok(gainService.allGain());
     }
     
     @PostMapping
-    public ResponseEntity<Gain> addGain(@RequestBody Gain gain){
-        Gain gainAux = gainRepository.save(gain);
-        return ResponseEntity.status(HttpStatus.CREATED).body(gainAux);
+    public ResponseEntity addGain(@RequestBody Gain gain){
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(gainService.addGain(gain));
     }
     
     @GetMapping(path={"/{id}"})
-    public ResponseEntity<Gain> readGain(@PathVariable Long id){
-        return gainRepository.findById(id)
-                .map(gainFound -> ResponseEntity.ok().body(gainFound))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity readGain(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .body(gainService.readGain(id));
     }
     
     @PutMapping(path={"/{id}"})
-    public ResponseEntity<Gain> updateGain(@PathVariable Long id,@RequestBody Gain gain){
-        return gainRepository.findById(id)
-                .map(gainFound ->{
-                    gainFound.setValue(gain.getValue());
-                    gainFound.setDay(gain.getDay());
-                    gainFound.setDescription(gain.getDescription());
-                    gainFound.setItMonthly(gain.isItMonthly());
-                    
-                    Gain update = gainRepository.save(gainFound);
-                    
-                    return ResponseEntity.ok().body(update);
-                    
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity updateGain(@PathVariable Long id,@RequestBody Gain gain){
+        return ResponseEntity.ok(gainService.updateGain(id,gain));
     }
     
     @DeleteMapping(path={"/{id}"})
     public ResponseEntity deleteGain(@PathVariable Long id){
-        return gainRepository.findById(id)
-                .map(gainFound->{
-                    gainRepository.delete(gainFound);
-                    return ResponseEntity.ok().body("Ganho excluido");
-                })
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(gainService.deleteGain(id));
     }
     
 }
