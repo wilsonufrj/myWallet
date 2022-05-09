@@ -3,16 +3,14 @@
     text-align: center;
 }
 
-.adicionar{
-    display: flex;
-    flex-direction: line;
-    justify-content: center;
+.months{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 50px 80px;
 }
 
-.adicionar div{
-    margin: 10px;
-    padding: 10px;
-}
+
+
 
 
 

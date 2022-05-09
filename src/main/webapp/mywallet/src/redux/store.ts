@@ -1,4 +1,4 @@
 import { createStore } from "@reduxjs/toolkit";
-import { gainsReducer } from "./gainsReducer";
+import { gainReducer } from "../reducers/gainReducer";
 
-export const store = createStore(gainsReducer);
+export const store = createStore(gainReducer);

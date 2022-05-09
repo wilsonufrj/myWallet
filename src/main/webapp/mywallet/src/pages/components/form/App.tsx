@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 
 export const Form=()=>{
     const [data,setData] = useState<IGanho>({
+        name:"Wilson",
         value:0,
         day:undefined,
         description:'',
@@ -24,8 +25,7 @@ export const Form=()=>{
 
     return(
         <div >
-            <Card title="Adicionar Ganho" style={{background:"#FFD700"}}>
-                <form action="post" className='formPosition'>
+                <form className='formPosition'>
                     <label htmlFor="valor">Valor</label>
                     <InputNumber inputId='valor'
                         value={data.value}
@@ -49,12 +49,15 @@ export const Form=()=>{
                     <InputSwitch id='isMonthly'
                         checked={data.isMonthly} 
                         onChange={(e) => setData({...data,isMonthly:e.value})}/>
-                    <Button type='submit' className='p-button-success teste'>Adicionar</Button>
+                    <Button type='button'
+                            className='p-button-success teste'
+                            onClick={()=>{
+                                console.log(data)
+                            }}>Adicionar</Button>
                     <Link style={{textDecorationLine:"none"}} to={'/'}>
                         <Button type='submit' className='p-button-danger teste'>Cancelar</Button>
                     </Link>
                 </form>
-            </Card>
         </div>
     )
 }
