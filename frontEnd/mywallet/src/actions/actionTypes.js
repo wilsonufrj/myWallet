@@ -1,2 +1,3 @@
-export const ADD_GAIN = 'ADD_GAIN';
-export const ADD_SPEND = 'ADD_ESPEND';
+export const addTransaction = {
+    type:'ADD_TRANSACTION'
+};

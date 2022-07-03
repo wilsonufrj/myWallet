@@ -3,19 +3,19 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Badge } from 'primereact/badge';
 
-interface ITransaction{
-    name: String,
-    value:string|number,
-    date:Date,
-    creditDebit:string,
-    description:string,
-    status:string,
-    typeTransaction:string
-}
+// interface ITransaction{
+//     name: String,
+//     value:string|number,
+//     date:Date,
+//     creditDebit:string,
+//     description:string,
+//     status:string,
+//     typeTransaction:string
+// }
 
 const DataTableDemo = () => {
 
-    const [products, setProducts] = useState<Array<ITransaction>>([
+    const [products, setProducts] = useState([
         {
             "name": "Jocimar",
             "value":37.90,
@@ -37,20 +37,20 @@ const DataTableDemo = () => {
         }
     ])
 
-    const priceBodyTemplate=(data:ITransaction)=>{
+    const priceBodyTemplate=(data)=>{
         if(data){
             return data.value.toLocaleString('pt-BR',{style:"currency" ,currency:"BRL"});
         }
     }
 
-    const statusBodyTemplate = (data:ITransaction) => {
+    const statusBodyTemplate = (data) => {
         if(data.status == "paid"){
             return(<Badge value={data.status} severity="success"></Badge>)
         }
         return(<Badge value={data.status} severity="danger"></Badge>)
     }
 
-    const countryBodyTemplate = (rowData:ITransaction) => {
+    const countryBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
                 <img alt="flag" src="./fotoTeste.png" 
@@ -61,11 +61,11 @@ const DataTableDemo = () => {
         );
     }
     
-    const dateBodyTemplate=(data:ITransaction)=>{
+    const dateBodyTemplate=(data)=>{
         return formatDate(data.date)
     }
 
-    const formatDate = (value:Date) => {
+    const formatDate = (value) => {
         return value.toLocaleDateString('en-US', {
             day: '2-digit',
             month: '2-digit',
