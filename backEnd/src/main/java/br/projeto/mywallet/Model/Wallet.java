@@ -19,22 +19,22 @@ import javax.persistence.Table;
  *
  * @author wilson
  */
-//
-//@Entity
-//@Table(name="wallet")
-//public class Wallet {
-//    
-//    @Id
-//    @GeneratedValue(strategy=GenerationType.IDENTITY)
-//    private Long id;
-//    private Double allMoney;
-//
-//    @OneToMany(
-//            mappedBy = "wallet",
-//            targetEntity = Transaction.class,
-//            cascade = CascadeType.ALL
-//    )
-//    private List<Transaction> transactions;
-//
-//    
-//}
+
+@Entity
+@Table(name="wallet")
+public class Wallet {
+    
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+    private Double allMoney;
+
+    @OneToMany(
+            mappedBy = "wallet",
+            targetEntity = Transaction.class,
+            cascade = CascadeType.ALL
+    )
+    private List<Transaction> transactions;
+
+    
+}
