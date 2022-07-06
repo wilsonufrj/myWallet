@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'primereact/button';
-import { Link} from 'react-router-dom';
+import { Link, useLocation} from 'react-router-dom';
 import "./style.css";
 import { Card } from 'primereact/card';
 import { Chart } from 'primereact/chart';
@@ -14,29 +14,33 @@ import { InputSwitch } from 'primereact/inputswitch';
 
 import { Dropdown } from 'primereact/dropdown';
 
-
-import axios from "axios";
 import { StatusTransaction } from '../../enums/typeStatusTransaction';
 import { TypeTransaction } from '../../enums/typeTransaction';
 // import { ITransactionDTO } from '../../Data/ITransaction';
 
 import {connect} from 'react-redux'
 import { Action } from 'redux';
-import { addTransaction } from '../../actions/actionTypes';
+import { addTransaction, loadData } from '../../actions/actionTypes';
+import {walletGetData} from '../../actions/actionWallet';
 
 
-function Month({value,addTransaction}) {
+function Month(props) {
 
     const [data,setData] = useState({
         name:"Wilson",
         value:0,
         day:undefined,
-        typeTransaction:null,
-        statusTransaction:null,
+        // typeTransaction:null,
+        // statusTransaction:null,
         description:'',
-        isMonthly:false 
     });
 
+    const dataWallet = useLocation().state;
+
+    useEffect(()=>{
+        console.log(props)
+        console.log(dataWallet)
+    },[props])
 
     const statusTransaction = [
         {name:"Pago", code:StatusTransaction.PAID},
@@ -47,15 +51,6 @@ function Month({value,addTransaction}) {
         {name:"Ganho", code:TypeTransaction.GAIN},
         {name:"Gasto", code:TypeTransaction.SPEND}
     ]
-    
-    const postRequest = ()=>{
-        console.log(data)
-        axios.post("http://localhost:8080/transaction",data)
-        .then((e)=>{
-            console.log("Salvo no banco");
-            console.log(e.data);
-        });
-    }
 
     const [chartData] = useState({
         labels: ['Caio', 'Mãe', 'Pai'],
@@ -109,12 +104,7 @@ function Month({value,addTransaction}) {
                     <label htmlFor="valor">Valor</label>
                     <InputNumber inputId='valor'
                         value={data.value}
-                        onValueChange={e=>{
-                            if(!e.target.value)
-                               setData({...data,value:e.value})
-                            else
-                                setData(data)
-                        }}
+                        onValueChange={e=>setData({...data,value:e.value})}
                         mode="decimal"
                         minFractionDigits={2} />
                     
@@ -125,7 +115,7 @@ function Month({value,addTransaction}) {
                         dateFormat="dd/mm/yy"
                         mask="99/99/9999"/>
 
-                    <div>
+                    {/* <div>
                     <label htmlFor="typeTransaction">Tipo de Transação</label>
                     <Dropdown value={data.typeTransaction}
                         options={statusTransaction}
@@ -142,22 +132,28 @@ function Month({value,addTransaction}) {
                         optionLabel="name"
                         placeholder="Status" />
                     
-                    </div>
+                    </div> */}
                     <label htmlFor='description'>Descrição</label>
                     <InputText id='description'
                         value={data.description}
                         onChange={(e) => setData({...data,description:e.target.value})}/>
                     
                 </form>
-                <Button className='buttonForm' onClick={addTransaction}>Salvar</Button>
-                        </Card>
+                        <Button className='buttonForm' onClick={()=>{
+                            //console.log(data)
+                            props.walletGetData(data)
+                            }}>Salvar</Button>
+                </Card>
                     </div>
-                    <div>
-                        <h1>{value}</h1>
-                    </div>
+                    {<div>
+                        <h1>{props.loading?"LOADING":dataWallet.allMoney}</h1>
+                    </div>}
                 </div>
                 </div>
-               
+                {/* <Button className='buttonForm' onClick={()=>{
+                            console.log(props)
+                    
+                            }}>Ver status</Button> */}
                 <div>
                 <DataTableDemo/>
                 </div>
@@ -166,18 +162,18 @@ function Month({value,addTransaction}) {
     )
 }
 
-const mapStatetoProps =(state)=>{
-    return{
-        value:state.value
-    }
+// const mapStatetoProps =(state)=>{
+//     return{
+//         allMoney:state.allMoney,
+//         loading:state.loading,
+//         listTransactions:state.listTransactions
+//     }
+// }
+
+const mapDispacthToProps = {
+
+    addTransaction,
+    
 }
 
-const mapDispacthToProps = (dispatch)=>{
-    return {
-        addTransaction:()=>dispatch(addTransaction)
-    }
-}
-
-export default connect(
-                    mapStatetoProps,
-                    mapDispacthToProps)(Month);
+export default connect(null,mapDispacthToProps)(Month);
