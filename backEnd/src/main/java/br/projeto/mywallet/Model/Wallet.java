@@ -4,6 +4,9 @@
  */
 package br.projeto.mywallet.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import lombok.Data;
 
 
 
@@ -22,18 +26,21 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="wallet")
-public class Wallet {
+@Data
+public class Wallet implements Serializable {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private Double allMoney;
+    private String name;
 
     @OneToMany(
             mappedBy = "wallet",
             targetEntity = Transaction.class,
             cascade = CascadeType.ALL
     )
+    @JsonManagedReference
     private List<Transaction> transactions;
 
     

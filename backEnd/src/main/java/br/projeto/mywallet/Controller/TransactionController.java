@@ -28,15 +28,7 @@ public class TransactionController {
     @Autowired
     ITransactionService serviceTransaction;
     
-    @PostMapping
-    public ResponseEntity addTransaction(@RequestBody TransactionDTO transactionDTO){
-        return ResponseEntity.ok(serviceTransaction.addTransaction(transactionDTO));
-    }
-    
-    @GetMapping
-    public ResponseEntity getAllTransaction(){
-        return ResponseEntity.ok(serviceTransaction.getAllTransaction());
-    }
+
     
     @GetMapping(path="/{id}")
     public ResponseEntity getTransaction(@PathVariable Long id){

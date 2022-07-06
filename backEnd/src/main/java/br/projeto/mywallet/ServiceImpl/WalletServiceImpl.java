@@ -1,17 +1,22 @@
 package br.projeto.mywallet.ServiceImpl;
 
 
+import br.projeto.mywallet.DTO.TransactionDTO;
 import br.projeto.mywallet.DTO.WalletDTO;
 import br.projeto.mywallet.Model.Transaction;
 
 import br.projeto.mywallet.Model.Wallet;
+import br.projeto.mywallet.Service.ITransactionService;
 
 import br.projeto.mywallet.Service.IWalletService;
+import br.projeto.mywallet.repository.TransactionRepository;
 import br.projeto.mywallet.repository.WalletRepository;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 
 @Service
@@ -20,15 +25,17 @@ public class WalletServiceImpl implements IWalletService {
     @Autowired
     private WalletRepository walletRepository;
     
-     @Autowired
-    private ModelMapper modelMapper; 
     
+    @Autowired
+    private ITransactionService transactionService;
+    
+    @Autowired
+    private ModelMapper modelMapper; 
+     
 
     @Override
-    public WalletDTO createWallet(Wallet wallet) {
-        walletRepository.save(wallet);
-        return this.toWalletDTO(wallet);
-                 
+    public WalletDTO createWallet(WalletDTO walletDTO) {
+       return this.toWalletDTO(walletRepository.save(this.toWallet(walletDTO)));     
     }
 
     @Override
@@ -37,30 +44,41 @@ public class WalletServiceImpl implements IWalletService {
                 .map(wallet->this.toWalletDTO(wallet))
                 .get();
     }
-//
-//    @Override
-//    public List<WalletDTO> allWallets() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-//
-//    @Override
-//    public String deleteWallet(Long id) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-//
-//    @Override
-//    public WalletDTO updateWallet(Long id, Wallet wallet) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
 
     @Override
-    public WalletDTO addTransaction(Long id,Transaction transaction) {
-        WalletDTO auxWallet = this.getWallet(id);
-        auxWallet.getTransactions().add(transaction);
-        walletRepository.save(this.toWallet(auxWallet));
-        return auxWallet;
+    public String deleteWallet(Long id) {
+        walletRepository.deleteById(id);
+        return "ok";
     }
 
+
+    @Override
+    public WalletDTO addTransactionInWallet(Long id,TransactionDTO transactionDTO) {
+        
+        Wallet auxWallet = walletRepository.findById(id).get();
+        Transaction auxTransaction = transactionService.toTransaction(transactionDTO);
+        
+        auxWallet.setAllMoney(auxWallet.getAllMoney()+auxTransaction.getValue());
+        auxTransaction.setWallet(auxWallet);
+        
+        List<Transaction> listTransaction = auxWallet.getTransactions(); 
+        listTransaction.add(auxTransaction);
+        
+        auxWallet.setTransactions(listTransaction);
+        
+        walletRepository.save(auxWallet);
+        
+        return this.toWalletDTO(auxWallet);
+        
+    }
+    
+    @Override
+    public List<WalletDTO> getAllWallets() {
+        return walletRepository.findAll()
+                .stream()
+                .map(wallet->this.toWalletDTO(wallet))
+                .collect(Collectors.toList());
+    }
 
     private WalletDTO toWalletDTO (Wallet wallet){
         return modelMapper.map(wallet,WalletDTO.class);
@@ -69,5 +87,7 @@ public class WalletServiceImpl implements IWalletService {
     private Wallet toWallet( WalletDTO walletDTO){
         return modelMapper.map(walletDTO, Wallet.class);
     }
-   
+
+    
+ 
 }

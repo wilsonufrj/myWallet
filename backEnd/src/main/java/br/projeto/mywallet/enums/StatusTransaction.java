@@ -10,5 +10,5 @@ package br.projeto.mywallet.enums;
  */
 public enum StatusTransaction {
     PAID,
-    NOTPAID;
+    NOPAID;
 }

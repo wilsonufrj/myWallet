@@ -18,6 +18,7 @@ import java.util.List;
 public class WalletDTO {
 
     private Long id;
+    private String name;
     private Double allMoney;
     private List<Transaction> transactions;
     
