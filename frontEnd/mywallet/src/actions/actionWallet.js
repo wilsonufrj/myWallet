@@ -29,6 +29,13 @@ export const sucessCreateNewWallet = (data)=>{
     }
 } 
 
+export const sucessDeleteWallet = (data)=>{
+    return{
+        type:'SUCESS_DELETE_WALLET',
+        data
+    }
+}
+
 export const walletGetData = ()=>{
     return dispatch=>{
         dispatch(loadingData())
@@ -50,16 +57,26 @@ export const getAllWallets = ()=>{
     }
 }
 
-export const createWallet = ()=>{
+export const createWallet = (nameWallet)=>{
     return dispatch=>{
         dispatch(loadingData())
         axios.post(http,{
-            name:"Junho",
+            name:nameWallet,
             allMoney:0,
             transactions:[]
         })
         .then(response=>{
             dispatch(sucessCreateNewWallet(response.data))
+        })
+    }
+}
+
+export const deleteWallet = (id)=>{
+    return dispatch=>{
+        dispatch(loadingData())
+        axios.delete(http+`/${id}`)
+        .then(response =>{
+            dispatch(sucessDeleteWallet(response.data))
         })
     }
 }

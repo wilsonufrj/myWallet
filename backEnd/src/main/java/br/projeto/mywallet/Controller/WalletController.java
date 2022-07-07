@@ -56,7 +56,7 @@ public class WalletController {
         return ResponseEntity.ok(walletService.addTransactionInWallet(id,transactionDTO));
     }
     
-    @DeleteMapping
+    @DeleteMapping(path="/{id}")
     public ResponseEntity deleteWallet(@PathVariable Long id){
         return ResponseEntity.ok(walletService.deleteWallet(id));
     }

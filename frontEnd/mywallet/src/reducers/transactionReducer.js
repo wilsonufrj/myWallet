@@ -2,13 +2,10 @@
 // import { ITransactionDTO} from "../Data/ITransaction";
 
 const initialState = {
-    name:"Wilson",
-    value: 4000,
-    day:undefined,
-    // typeTransaction:null,
-    // statusTransaction:null,
-    description:" ",
-    loading:false
+    name:"",
+    allMoney: 0.0,
+    loading:false,
+    listTransaction:[]
 }
 
 export const transactionReducer = (state = initialState,action)=>{
@@ -16,7 +13,9 @@ export const transactionReducer = (state = initialState,action)=>{
         case 'ADD_TRANSACTION':{
             return {
                 ...state,
-                value: state.value + action.value,
+                name:action.data.name,
+                allMoney:action.data.allMoney,
+                listTransaction:[...action.data.transactions],
                 loading:false
             }
         }

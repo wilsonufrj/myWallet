@@ -1,5 +1,6 @@
 import React from 'react';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+
 import Home from './pages/Home/App';
 import Month from './pages/Month/App';
 
@@ -9,17 +10,20 @@ import "primeicons/primeicons.css";
 
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
+import HistoricalTransaction from './pages/HistoricalTransaction/App';
+import Sidebar from './pages/components/Sidebar/App';
 
 
 function App() {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <Router>
         <Routes>
             <Route path='/' element={<Home/>}/>
-            <Route path='month' element={<Month/>}/>
+            <Route path='month/:monthId' element={<Month/>}/>
+            <Route path='historical/:monthId' element={<HistoricalTransaction/>}/>
         </Routes>
-      </BrowserRouter>
+      </Router>
     </Provider>
   );
 }

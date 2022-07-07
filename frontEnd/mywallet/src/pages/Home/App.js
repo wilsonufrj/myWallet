@@ -7,25 +7,29 @@ import { Button } from "primereact/button";
 import { Dialog } from 'primereact/dialog';
 
 import {connect} from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { createWallet, getAllWallets } from "../../actions/actionWallet";
+import { createWallet, getAllWallets, deleteWallet } from "../../actions/actionWallet";
 import { useEffect, useState } from "react";
+import { InputText } from "primereact/inputtext";
 
 
 
 function Home(props) {
     const [displayResponsive, setDisplayResponsive] = useState(false);
     const [position, setPosition] = useState('center');
+    const [nameNewWallet,setNameNewWallet] = useState({name:""})
+
     useEffect(()=>{
        props.getAllWallets()
     },[])
 
-    
     const renderFooter = (name) => {
         return (
             <div>
-                <Button label="No" icon="pi pi-times" onClick={() => onHide(name)} className="p-button-text" />
-                <Button label="Yes" icon="pi pi-check" onClick={() => onHide(name)} autoFocus />
+                <Button label="Cancelar" icon="pi pi-times" onClick={() => onHide(name)} className="p-button-text" />
+                <Button label="Salvar" icon="pi pi-check" onClick={() =>{
+                     onHide(name)
+                     props.createWallet(nameNewWallet)
+                     }} autoFocus />
             </div>
         );
     }
@@ -47,28 +51,22 @@ function Home(props) {
     return(
         <div>
             <h1 className="title">Bem vindo ao myWallet</h1>
-            <div className="mainContainer">
-                <Button onClick={()=>
-                {
-                    onClick('displayResponsive')
-                    // props.createWallet()
-                }
-                }>Nova Carteira</Button>
-                <Dialog header="Header" visible={displayResponsive} onHide={() => onHide('displayResponsive')} breakpoints={{'960px': '75vw'}} style={{width: '50vw'}} footer={renderFooter('displayResponsive')}>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <div className="mainContainerHome">
+                <Button onClick={()=> onClick('displayResponsive')}>Nova Carteira</Button>
+                <Dialog header="Nova Carteira" visible={displayResponsive} onHide={() => onHide('displayResponsive')} breakpoints={{'960px': '75vw'}} style={{width: '50vw'}} footer={renderFooter('displayResponsive')}>
+                    <InputText placeholder="Name" htmlFor="nawWallet" onChange={(e)=>setNameNewWallet(e.target.value)}/>
                 </Dialog>
                 <div  className="months">
                     {
                         props.loading?"LOADING":
                         props.listWallet.map((value,index)=>{
                             return(
-                                <Card key={index} title={value.name}>
-                                    <Link to="/month/" state={value}>
-                                        <Button> Acessar</Button>
+                                <Card key={index} title={value.name} subTitle={value.allMoney}>
+                                    <Link to={`/month/${value.id}`}>
+                                        <Button>Acessar</Button>
                                     </Link>
+                                    {/* Deixar o botao escondido por enquanto */}
+                                    {/* <Button icon="pi pi-trash" iconPos="right" label="Deletar" className="p-button-danger" onClick={()=>props.deleteWallet(value.id)}></Button> */}
                                 </Card>
                             )
                         })
@@ -81,14 +79,15 @@ function Home(props) {
 
 const mapStateProps = (state)=>{
     return{
-        listWallet:state.listWallet,
-        loading:state.loading
+        listWallet:state.walletReducer.listWallet,
+        loading:state.walletReducer.loading
     }
 }
 
 const mapDispacthToProps  = {
         getAllWallets,
-        createWallet
+        createWallet,
+        deleteWallet
 }
 
 export default connect(mapStateProps,mapDispacthToProps)(Home);

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const http = 'http://localhost:8080/transaction'
+const http = 'http://localhost:8080/wallet'
 
 export const loadingData = ()=>{
     return{
@@ -12,7 +12,7 @@ export const loadingData = ()=>{
 export const loadingSucessTransaction = (data)=>{
     return{
         type:'ADD_TRANSACTION',
-        value:  data.value,
+        data,
         loading:false
     }
 }
@@ -25,20 +25,20 @@ export const errorTransaction=(error)=>{
     }
 }
 
-export const loadData =()=>{
+export const loadData =(id)=>{
     return dispatch =>{
         dispatch(loadingData)
-        axios.get(http)
+        axios.get(http+`/${id}`)
                 .then((response)=>{
                     dispatch(loadingSucessTransaction(response.data))
                 })
     }
 }
 
-export const addTransaction = (data)=>{
+export const addTransaction = (id,data)=>{
     return dispatch=>{
         dispatch(loadingData)
-        axios.post(http,data)
+        axios.post(http+`/transaction/${id}`,data)
         .then(response=>{
             dispatch(loadingSucessTransaction(response.data))
         })

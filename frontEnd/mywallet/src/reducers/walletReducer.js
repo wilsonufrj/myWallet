@@ -32,7 +32,12 @@ const inicial_state = {
                 loading:false,
                 listWallet:[...state.listWallet,action.data]
             }
-
+        case('SUCESS_DELETE_WALLET'):
+            return{
+                ...state,
+                loading:false,
+                listWallet:[action.data]
+            }
         default:
             return state;
     }
