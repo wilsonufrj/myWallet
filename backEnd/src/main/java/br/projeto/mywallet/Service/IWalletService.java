@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Service;
 
+import br.projeto.mywallet.DTO.HomeDTO;
 import br.projeto.mywallet.DTO.TransactionDTO;
 import br.projeto.mywallet.DTO.WalletDTO;
 import br.projeto.mywallet.Model.Transaction;
@@ -11,10 +12,12 @@ import java.util.List;
 
 @Service
 public interface IWalletService {
-    public WalletDTO createWallet(WalletDTO walletDTO);
-    public List<WalletDTO> getAllWallets();
-    public WalletDTO getWallet(Long id);
-    public String deleteWallet(Long id);
+    HomeDTO createWallet(WalletDTO walletDTO);
+    List<HomeDTO> getAllWallets();
+    WalletDTO getWallet(Long id);
+    void deleteWallet(Long id);
 
-    public WalletDTO addTransactionInWallet(Long id,TransactionDTO transactionDTO);
+    WalletDTO addTransactionInWallet(Long id,TransactionDTO transactionDTO);
+    //WalletDTO editTransactionInWallet(Long id,TransactionDTO transactionDTO);
+    
 }

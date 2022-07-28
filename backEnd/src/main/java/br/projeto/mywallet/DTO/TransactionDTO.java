@@ -1,6 +1,7 @@
 package br.projeto.mywallet.DTO;
 
 import br.projeto.mywallet.Model.Wallet;
+import br.projeto.mywallet.enums.CreditOrDebit;
 import br.projeto.mywallet.enums.StatusTransaction;
 import br.projeto.mywallet.enums.TypesTransaction;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,9 +27,15 @@ public class TransactionDTO {
     @JsonProperty("description")
     private String description;
     
-    @JsonProperty("id_wallet")
-    private Wallet id_wallet;
-    
+//    @JsonProperty("id_wallet")
+//    private Wallet id_wallet;
+//    
+//    @JsonProperty("typeTransaction")
 //    private TypesTransaction typeTransaction;
+//    
+//    @JsonProperty("statusTransaction")
 //    private StatusTransaction statusTransaction;
+//    
+//    @JsonProperty("creditOrDebit")
+//    private CreditOrDebit creditOrDebit;
 }

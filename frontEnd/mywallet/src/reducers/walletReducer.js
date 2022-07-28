@@ -11,14 +11,7 @@ const inicial_state = {
                 ...state,
                 loading:true
             }
-        case('SUCCESS_WALLET_DATA'):
-            return{
-                ...state,
-                loading:false,
-                allMoney:action.payload.allMoney,
-                listTransactions:action.payload.transactions
             
-        }
         case('SUCESS_ALL_WALLETS'):
             return{
                 ...state,
@@ -32,7 +25,7 @@ const inicial_state = {
                 loading:false,
                 listWallet:[...state.listWallet,action.data]
             }
-        case('SUCESS_DELETE_WALLET'):
+        case('SUCESS_DELETE_WALLET'): //Eh necessario atualizar a lista toda 
             return{
                 ...state,
                 loading:false,

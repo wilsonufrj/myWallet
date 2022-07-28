@@ -28,7 +28,6 @@ public class TransactionController {
     @Autowired
     ITransactionService serviceTransaction;
     
-
     
     @GetMapping(path="/{id}")
     public ResponseEntity getTransaction(@PathVariable Long id){
@@ -37,12 +36,14 @@ public class TransactionController {
     
     @PutMapping(path="/{id}")
     public ResponseEntity editTransaction(@PathVariable Long id, @RequestBody TransactionDTO transactionDTO){
-        return ResponseEntity.ok(serviceTransaction.editTransaction(id, transactionDTO));
+        serviceTransaction.editTransaction(id, transactionDTO);
+        return ResponseEntity.ok().build();
     }
     
     @DeleteMapping(path="/{id}")
     public ResponseEntity deleteTransaction(@PathVariable Long id){
-        return ResponseEntity.ok(serviceTransaction.removeTransaction(id));
+        serviceTransaction.removeTransaction(id);
+        return ResponseEntity.ok().build();
     }
     
 }

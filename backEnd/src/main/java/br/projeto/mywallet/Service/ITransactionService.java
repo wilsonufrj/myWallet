@@ -12,7 +12,7 @@ public interface ITransactionService {
     
     public TransactionDTO getTransaction(Long id);
     public TransactionDTO editTransaction(Long id, TransactionDTO transactionDTO);
-    public String removeTransaction(Long id);
+    public void removeTransaction(Long id);
     
     
     public Transaction toTransaction(TransactionDTO transactionDTO);

@@ -26,7 +26,6 @@ import lombok.Data;
 
 @Entity
 @Table(name="wallet")
-@Data
 public class Wallet implements Serializable {
     
     @Id
@@ -44,4 +43,48 @@ public class Wallet implements Serializable {
     private List<Transaction> transactions;
 
     
+     public Double getAllMoney() {
+        Double total = 0.0;
+        
+        for(Transaction transaction:this.getTransactions()){
+            total+=transaction.getValue();
+        }
+        
+        allMoney = total;
+        
+        return allMoney;
+    }
+
+    public void setAllMoney(Double allMoney) {
+        this.allMoney = allMoney;
+    }
+     
+     
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+     
+     
+     
 }

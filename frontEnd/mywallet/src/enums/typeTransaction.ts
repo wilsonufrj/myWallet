@@ -1,4 +1,4 @@
-export enum TypeTransaction{
+export enum TypesTransaction{
     GAIN,
     SPEND
 }

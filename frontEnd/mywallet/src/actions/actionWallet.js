@@ -2,18 +2,12 @@ import axios from "axios"
 
 const http = 'http://localhost:8080/wallet'
 
-export const loadingData=()=>{
+export const loadingWallet=()=>{
     return{
         type:'LOADING_WALLET'
     }
 }
 
-export const sucessWalletData=(data)=>{
-    return{
-        type:'SUCCESS_WALLET_DATA',
-        data
-    }
-}
 
 export const sucessAllWallets = (data)=>{
     return{
@@ -36,20 +30,10 @@ export const sucessDeleteWallet = (data)=>{
     }
 }
 
-export const walletGetData = ()=>{
-    return dispatch=>{
-        dispatch(loadingData())
-        axios.get(http+'/5')
-        .then(reponse=>{
-            dispatch(sucessWalletData(reponse.data));
-        })
-    }
-}
-
 
 export const getAllWallets = ()=>{
     return dispatch=>{
-        dispatch(loadingData())
+        dispatch(loadingWallet)
         axios.get(http)
         .then(response=>{
             dispatch(sucessAllWallets(response.data))
@@ -59,7 +43,7 @@ export const getAllWallets = ()=>{
 
 export const createWallet = (nameWallet)=>{
     return dispatch=>{
-        dispatch(loadingData())
+        dispatch(loadingWallet)
         axios.post(http,{
             name:nameWallet,
             allMoney:0,
@@ -73,7 +57,7 @@ export const createWallet = (nameWallet)=>{
 
 export const deleteWallet = (id)=>{
     return dispatch=>{
-        dispatch(loadingData())
+        dispatch(loadingWallet)
         axios.delete(http+`/${id}`)
         .then(response =>{
             dispatch(sucessDeleteWallet(response.data))

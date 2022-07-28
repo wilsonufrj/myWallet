@@ -5,7 +5,8 @@ import { Card } from 'primereact/card';
 // import { ITransactionDTO } from '../../Data/ITransaction';
 
 import {connect} from 'react-redux'
-import { loadData } from '../../actions/actionTransaction';
+import { getWalletData } from '../../actions/actionMonth';
+
 import Sidebar from '../components/Sidebar/App';
 import ChartPie from '../components/chartPie/App'
 import ChartGraph from '../components/chartGraph/App';
@@ -16,8 +17,8 @@ function Month(props) {
     const idURL = useParams()
 
     useEffect(()=>{
-        props.loadData(idURL.monthId)
-    },[])
+        props.getWalletData(idURL.monthId)
+    },[idURL])
 
 
     return(
@@ -60,17 +61,16 @@ function Month(props) {
     )
 }
 
-const mapStatetoProps =(state)=>{
+const mapStateProps =(state)=>{
     return{
-        allMoney:state.transactionReducer.allMoney,
-        loading:state.transactionReducer.loading,
-        listTransaction:state.transactionReducer.listTransaction,
-        nameWallet:state.transactionReducer.name
+        allMoney:state.monthReducer.allMoney,
+        loading:state.monthReducer.loading,
+        nameWallet:state.monthReducer.name
     }
 }
 
 const mapDispacthToProps = {
-    loadData,
+   getWalletData,
 }
 
-export default connect(mapStatetoProps,mapDispacthToProps)(Month);
+export default connect(mapStateProps,mapDispacthToProps)(Month);

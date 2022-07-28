@@ -1,60 +1,19 @@
 import { Button } from 'primereact/button';
 import { PanelMenu } from 'primereact/panelmenu';
+import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { SideBarData } from '../utils/ListToSidebar';
+import { getAllWallets } from '../../../actions/actionWallet';
 import './style.css'
 
-function Sidebar(){
-    const items = [
-        {
-            label:'Junho',
-            items:[
-                {
-                    label:'Overview',
-                    id:17,
-                    icon:'pi pi-fw pi-trash',
-                    template: (item, options) => {
-                        
-                        return(              
-                                <Link to={`/month/17`}>
-                                    <div id="testeLabel">
-                                        <span className='pi pi-chart-bar'></span>
-                                        <span>Overview</span>
-                                    </div>
-                                </Link>
-                        )
-                    }
-                },
-                {
-                    label:'Historico Transaction',
-                    icon:'pi pi-fw pi-external-link',
-                    url:'/historical/17',
-                    template: (item, options) => {
-                        return(              
-                            <Link to={`/historical/17`}>
-                                <div id="testeLabel">
-                                    <span className='pi pi-fw pi-external-link'></span>
-                                    <span>Historical</span>
-                                </div>
-                            </Link>
-                    )
-                    }
-                }
-            ]
-        }
-    ];
+function Sidebar(props){
 
-    const RedirectTeste = (id)=>{
-        return(
-            <>
-                <Link to={`/historical/${id}`}>
-                    <li className='p-menuitem'>
-                        <span className='p-menuitem-icon pi pi-fww pi-trah'></span>
-                        <span className='p-menuitem-text'>Overview</span>
-                    </li>
-                </Link>
-            </>
-        )
-    }
+    const [listWallet,setListWallet] = useState([])
+
+     useEffect(()=>{
+        setListWallet(SideBarData(props.listWallet))
+    },[])
 
     return(
         <div className="sidebar">
@@ -69,11 +28,26 @@ function Sidebar(){
                 <Button> Voltar</Button>
             </Link>
             <div className='listMonths'>
-                 <PanelMenu model={items}/>
+                {props.loading?
+                    'LOADING':
+                    <PanelMenu model={listWallet}/>
+                }
+                 
             </div>
             
         </div>
     )
 }
 
-export default Sidebar;
+const mapStateProps = (state)=>{
+    return({
+        listWallet: state.walletReducer.listWallet,
+        loading: state.walletReducer.loading
+    })
+}
+
+const mapDispacthToProps = {
+    getAllWallets,
+}
+
+export default connect(mapStateProps,mapDispacthToProps)(Sidebar);

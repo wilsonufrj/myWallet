@@ -33,6 +33,7 @@ function Home(props) {
             </div>
         );
     }
+    
     const onHide = (name) => {
         dialogFuncMap[`${name}`](false);
     }

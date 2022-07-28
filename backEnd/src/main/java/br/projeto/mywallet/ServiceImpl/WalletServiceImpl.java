@@ -1,6 +1,7 @@
 package br.projeto.mywallet.ServiceImpl;
 
 
+import br.projeto.mywallet.DTO.HomeDTO;
 import br.projeto.mywallet.DTO.TransactionDTO;
 import br.projeto.mywallet.DTO.WalletDTO;
 import br.projeto.mywallet.Model.Transaction;
@@ -34,8 +35,8 @@ public class WalletServiceImpl implements IWalletService {
      
 
     @Override
-    public WalletDTO createWallet(WalletDTO walletDTO) {
-       return this.toWalletDTO(walletRepository.save(this.toWallet(walletDTO)));     
+    public HomeDTO createWallet(WalletDTO walletDTO) {
+       return this.toHomeDTO(walletRepository.save(this.toWallet(walletDTO)));     
     }
 
     @Override
@@ -46,9 +47,8 @@ public class WalletServiceImpl implements IWalletService {
     }
 
     @Override
-    public String deleteWallet(Long id) {
+    public void deleteWallet(Long id) {
         walletRepository.deleteById(id);
-        return "ok";
     }
 
 
@@ -71,15 +71,19 @@ public class WalletServiceImpl implements IWalletService {
         return this.toWalletDTO(auxWallet);
         
     }
-    
+   
     @Override
-    public List<WalletDTO> getAllWallets() {
+    public List<HomeDTO> getAllWallets() {
         return walletRepository.findAll()
                 .stream()
-                .map(wallet->this.toWalletDTO(wallet))
+                .map(wallet->this.toHomeDTO(wallet))
                 .collect(Collectors.toList());
     }
 
+    private HomeDTO toHomeDTO (Wallet wallet){
+        return modelMapper.map(wallet,HomeDTO.class);
+    }
+    
     private WalletDTO toWalletDTO (Wallet wallet){
         return modelMapper.map(wallet,WalletDTO.class);
     }

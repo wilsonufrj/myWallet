@@ -49,9 +49,8 @@ public class TransactionServiceImpl implements ITransactionService {
     }
 
     @Override
-    public String removeTransaction(Long id) {
+    public void removeTransaction(Long id) {
         transactionRepository.deleteById(id);
-        return "Transaction Deleted";
     }
     
     @Override

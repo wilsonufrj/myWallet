@@ -58,6 +58,7 @@ public class WalletController {
     
     @DeleteMapping(path="/{id}")
     public ResponseEntity deleteWallet(@PathVariable Long id){
-        return ResponseEntity.ok(walletService.deleteWallet(id));
+        walletService.deleteWallet(id);
+        return ResponseEntity.ok().build();
     }
 }
