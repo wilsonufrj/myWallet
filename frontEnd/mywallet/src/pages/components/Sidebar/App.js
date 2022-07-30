@@ -12,8 +12,11 @@ function Sidebar(props){
     const [listWallet,setListWallet] = useState([])
 
      useEffect(()=>{
+        if(props.listWallet.length == 0){
+            props.getAllWallets();
+        }
         setListWallet(SideBarData(props.listWallet))
-    },[])
+    },[props.listWallet])
 
     return(
         <div className="sidebar">

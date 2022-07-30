@@ -11,8 +11,6 @@ import "primeicons/primeicons.css";
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import HistoricalTransaction from './pages/HistoricalTransaction';
-import Sidebar from './pages/components/Sidebar/App';
-import Teste from './pages/Teste';
 
 
 function App() {
@@ -21,7 +19,6 @@ function App() {
       <Router>
         <Routes>
             <Route path='/' element={<Home/>}/>
-            <Route path='/teste' element={<Teste/>}/>
             <Route path='month/:monthId' element={<Month/>}/>
             <Route path='historical/:monthId' element={<HistoricalTransaction/>}/>
         </Routes>

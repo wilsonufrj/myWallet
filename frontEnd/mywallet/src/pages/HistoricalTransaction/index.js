@@ -33,11 +33,6 @@ const HistoricalTransaction = (props)=>{
         name:"Wilson"});
     const [enumName,setEnumName]=useState({})
     
-
-    // const getFormErrorMessage = (name) => {
-    //     return errors[name] && <small className="p-error">{errors[name].message}</small>
-    // };
-
     useEffect(()=>{
         props.getWalletData(idURL.monthId);
     },[idURL,props])
@@ -192,12 +187,12 @@ const HistoricalTransaction = (props)=>{
                     </div>
                     </div>
                  </Dialog>
-                <div className="rowData">
+                <div className="row">
                     <div>
                         <DataListFilter/>
                     </div>
-                    <div>
-                        <Card title="Total">
+                    <div id='cardValor' >
+                        <Card  title="Total">
                             <div>
                                 <h1>R${props.allMoney}</h1>
                             </div>
