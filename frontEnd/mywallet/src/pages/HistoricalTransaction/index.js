@@ -203,6 +203,7 @@ const HistoricalTransaction = (props)=>{
                             </div>
                         </Card>
                     </div>
+
                 </div>
             </div>
         </div>

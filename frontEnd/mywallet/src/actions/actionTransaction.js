@@ -58,7 +58,7 @@ export const addTransaction = (id,data)=>{
     }
 }
 
-//Terminar amanhã
+
 export const editTransaction = (id,data,idWallet)=>{
     return dispatch=>{
         dispatch(loadData)
