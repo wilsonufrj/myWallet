@@ -1,32 +1,31 @@
 package br.projeto.mywallet.DTO;
 
 
-import br.projeto.mywallet.Model.Transaction;
-import java.util.ArrayList;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-
-
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 public class WalletDTO {
 
     private Long id;
     private String name;
     private Double allMoney;
-    private List<Transaction> transactions = new ArrayList<Transaction>();
+    private Double limitCreditMonth;
+    private Double limitDebitMonth;
+    private List<GainDTO> gainList;
+    private List<SpendDTO> spendList;
+    private LocalDate creatinDate;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public WalletDTO(Long id, String name, Double allMoney, Double limitCreditMonth, Double limitDebitMonth, List<GainDTO> gainList, List<SpendDTO> spendList, LocalDate creatinDate) {
         this.id = id;
+        this.name = name;
+        this.allMoney = allMoney;
+        this.limitCreditMonth = limitCreditMonth;
+        this.limitDebitMonth = limitDebitMonth;
+        this.gainList = gainList;
+        this.spendList = spendList;
+        this.creatinDate = creatinDate;
     }
 
     public String getName() {
@@ -37,7 +36,41 @@ public class WalletDTO {
         this.name = name;
     }
 
-    public Double getAllMoney() {      
+    public Double getLimitCreditMonth() {
+        return limitCreditMonth;
+    }
+
+    public void setLimitCreditMonth(Double limitCreditMonth) {
+        this.limitCreditMonth = limitCreditMonth;
+    }
+
+    public Double getLimitDebitMonth() {
+        return limitDebitMonth;
+    }
+
+    public void setLimitDebitMonth(Double limitDebitMonth) {
+        this.limitDebitMonth = limitDebitMonth;
+    }
+
+    public LocalDate getCreatinDate() {
+        return creatinDate;
+    }
+
+    public void setCreatinDate(LocalDate creatinDate) {
+        this.creatinDate = creatinDate;
+    }
+
+    
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Double getAllMoney() {
         return allMoney;
     }
 
@@ -45,12 +78,20 @@ public class WalletDTO {
         this.allMoney = allMoney;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public List<GainDTO> getGainList() {
+        return gainList;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setGainList(List<GainDTO> gainList) {
+        this.gainList = gainList;
+    }
+
+    public List<SpendDTO> getSpendList() {
+        return spendList;
+    }
+
+    public void setSpendList(List<SpendDTO> spendList) {
+        this.spendList = spendList;
     }
     
     

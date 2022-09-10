@@ -2,25 +2,33 @@ package br.projeto.mywallet.DTO;
 
 import java.time.LocalDate;
 import java.util.Date;
-import lombok.Data;
 
 /**
  *
  * @author wilson
  */
-public class TransactionDTO {
+public class SpendDTO {
     
-    private String typeTransaction;
+    private Long id;
     private Double value;
     private String description;
     private LocalDate creationDate;
+    
+    SpendDTO(){}
 
-    public String getTypeTransaction() {
-        return typeTransaction;
+    public SpendDTO(Long id, Double value, String description, LocalDate creationDate) {
+        this.id = id;
+        this.value = value;
+        this.description = description;
+        this.creationDate = creationDate;
     }
 
-    public void setTypeTransaction(String typeTransaction) {
-        this.typeTransaction = typeTransaction;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Double getValue() {
@@ -31,7 +39,6 @@ public class TransactionDTO {
         this.value = value;
     }
 
-
     public String getDescription() {
         return description;
     }
@@ -39,7 +46,7 @@ public class TransactionDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    
     public LocalDate getCreationDate() {
         return creationDate;
     }
@@ -48,7 +55,6 @@ public class TransactionDTO {
         this.creationDate = creationDate;
     }
 
-    
     
     
     

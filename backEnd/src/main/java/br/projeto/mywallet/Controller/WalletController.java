@@ -7,7 +7,7 @@ package br.projeto.mywallet.Controller;
 
 import br.projeto.mywallet.DTO.TransactionDTO;
 import br.projeto.mywallet.DTO.WalletDTO;
-import br.projeto.mywallet.Model.Transaction;
+
 import br.projeto.mywallet.Model.Wallet;
 import br.projeto.mywallet.Service.IWalletService;
 import java.util.List;
@@ -53,7 +53,7 @@ public class WalletController {
     
     @PostMapping(path="/transaction/{id}")
     public ResponseEntity addTransaction(@PathVariable Long id,@RequestBody TransactionDTO transactionDTO){
-        return ResponseEntity.ok(walletService.addTransactionInWallet(id,transactionDTO));
+        return ResponseEntity.ok(walletService.addTransaction(id,transactionDTO));
     }
     
     @DeleteMapping(path="/{id}")

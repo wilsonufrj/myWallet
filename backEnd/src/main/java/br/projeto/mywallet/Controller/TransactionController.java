@@ -1,7 +1,6 @@
 package br.projeto.mywallet.Controller;
 
 import br.projeto.mywallet.DTO.TransactionDTO;
-import br.projeto.mywallet.Service.ITransactionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,25 +24,25 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class TransactionController {
     
-    @Autowired
-    ITransactionService serviceTransaction;
-    
-    
-    @GetMapping(path="/{id}")
-    public ResponseEntity getTransaction(@PathVariable Long id){
-        return ResponseEntity.ok(serviceTransaction.getTransaction(id));
-    }
-    
-    @PutMapping(path="/{id}")
-    public ResponseEntity editTransaction(@PathVariable Long id, @RequestBody TransactionDTO transactionDTO){
-        serviceTransaction.editTransaction(id, transactionDTO);
-        return ResponseEntity.ok().build();
-    }
-    
-    @DeleteMapping(path="/{id}")
-    public ResponseEntity deleteTransaction(@PathVariable Long id){
-        serviceTransaction.removeTransaction(id);
-        return ResponseEntity.ok().build();
-    }
+//    @Autowired
+//    ITransactionService serviceTransaction;
+//    
+//    
+//    @GetMapping(path="/{id}")
+//    public ResponseEntity getTransaction(@PathVariable Long id){
+//        return ResponseEntity.ok(serviceTransaction.getTransaction(id));
+//    }
+//    
+//    @PutMapping(path="/{id}")
+//    public ResponseEntity editTransaction(@PathVariable Long id, @RequestBody TransactionDTO transactionDTO){
+//        serviceTransaction.editTransaction(id, transactionDTO);
+//        return ResponseEntity.ok().build();
+//    }
+//    
+//    @DeleteMapping(path="/{id}")
+//    public ResponseEntity deleteTransaction(@PathVariable Long id){
+//        serviceTransaction.removeTransaction(id);
+//        return ResponseEntity.ok().build();
+//    }
     
 }
