@@ -45,7 +45,7 @@ const DataListFilter = (props)=>{
 
     //------------------------Date---------------------------------
     const dateBodyTemplate=(data)=>{
-        return formatDate(data.day)
+        return formatDate(data.date)
     }
 
     const formatDate = (value) => {
@@ -106,7 +106,7 @@ const DataListFilter = (props)=>{
                             <div className="field">
                             <label htmlFor="data">Data</label>
                                 <Calendar id="data"
-                                    value={new Date(updateTransaction.day)}
+                                    value={new Date(updateTransaction.date)}
                                     onChange={(e) => setUpdateTransaction({...updateTransaction,day:e.target.value})}
                                     dateFormat="dd/mm/yy"
                                     mask="99/99/9999"/>

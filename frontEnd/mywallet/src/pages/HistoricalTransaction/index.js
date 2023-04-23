@@ -14,40 +14,50 @@ import { addTransaction } from "../../actions/actionTransaction";
 import { StatusTransaction } from "../../enums/typeStatusTransaction";
 import { TypesTransaction } from "../../enums/typeTransaction";
 
-import {useEffect, useState } from "react";
-import {connect} from 'react-redux'
-import { useParams} from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { connect } from 'react-redux'
+import { useParams } from 'react-router-dom';
 import { CreditOrDebit } from "../../enums/creditOrDebit";
 
 import './style.css'
 import DataListFilter from "../components/DataListFilter";
 import { getWalletData } from "../../actions/actionMonth";
+import { Controller, useForm } from "react-hook-form";
 
-const HistoricalTransaction = (props)=>{
+const HistoricalTransaction = (props) => {
 
     const idURL = useParams()
     const [displayResponsive, setDisplayResponsive] = useState(false);
-    const [search,setSearch] = useState(" ")
+    const [search, setSearch] = useState(" ");
     const [position, setPosition] = useState('center');
-    const [data,setData] = useState({
-        name:"Wilson"});
-    const [enumName,setEnumName]=useState({})
-    
-    useEffect(()=>{
+    const { register, handleSubmit, control } = useForm();
+
+    useEffect(() => {
         props.getWalletData(idURL.monthId);
-    },[idURL,props])
+    }, [idURL, props])
 
     const renderFooter = (name) => {
         return (
             <div>
                 <Button label="Cancelar" icon="pi pi-times" onClick={() => onHide(name)} className="p-button-text" />
-                <Button label="Salvar" icon="pi pi-check" onClick={() =>{
-                     onHide(name)
-                     props.addTransaction(idURL.monthId,data)
-                     }} autoFocus />
+                <Button label="Salvar" icon="pi pi-check" onClick={() => {
+                    onHide(name)
+                    handleSubmit(onSubmit)()
+                }} autoFocus />
             </div>
         );
     }
+
+    const onSubmit = (data) => {
+        props.addTransaction(idURL.monthId,
+             {...data,
+                creditOrDebit:data.creditOrDebit.code,
+                typeTransaction: data.typeTransaction.code,
+                statusTransaction:data.statusTransaction.code
+            })
+    }
+
+
     const onHide = (name) => {
         dialogFuncMap[`${name}`](false);
     }
@@ -60,139 +70,130 @@ const HistoricalTransaction = (props)=>{
         }
     }
 
-    // const AtualizaDropdown =(e,nameData) =>{
-    //     setData({
-    //         ...data,
-    //         auxName:e.target.value.code
-    //     })
-    //     setEnumName({
-    //         ...enumName,
-    //         :e.target.value
-
-    //     })
-        
-    // }
-
     const dialogFuncMap = {
         'displayResponsive': setDisplayResponsive
     }
 
     const statusTransaction = [
-        {name:"Pago",code:StatusTransaction.PAID},
-        {name:"Nao Pago", code:StatusTransaction.NOPAID}
+        { name: "Pago", code: StatusTransaction.PAID },
+        { name: "Nao Pago", code: StatusTransaction.NOPAID }
     ]
 
     const typeTransaction = [
-        {name:"Ganho",code:TypesTransaction.GAIN},
-        {name:"Gasto",code:TypesTransaction.SPEND}
+        { name: "Ganho", code: TypesTransaction.GAIN },
+        { name: "Gasto", code: TypesTransaction.SPEND }
     ]
 
     const creditOrDebit = [
-       {name:"Crédito", code:CreditOrDebit.CREDIT},
-        { name: "Débito", code:CreditOrDebit.DEBIT}
+        { name: "Crédito", code: CreditOrDebit.CREDIT },
+        { name: "Débito", code: CreditOrDebit.DEBIT }
     ]
 
-    return(
+    return (
         <div>
-            <Sidebar/>
+            <Sidebar />
             <div className="mainContainer">
-                <Button onClick={()=> onClick('displayResponsive')}>Nova Transação</Button>
-                <Dialog header="Nova Transaction" visible={displayResponsive} onHide={() => onHide('displayResponsive')} breakpoints={{'960px': '75vw'}} style={{width: '50vw'}} footer={renderFooter('displayResponsive')}>
-                <div className="flex justify-content-center">
-                    <div className="card">
-                        <form className="p-fluid">
-                            <div className="field">
-                                <label htmlFor='name'>Nome</label>
-                                <InputText id='name'
-                                    value={data.name}
-                                    onChange={(e) => setData({...data,name:e.target.value})}/>
-                            </div>
-                            <div className="field">
-                                <label htmlFor="valor">Valor</label>
-                                <InputNumber inputId='valor'
-                                    value={data.value}
-                                    onValueChange={e=>setData({...data,value:e.value})}
-                                    mode="decimal"
-                                    minFractionDigits={2} />       
-                            </div>
-                            <div className="field">
-                            <label htmlFor="data">Data</label>
-                                <Calendar id="data"
-                                    value={data.day}
-                                    onChange={(e) => setData({...data,day:e.value})}
-                                    dateFormat="dd/mm/yy"
-                                    mask="99/99/9999"/>
-                            </div>
-                            <div className="field">
-                                <label htmlFor='description'>Descrição</label>
-                                <InputText id='description'
-                                    value={data.description}
-                                    onChange={(e) =>{ setData({...data,description:e.target.value})}}/>
-                                    </div>
-                            <div className="field">
-                                <label htmlFor="creditOrdebit">Crédito ou Débito</label>
-                                <Dropdown value={enumName.creditOrDebit}
-                                    options={creditOrDebit}
-                                    onChange={(e)=>{
-                                        setData({
-                                            ...data,
-                                            creditOrDebit:e.target.value.code
-                                        })
-                                        setEnumName({
-                                            ...enumName,
-                                            creditOrDebit:e.target.value
-                                
-                                        })
-                                    }}
-                                    optionLabel="name"
-                                    placeholder="Crédito ou Débito" />
-                            </div>
-                            <div className="field">
-                                <label htmlFor="typeTransaction">Tipo de Transação</label>
-                                <Dropdown value={enumName.typeTransaction}
-                                    options={typeTransaction}
-                                    onChange={e=>{
-                                        setData({
-                                            ...data,
-                                            typeTransaction:e.target.value.code
-                                        })
-                                        setEnumName({
-                                            ...enumName,
-                                            typeTransaction:e.target.value
-                                
-                                        })
-                                    }}
-                                    optionLabel="name"
-                                    placeholder="Tipo Transacão" />
-                            </div>
-                            <div className="field">
-                                <label htmlFor="statusTransaction">Status da Transação</label>
-                                <Dropdown value={enumName.statusTransaction}
-                                    options={statusTransaction}
-                                    onChange={(e)=>{
-                                        setData({
-                                            ...data,
-                                            statusTransaction:e.target.value.code
-                                        })
-                                        setEnumName({
-                                            ...enumName,
-                                            statusTransaction:e.target.value
-                                
-                                        })
-                                    }}
-                                    optionLabel="name"
-                                    placeholder="Status" />
-                            </div>
-                        </form>
+                <Button onClick={() => onClick('displayResponsive')}>Nova Transação</Button>
+                <Dialog header="Nova Transaction" visible={displayResponsive} onHide={() => onHide('displayResponsive')} breakpoints={{ '960px': '75vw' }} style={{ width: '50vw' }} footer={renderFooter('displayResponsive')}>
+                    <div className="flex justify-content-center">
+                        <div className="card">
+                            <form className="p-fluid">
+                                <div className="field">
+                                    <label htmlFor='name'>Nome</label>
+                                    <InputText id='name'
+                                        {...register('name')}
+                                    />
+                                </div>
+                                <div className="field">
+                                    <label htmlFor="value">Valor</label>
+                                    <Controller
+                                        name="value"
+                                        control={control}
+                                        render={({ field }) =>
+                                        <InputNumber inputId="currency-us"
+                                        value={field.value}
+                                        onValueChange={(e) => field.onChange(e.value)}
+                                        mode="currency"
+                                        currency="USD"
+                                        locale="en-US"/>
+                                        }
+                                        
+                                    />
+                                    
+                                </div>
+                                <div className="field">
+                                    <label htmlFor="data">Data</label>
+                                    <Calendar id="date"
+                                        {...register('date')}
+                                        dateFormat="dd/mm/yy"
+                                        mask="99/99/9999" />
+                                </div>
+                                <div className="field">
+                                    <label htmlFor='description'>Descrição</label>
+                                    <InputText id='description'
+                                        {...register('description')}
+                                    />
+                                </div>
+                                <div className="field">
+                                    <label htmlFor="creditOrDebit">Crédito ou Débito</label>
+                                    <Controller
+                                        name="creditOrDebit"
+                                        control={control}
+                                        render={({ field }) =>
+                                            <Dropdown
+                                                value={field.value}
+                                                options={creditOrDebit}
+                                                control={control}
+                                                onChange={(e) => field.onChange(e.value)}
+                                                optionLabel="name"
+                                                placeholder="Crédito ou Débito" />
+                                        }
+                                    />
+
+                                </div>
+                                <div className="field">
+                                    <label htmlFor="typeTransaction">Tipo de Transação</label>
+                                    <Controller
+                                        name="typeTransaction"
+                                        control={control}
+                                        render={({ field }) =>
+                                       
+                                            <Dropdown
+                                                value={field.value}
+                                                options={typeTransaction}
+                                                control={control}
+                                                onChange={(e) => field.onChange(e.value)}
+                                                optionLabel="name"
+                                                placeholder="Tipo Transacão" />
+                                        }
+                                    />
+                                </div>
+                                <div className="field">
+                                    <label htmlFor="statusTransaction">Status da Transação</label>
+                                    <Controller
+                                        name="statusTransaction"
+                                        control={control}
+                                        render={({ field }) =>
+                                            <Dropdown
+                                                value={field.value}
+                                                options={statusTransaction}
+                                                control={control}
+                                                onChange={(e) => field.onChange(e.value)}
+                                                optionLabel="name"
+                                                placeholder="Status" />
+                                        }
+                                    />
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    </div>
-                 </Dialog>
+                </Dialog>
                 <div className="row">
                     <div>
-                        <DataListFilter/>
+                        <DataListFilter />
                     </div>
                     <div id='cardValor' >
-                        <Card  title="Total">
+                        <Card title="Total">
                             <div>
                                 <h1>R${props.allMoney}</h1>
                             </div>
@@ -205,9 +206,9 @@ const HistoricalTransaction = (props)=>{
     );
 }
 
-const mapStateProps = (state)=>{
-    return{
-        allMoney:state.monthReducer.allMoney,
+const mapStateProps = (state) => {
+    return {
+        allMoney: state.monthReducer.allMoney,
     }
 }
 
@@ -216,4 +217,4 @@ const mapDispacthToProps = {
     getWalletData
 }
 
-export default connect(mapStateProps,mapDispacthToProps)(HistoricalTransaction);
+export default connect(mapStateProps, mapDispacthToProps)(HistoricalTransaction);

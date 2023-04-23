@@ -2,38 +2,42 @@ import Footer from "../components/footer/App";
 import "./style.css";
 
 import { Card } from 'primereact/card';
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Dialog } from 'primereact/dialog';
 
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { createWallet, getAllWallets, deleteWallet } from "../../actions/actionWallet";
 import { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
+import { useForm } from "react-hook-form";
 
 
 
 function Home(props) {
     const [displayResponsive, setDisplayResponsive] = useState(false);
     const [position, setPosition] = useState('center');
-    const [nameNewWallet,setNameNewWallet] = useState({name:""})
+    const { register, handleSubmit } = useForm();
 
-    useEffect(()=>{
-       props.getAllWallets()
-    },[])
+    useEffect(() => {
+        props.getAllWallets()
+    }, [])
 
     const renderFooter = (name) => {
         return (
             <div>
                 <Button label="Cancelar" icon="pi pi-times" onClick={() => onHide(name)} className="p-button-text" />
-                <Button label="Salvar" icon="pi pi-check" onClick={() =>{
-                     onHide(name)
-                     props.createWallet(nameNewWallet)
-                     }} autoFocus />
+                <Button label="Salvar" icon="pi pi-check" onClick={() => {
+                    handleSubmit(onSubmit)()
+                    onHide(name)
+                }} autoFocus />
             </div>
         );
     }
-    
+
+    const onSubmit = (data) => {
+        props.createWallet(data)
+    }
     const onHide = (name) => {
         dialogFuncMap[`${name}`](false);
     }
@@ -49,28 +53,37 @@ function Home(props) {
     const dialogFuncMap = {
         'displayResponsive': setDisplayResponsive
     }
-    return(
+
+    return (
         <div>
             <h1 className="title">Bem vindo ao myWallet</h1>
             <div className="mainContainerHome">
-                <Button onClick={()=> onClick('displayResponsive')}>Nova Carteira</Button>
-                <Dialog header="Nova Carteira" visible={displayResponsive} onHide={() => onHide('displayResponsive')} breakpoints={{'960px': '75vw'}} style={{width: '50vw'}} footer={renderFooter('displayResponsive')}>
-                    <InputText placeholder="Name" htmlFor="nawWallet" onChange={(e)=>setNameNewWallet(e.target.value)}/>
+                <Button onClick={() => onClick('displayResponsive')}>Nova Carteira</Button>
+                <Dialog header="Nova Carteira" visible={displayResponsive} onHide={() => onHide('displayResponsive')} breakpoints={{ '960px': '75vw' }} style={{ width: '50vw' }} footer={renderFooter('displayResponsive')}>
+                    <form>
+                        <InputText placeholder="Name" htmlFor="nameWallet" {...register('name')} />
+                        <InputText placeholder="Description" htmlFor="descriptionWallet" {...register('description')} />
+                    </form>
                 </Dialog>
-                <div  className="months">
+                <div className="months">
                     {
-                        props.loading?"LOADING":
-                        props.listWallet.map((value,index)=>{
-                            return(
-                                <Card key={index} title={value.name} subTitle={value.allMoney}>
-                                    <Link to={`/month/${value.id}`}>
-                                        <Button>Acessar</Button>
-                                    </Link>
-                                    {/* Deixar o botao escondido por enquanto */}
-                                    {/* <Button icon="pi pi-trash" iconPos="right" label="Deletar" className="p-button-danger" onClick={()=>props.deleteWallet(value.id)}></Button> */}
-                                </Card>
-                            )
-                        })
+                        props.loading ? "LOADING" :
+                            props.listWallet.map((data, index) => {
+                                return (
+                                    <Card key={index} title={data.name} subTitle={data.description}>
+                                        <Link to={`/month/${data.id}`}>
+                                            <Button>Acessar</Button>
+                                        </Link>
+                                        <Button
+                                            icon="pi pi-trash"
+                                            iconPos="right"
+                                            label="Deletar"
+                                            className="p-button-danger"
+                                            onClick={() => props.deleteWallet(data.id)}>
+                                        </Button>
+                                    </Card>
+                                )
+                            })
                     }
                 </div>
             </div>
@@ -78,17 +91,17 @@ function Home(props) {
     )
 }
 
-const mapStateProps = (state)=>{
-    return{
-        listWallet:state.walletReducer.listWallet,
-        loading:state.walletReducer.loading
+const mapStateProps = (state) => {
+    return {
+        listWallet: state.walletReducer.listWallet,
+        loading: state.walletReducer.loading
     }
 }
 
-const mapDispacthToProps  = {
-        getAllWallets,
-        createWallet,
-        deleteWallet
+const mapDispacthToProps = {
+    getAllWallets,
+    createWallet,
+    deleteWallet
 }
 
-export default connect(mapStateProps,mapDispacthToProps)(Home);
+export default connect(mapStateProps, mapDispacthToProps)(Home);

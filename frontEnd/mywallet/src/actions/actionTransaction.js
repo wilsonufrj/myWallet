@@ -48,12 +48,13 @@ export const loadData =(id)=>{
     }
 }
 
-export const addTransaction = (id,data)=>{
+export const addTransaction = (idWallet,data)=>{
     return dispatch=>{
+        
         dispatch(loadMonth)
-        axios.post(httpWallet+`/transaction/${id}`,data)
+        axios.post(httpTransaction+`/${idWallet}`,data)
         .then(response=>{
-            dispatch(loadingSucessTransaction(response.data))
+            dispatch(getWalletData(idWallet))
         })
     }
 }

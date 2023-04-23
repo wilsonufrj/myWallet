@@ -25,12 +25,6 @@ const inicial_state = {
                 loading:false,
                 listWallet:[...state.listWallet,action.data]
             }
-        case('SUCESS_DELETE_WALLET'): //Eh necessario atualizar a lista toda 
-            return{
-                ...state,
-                loading:false,
-                listWallet:[action.data]
-            }
         default:
             return state;
     }
