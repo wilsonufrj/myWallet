@@ -4,6 +4,7 @@
  */
 package br.projeto.mywallet.Model;
 
+import br.projeto.mywallet.DTO.WalletDTO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,7 +16,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 
@@ -25,66 +29,32 @@ import lombok.Data;
  */
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name="wallet")
-public class Wallet implements Serializable {
+public class Wallet {
     
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-    private Double allMoney;
     private String name;
+    private String description;
 
     @OneToMany(
             mappedBy = "wallet",
             targetEntity = Transaction.class,
             cascade = CascadeType.ALL
     )
-    @JsonManagedReference
     private List<Transaction> transactions;
-
     
-     public Double getAllMoney() {
-        Double total = 0.0;
-        
-        for(Transaction transaction:this.getTransactions()){
-            total+=transaction.getValue();
-        }
-        
-        allMoney = total;
-        
-        return allMoney;
-    }
-
-    public void setAllMoney(Double allMoney) {
-        this.allMoney = allMoney;
-    }
-     
-     
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-     
-     
+    public static Wallet fromDTO(WalletDTO walletDTO){
+        return Wallet.builder()
+                .name(walletDTO.getName())
+                .description(walletDTO.getDescription())
+                .transactions(walletDTO.getTransactions())
+                .build();
+    } 
      
 }

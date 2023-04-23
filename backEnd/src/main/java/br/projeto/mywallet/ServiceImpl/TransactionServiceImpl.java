@@ -5,62 +5,62 @@ import br.projeto.mywallet.Service.ITransactionService;
 import br.projeto.mywallet.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.modelmapper.ModelMapper;
 import br.projeto.mywallet.Model.Transaction;
-
-
+import br.projeto.mywallet.Model.Wallet;
+import br.projeto.mywallet.repository.WalletRepository;
 /**
  *
  * @author wilson
  */
 @Service
 public class TransactionServiceImpl implements ITransactionService {
-    
+
     @Autowired
     private TransactionRepository transactionRepository;
-    
-    
+
     @Autowired
-    private ModelMapper modelMapper; 
-    
+    private WalletRepository walletRepository;
 
     @Override
-    public TransactionDTO getTransaction(Long id) {
-        return this.toTransactionDTO(transactionRepository.findById(id).get()); //Fazer um tratamento para o optional
+    public TransactionDTO getTransaction(Long id) throws Exception {
+        Transaction auxTransaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new Exception("Transaction not found"));
+
+        return TransactionDTO.fromEntity(auxTransaction);
     }
 
-
     @Override
-    public TransactionDTO editTransaction(Long id, TransactionDTO transactionDTO) {
-    
-        Transaction auxTransaction = transactionRepository.findById(id).get();
+    public TransactionDTO editTransaction(Long id, TransactionDTO transactionDTO) throws Exception {
+
+        Transaction auxTransaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new Exception("Transaction not found"));
+
         auxTransaction.setValue(transactionDTO.getValue());
-        auxTransaction.setDay(transactionDTO.getDay());
+        auxTransaction.setDate(transactionDTO.getDate());
         auxTransaction.setDescription(transactionDTO.getDescription());
         auxTransaction.setName(transactionDTO.getName());
-//        auxTransaction.setStatusTransaction(transactionDTO.getStatusTransaction());
-//        auxTransaction.setTypeTransaction(transactionDTO.getTypeTransaction());
-        
-        
+        auxTransaction.setStatusTransaction(transactionDTO.getStatusTransaction());
+        auxTransaction.setTypeTransaction(transactionDTO.getTypeTransaction());
+
         transactionRepository.save(auxTransaction);
-        
-        return this.toTransactionDTO(auxTransaction);
-        
+
+        return TransactionDTO.fromEntity(auxTransaction);
     }
 
     @Override
     public void removeTransaction(Long id) {
         transactionRepository.deleteById(id);
     }
-    
+
     @Override
-    public Transaction toTransaction(TransactionDTO transactionDTO){
-        return modelMapper.map(transactionDTO, Transaction.class);
+    public TransactionDTO addTransaction(Long id, TransactionDTO transactionDTO) {
+
+        Wallet auxWallet = walletRepository.findById(id).get();
+        Transaction auxTransaction = Transaction.fromDTO(transactionDTO);
+
+        auxTransaction.setWallet(auxWallet);
+
+        return TransactionDTO.fromEntity(transactionRepository.save(auxTransaction));
     }
-    
-     @Override
-    public TransactionDTO toTransactionDTO(Transaction transaction){
-        return modelMapper.map(transaction, TransactionDTO.class);
-    }
-    
+
 }

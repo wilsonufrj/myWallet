@@ -10,12 +10,8 @@ import java.util.List;
  */
 public interface ITransactionService {
     
-    public TransactionDTO getTransaction(Long id);
-    public TransactionDTO editTransaction(Long id, TransactionDTO transactionDTO);
+    public TransactionDTO getTransaction(Long id) throws Exception;
+    public TransactionDTO editTransaction(Long id, TransactionDTO transactionDTO) throws Exception;
     public void removeTransaction(Long id);
-    
-    
-    public Transaction toTransaction(TransactionDTO transactionDTO);
-    public TransactionDTO toTransactionDTO(Transaction transaction);
-    
+    public TransactionDTO addTransaction(Long id,TransactionDTO transactionDTO);
 }

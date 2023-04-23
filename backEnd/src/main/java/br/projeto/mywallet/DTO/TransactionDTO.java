@@ -1,41 +1,48 @@
 package br.projeto.mywallet.DTO;
 
+import br.projeto.mywallet.Model.Transaction;
 import br.projeto.mywallet.Model.Wallet;
 import br.projeto.mywallet.enums.CreditOrDebit;
 import br.projeto.mywallet.enums.StatusTransaction;
 import br.projeto.mywallet.enums.TypesTransaction;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDate;
+import lombok.Builder;
 import lombok.Data;
-
 
 /**
  *
  * @author wilson
  */
 @Data
+@Builder
 public class TransactionDTO {
     
-    @JsonProperty("value")
+    private Long id;
+    
     private Double value;
-    
-    @JsonProperty("name")
+
     private String name;
-    
-    @JsonProperty("day")
-    private String day;
-    
-    @JsonProperty("description")
+
+    private LocalDate date;
+
     private String description;
+
+    private TypesTransaction typeTransaction;
+
+    private StatusTransaction statusTransaction;
+
+    private CreditOrDebit creditOrDebit;
     
-//    @JsonProperty("id_wallet")
-//    private Wallet id_wallet;
-//    
-//    @JsonProperty("typeTransaction")
-//    private TypesTransaction typeTransaction;
-//    
-//    @JsonProperty("statusTransaction")
-//    private StatusTransaction statusTransaction;
-//    
-//    @JsonProperty("creditOrDebit")
-//    private CreditOrDebit creditOrDebit;
+    public static TransactionDTO fromEntity(Transaction transaction){
+        return TransactionDTO.builder()
+                .id(transaction.getId())
+                .value(transaction.getValue())
+                .name(transaction.getName())
+                .date(transaction.getDate())
+                .description(transaction.getDescription())
+                .typeTransaction(transaction.getTypeTransaction())
+                .statusTransaction(transaction.getStatusTransaction())
+                .creditOrDebit(transaction.getCreditOrDebit())
+                .build();
+    }
 }

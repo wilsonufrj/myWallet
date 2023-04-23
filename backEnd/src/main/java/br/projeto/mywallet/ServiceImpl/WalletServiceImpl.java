@@ -1,7 +1,5 @@
 package br.projeto.mywallet.ServiceImpl;
 
-
-import br.projeto.mywallet.DTO.HomeDTO;
 import br.projeto.mywallet.DTO.TransactionDTO;
 import br.projeto.mywallet.DTO.WalletDTO;
 import br.projeto.mywallet.Model.Transaction;
@@ -18,32 +16,40 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.modelmapper.ModelMapper;
 
 @Service
 public class WalletServiceImpl implements IWalletService {
 
     @Autowired
     private WalletRepository walletRepository;
-    
-    
-    @Autowired
-    private ITransactionService transactionService;
-    
-    @Autowired
-    private ModelMapper modelMapper; 
-     
 
     @Override
-    public HomeDTO createWallet(WalletDTO walletDTO) {
-       return this.toHomeDTO(walletRepository.save(this.toWallet(walletDTO)));     
+    public WalletDTO createWallet(WalletDTO walletDTO) {
+        Wallet wallet = Wallet.fromDTO(walletDTO);
+        wallet.setTransactions(new ArrayList<Transaction>());
+
+        return WalletDTO.fromEntity(walletRepository.save(wallet));
     }
 
     @Override
-    public WalletDTO getWallet(Long id) {
-        return walletRepository.findById(id)
-                .map(wallet->this.toWalletDTO(wallet))
-                .get();
+    public WalletDTO getWallet(Long id) throws Exception {
+        Wallet wallet = walletRepository.findById(id)
+                .orElseThrow(() -> new Exception("Wallet not found"));
+
+        return WalletDTO.fromEntity(wallet);
+    }
+
+    @Override
+    public WalletDTO updateWallet(Long id, WalletDTO walletDTO) throws Exception {
+        Wallet wallet = walletRepository.findById(id)
+                .orElseThrow(() -> new Exception("Wallet not found"));
+
+        wallet.setName(walletDTO.getName());
+        wallet.setDescription(walletDTO.getDescription());
+        wallet.setTransactions(walletDTO.getTransactions());
+
+        return WalletDTO.fromEntity(walletRepository.save(wallet));
+
     }
 
     @Override
@@ -51,47 +57,34 @@ public class WalletServiceImpl implements IWalletService {
         walletRepository.deleteById(id);
     }
 
-
     @Override
-    public WalletDTO addTransactionInWallet(Long id,TransactionDTO transactionDTO) {
-        
-        Wallet auxWallet = walletRepository.findById(id).get();
-        Transaction auxTransaction = transactionService.toTransaction(transactionDTO);
-        
-        auxWallet.setAllMoney(auxWallet.getAllMoney()+auxTransaction.getValue());
-        auxTransaction.setWallet(auxWallet);
-        
-        List<Transaction> listTransaction = auxWallet.getTransactions(); 
-        listTransaction.add(auxTransaction);
-        
-        auxWallet.setTransactions(listTransaction);
-        
-        walletRepository.save(auxWallet);
-        
-        return this.toWalletDTO(auxWallet);
-        
-    }
-   
-    @Override
-    public List<HomeDTO> getAllWallets() {
+    public List<WalletDTO> getAllWallets() {
         return walletRepository.findAll()
                 .stream()
-                .map(wallet->this.toHomeDTO(wallet))
+                .map(wallet -> WalletDTO.fromEntity(wallet))
                 .collect(Collectors.toList());
     }
 
-    private HomeDTO toHomeDTO (Wallet wallet){
-        return modelMapper.map(wallet,HomeDTO.class);
-    }
-    
-    private WalletDTO toWalletDTO (Wallet wallet){
-        return modelMapper.map(wallet,WalletDTO.class);
-    }
-    
-    private Wallet toWallet( WalletDTO walletDTO){
-        return modelMapper.map(walletDTO, Wallet.class);
+    @Override
+    public WalletDTO updateNameWallet(Long id, String name) throws Exception {
+        Wallet wallet = walletRepository.findById(id)
+                .orElseThrow(() -> new Exception("Wallet not found"));
+
+        wallet.setName(name);
+
+        return WalletDTO.fromEntity(walletRepository.save(wallet));
+
     }
 
-    
- 
+    @Override
+    public WalletDTO updateDescriptionWallet(Long id, String description) throws Exception {
+        Wallet wallet = walletRepository.findById(id)
+                .orElseThrow(() -> new Exception("Wallet not found"));
+
+        wallet.setDescription(description);
+
+        return WalletDTO.fromEntity(walletRepository.save(wallet));
+
+    }
+
 }
