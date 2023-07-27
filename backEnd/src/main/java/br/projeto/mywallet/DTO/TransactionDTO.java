@@ -28,10 +28,6 @@ public class TransactionDTO {
     private String description;
 
     private TypesTransaction typeTransaction;
-
-    private StatusTransaction statusTransaction;
-
-    private CreditOrDebit creditOrDebit;
     
     public static TransactionDTO fromEntity(Transaction transaction){
         return TransactionDTO.builder()
@@ -41,8 +37,8 @@ public class TransactionDTO {
                 .date(transaction.getDate())
                 .description(transaction.getDescription())
                 .typeTransaction(transaction.getTypeTransaction())
-                .statusTransaction(transaction.getStatusTransaction())
-                .creditOrDebit(transaction.getCreditOrDebit())
+//                .statusTransaction(transaction.getStatusTransaction())
+//                .creditOrDebit(transaction.getCreditOrDebit())
                 .build();
     }
 }

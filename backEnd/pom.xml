@@ -53,20 +53,19 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.modelmapper.extensions</groupId>
             <artifactId>modelmapper-spring</artifactId>
             <version>3.0.0</version>
-          </dependency>
+        </dependency>
     </dependencies>
 
     <build>
@@ -83,19 +82,19 @@
                     </excludes>
                 </configuration>
             </plugin>
-<!--            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>3.2.1</version>
-                <configuration>
-                    <from>
-                        <image>openjdk:14-alpine</image>
-                    </from>
-                  <to>
-                    <image>mywallet</image> 
-                  </to>
-                </configuration>
-              </plugin>-->
+            <!--            <plugin>
+              <groupId>com.google.cloud.tools</groupId>
+              <artifactId>jib-maven-plugin</artifactId>
+              <version>3.2.1</version>
+              <configuration>
+                  <from>
+                      <image>openjdk:14-alpine</image>
+                  </from>
+                <to>
+                  <image>mywallet</image> 
+                </to>
+              </configuration>
+            </plugin>-->
         </plugins>
     </build>
 

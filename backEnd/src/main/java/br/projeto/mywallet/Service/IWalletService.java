@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface IWalletService {
     public WalletDTO createWallet(WalletDTO walletDTO);
     public List<WalletDTO> getAllWallets();

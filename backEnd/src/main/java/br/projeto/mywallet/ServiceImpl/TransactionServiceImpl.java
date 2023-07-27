@@ -39,8 +39,8 @@ public class TransactionServiceImpl implements ITransactionService {
         auxTransaction.setDate(transactionDTO.getDate());
         auxTransaction.setDescription(transactionDTO.getDescription());
         auxTransaction.setName(transactionDTO.getName());
-        auxTransaction.setStatusTransaction(transactionDTO.getStatusTransaction());
-        auxTransaction.setTypeTransaction(transactionDTO.getTypeTransaction());
+//        auxTransaction.setStatusTransaction(transactionDTO.getStatusTransaction());
+//        auxTransaction.setTypeTransaction(transactionDTO.getTypeTransaction());
 
         transactionRepository.save(auxTransaction);
 

@@ -7,7 +7,8 @@ package br.projeto.mywallet.enums;
 
 public enum TypesTransaction {
     GAIN("GAIN"),
-    SPEND("SPEND");
+    SPEND("SPEND"),
+    INVESTIMENT("INVESTIMENT");
     
     private String typeTransaction;
 
