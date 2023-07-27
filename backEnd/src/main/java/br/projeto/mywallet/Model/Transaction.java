@@ -52,7 +52,7 @@ public class Transaction {
     @Column(name = "description")
     private String description;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Column(name="type_transaction")
     private TypesTransaction typeTransaction;
 
