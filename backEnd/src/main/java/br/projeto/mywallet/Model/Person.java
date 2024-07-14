@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Model;
 
+import br.projeto.mywallet.DTO.PersonDTO;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,8 +25,7 @@ public class Person implements Serializable{
     @Column(name = "name")
     private String name;
 
-    public Person(Long id, String name) {
-        this.id = id;
+    public Person(String name) {
         this.name = name;
     }
 
@@ -53,5 +53,11 @@ public class Person implements Serializable{
     public String toString() {
         return "Person{" + "id=" + id + ", name=" + name + '}';
     }
-       
+    
+    public PersonDTO converteToDto() {
+        return new PersonDTO(
+                this.getId(),
+                this.getName()
+        );
+    }
 }

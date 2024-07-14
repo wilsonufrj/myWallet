@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const httpWallet = 'http://localhost:8080/wallet'
+const httpWallet = 'http://localhost:8082/wallet'
 
 export const loadMonth = ()=>{
     return{

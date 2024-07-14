@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const http = 'http://localhost:8080/wallet'
+const http = 'http://localhost:8082/wallet'
 
 export const loadingWallet=()=>{
     return{

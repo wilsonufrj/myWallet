@@ -1,9 +1,9 @@
 package br.projeto.mywallet.Controller;
 
+import br.projeto.mywallet.DTO.PersonDTO;
 import br.projeto.mywallet.DTO.WalletDTO;
-
-import br.projeto.mywallet.Service.IWalletService;
-
+import br.projeto.mywallet.Model.Person;
+import br.projeto.mywallet.Service.IPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,39 +21,40 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author wilson
  */
+
 @RestController
-@RequestMapping("/wallet")
+@RequestMapping("/person")
 @CrossOrigin
-public class WalletController {
-
+public class PersonController {
+    
     @Autowired
-    private IWalletService walletService;
-
+    private IPersonService personService;
+    
     @GetMapping(path = "/{id}")
-    public ResponseEntity getWallet(@PathVariable Long id) {
+    public ResponseEntity getPerson(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(walletService.getWallet(id));
+            return ResponseEntity.ok(personService.getPerson(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping
-    public ResponseEntity getAllWallets() {
-        return ResponseEntity.ok(walletService.getAllWallets());
+    public ResponseEntity getAllPerson() {
+        return ResponseEntity.ok(personService.getAllPerson());
     }
 
     @PostMapping
-    public ResponseEntity createWallet(@RequestBody WalletDTO walletDTO) {
+    public ResponseEntity createPerson(@RequestBody PersonDTO personDTO) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(walletService.createWallet(walletDTO));
+                .body(personService.createPerson(personDTO));
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity udateWallet(@PathVariable Long id, @RequestBody WalletDTO walletDTO) {
+    public ResponseEntity updatePerson(@PathVariable Long id, @RequestBody PersonDTO personDTO) {
         try {
-            return ResponseEntity.ok(walletService.updateWallet(id, walletDTO));
+            return ResponseEntity.ok(personService.updatePerson(id, personDTO));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
 
@@ -61,8 +62,8 @@ public class WalletController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity deleteWallet(@PathVariable Long id) {
-        walletService.deleteWallet(id);
+    public ResponseEntity deletePerson(@PathVariable Long id) {
+        personService.deletePerson(id);
         return ResponseEntity.ok().build();
     }
 }

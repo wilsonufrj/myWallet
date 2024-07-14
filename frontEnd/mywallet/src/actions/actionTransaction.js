@@ -2,8 +2,8 @@ import axios from "axios";
 import { getWalletData, loadMonth } from "./actionMonth";
 
 
-const httpWallet = 'http://localhost:8080/wallet'
-const httpTransaction = 'http://localhost:8080/transaction'
+const httpWallet = 'http://localhost:8082/wallet'
+const httpTransaction = 'http://localhost:8082/transaction'
 
 
 export const loadingSucessTransaction = (data)=>{

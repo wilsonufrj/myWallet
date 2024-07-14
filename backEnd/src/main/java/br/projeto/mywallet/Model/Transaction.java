@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Model;
 
+import br.projeto.mywallet.DTO.TransactionDTO;
 import br.projeto.mywallet.enums.TypesTransaction;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDate;
@@ -26,21 +27,21 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    
+
     @Column(name = "client")
     private Person person;
-    
+
     @Column(name = "value")
     private Double value;
-    
+
     @Column(name = "date")
     private LocalDate date;
-    
+
     @Column(name = "description")
     private String description;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name="type_transaction")
+    @Column(name = "type_transaction")
     private TypesTransaction typeTransaction;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -60,7 +61,7 @@ public class Transaction {
 
     public Transaction() {
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -117,5 +118,15 @@ public class Transaction {
         this.wallet = wallet;
     }
 
-    
+    public TransactionDTO converteToDto() {
+        return new TransactionDTO(
+                this.getId(),
+                this.getPerson(),
+                this.getValue(),
+                this.getDate(),
+                this.getDescription(),
+                this.getTypeTransaction(),
+                this.getWallet().converteToDto()
+        );
+    }
 }

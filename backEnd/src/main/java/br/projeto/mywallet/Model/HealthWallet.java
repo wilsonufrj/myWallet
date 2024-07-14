@@ -1,7 +1,6 @@
 package br.projeto.mywallet.Model;
 
 import br.projeto.mywallet.DTO.HealthWalletDTO;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -113,4 +112,14 @@ public class HealthWallet {
         return sb.toString();
     }
     
+    public HealthWalletDTO converteToDto() {
+        return new HealthWalletDTO(
+                this.getId(),
+                this.getWallet(),
+                this.getCreditLimit(),
+                this.getDebitLimit(),
+                this.getCloseMonth(),
+                this.getInvestiment()
+        );
+    }
 }

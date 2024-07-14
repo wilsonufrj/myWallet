@@ -9,31 +9,28 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="wallet")
+@Table(name = "wallet")
 public class Wallet {
-    
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name="name")
+
+    @Column(name = "name")
     private String name;
-    
-    @Column(name="description")
+
+    @Column(name = "description")
     private String description;
-    
 
     public Wallet(String name, String description) {
         this.name = name;
         this.description = description;
-        
+
     }
-    
+
     public Wallet() {
     }
-    
-    
-    
+
     public Long getId() {
         return id;
     }
@@ -58,8 +55,8 @@ public class Wallet {
     public String toString() {
         return "Wallet{" + "id=" + id + ", name=" + name + ", description=" + description + '}';
     }
-    
-    public WalletDTO converteToDto(){
+
+    public WalletDTO converteToDto() {
         return new WalletDTO(
                 this.getId(),
                 this.getName(),
