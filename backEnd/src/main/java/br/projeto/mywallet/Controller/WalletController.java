@@ -61,26 +61,6 @@ public class WalletController {
 
         }
     }
-    
-    @PatchMapping(path = "/{id}/name")
-    public ResponseEntity udateNameWallet(@PathVariable Long id, @RequestParam String name) {
-        try {
-            return ResponseEntity.ok(walletService.updateNameWallet(id, name));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-
-        }
-    }
-    
-    @PatchMapping(path = "/{id}/description")
-    public ResponseEntity udateDescriptionWallet(@PathVariable Long id, @RequestParam String description) {
-        try {
-            return ResponseEntity.ok(walletService.updateDescriptionWallet(id, description));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-
-        }
-    }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteWallet(@PathVariable Long id) {

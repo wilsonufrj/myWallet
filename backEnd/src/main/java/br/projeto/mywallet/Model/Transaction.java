@@ -1,11 +1,7 @@
 package br.projeto.mywallet.Model;
 
-import br.projeto.mywallet.DTO.TransactionDTO;
-import br.projeto.mywallet.enums.CreditOrDebit;
-import br.projeto.mywallet.enums.StatusTransaction;
 import br.projeto.mywallet.enums.TypesTransaction;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,12 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  *
@@ -31,24 +21,21 @@ import lombok.ToString;
  */
 @Entity
 @Table(name = "transaction")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@ToString
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    
     @Column(name = "client")
-    private String client;
+    private Person person;
+    
     @Column(name = "value")
     private Double value;
-    @Column(name = "name")
-    private String name;
+    
     @Column(name = "date")
     private LocalDate date;
+    
     @Column(name = "description")
     private String description;
 
@@ -61,15 +48,74 @@ public class Transaction {
     @JsonBackReference
     private Wallet wallet;
 
-    public static Transaction fromDTO(TransactionDTO transactionDTO) {
-        return Transaction.builder()
-                .name(transactionDTO.getName())
-                .value(transactionDTO.getValue())
-                .date(transactionDTO.getDate())
-                .description(transactionDTO.getDescription())
-                .typeTransaction(transactionDTO.getTypeTransaction())
-                //                .statusTransaction(transactionDTO.getStatusTransaction())
-                //                .creditOrDebit(transactionDTO.getCreditOrDebit())
-                .build();
+    public Transaction(Long id, Person person, Double value, LocalDate date, String description, TypesTransaction typeTransaction, Wallet wallet) {
+        this.id = id;
+        this.person = person;
+        this.value = value;
+        this.date = date;
+        this.description = description;
+        this.typeTransaction = typeTransaction;
+        this.wallet = wallet;
     }
+
+    public Transaction() {
+    }
+    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public Double getValue() {
+        return value;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public TypesTransaction getTypeTransaction() {
+        return typeTransaction;
+    }
+
+    public void setTypeTransaction(TypesTransaction typeTransaction) {
+        this.typeTransaction = typeTransaction;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
+    
 }

@@ -1,19 +1,19 @@
 package br.projeto.mywallet.DTO;
 
-
-public class WalletDTO {
-
+/**
+ *
+ * @author wilson
+ */
+public class PersonDTO {
     private Long id;
     private String name;
-    private String description;
- 
 
-    public WalletDTO(Long id, String name, String description) {
+    public PersonDTO(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.description = description;
     }
-
+    
+    
     public Long getId() {
         return id;
     }
@@ -29,13 +29,7 @@ public class WalletDTO {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
+    
+    
+    
 }
