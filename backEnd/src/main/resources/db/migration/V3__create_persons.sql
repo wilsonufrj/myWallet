@@ -7,13 +7,15 @@ CREATE TABLE persons(
     name VARCHAR(50)
 );
 
+DELETE FROM transaction;
+
 -- Supondo que a tabela transaction já existe, com a coluna client
 ALTER TABLE transaction
 RENAME COLUMN client TO id_person;
 
 -- Supondo que a coluna id_person precisa ser do tipo inteiro
 ALTER TABLE transaction
-ALTER COLUMN id_person TYPE INT;
+ALTER COLUMN id_person TYPE INT USING (id_person::integer);
 
 -- Adicionar a chave estrangeira e remover a coluna name
 ALTER TABLE transaction
