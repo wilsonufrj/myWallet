@@ -1,4 +1,5 @@
 export enum TypesTransaction{
     GAIN,
-    SPEND
+    SPEND,
+    INVESTIMENT
 }
