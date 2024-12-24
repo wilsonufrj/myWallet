@@ -3,11 +3,12 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 import "primereact/resources/themes/lara-light-indigo/theme.css";  //theme
 import "primereact/resources/primereact.min.css";                  //core css
-import "primeicons/primeicons.css";     
+import "primeicons/primeicons.css";
+import "/node_modules/primeflex/primeflex.css"     
 
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-import Home from './pages/Home';
+import Home from './pages/Home/home';
 
 
 function App() {
