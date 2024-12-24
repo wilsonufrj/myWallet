@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Transacao } from "../database/mockDados";
+import { ITransacao } from "../database/mockDados";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputNumber } from "primereact/inputnumber";
@@ -8,7 +8,7 @@ import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 
 declare interface PropsTransacaoGanhosDialog {
-    transacao: Transacao
+    transacao: ITransacao
     updateTransacao: Function
     dialogState: boolean
     setDialogState: Function

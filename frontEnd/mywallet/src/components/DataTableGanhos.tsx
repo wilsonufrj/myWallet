@@ -3,25 +3,27 @@ import { DataTable } from "primereact/datatable";
 import { Toolbar } from "primereact/toolbar";
 import React, { useState } from "react";
 import TransacaoGanhosDialog from "./TransacaoGanhosDialog";
-import { Transacao } from "../database/mockDados";
+import { ITransacao } from "../database/mockDados";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { Button } from "primereact/button";
+import { useAppDispatch } from "../redux/hooks";
 
 declare interface PropsDataTableGanhos {
-    transacoes: Transacao[]
-    updateTransacoes: Function
+    transacoes: ITransacao[]
     titulo: string
 }
 
 const DataTableGanhos = (props: PropsDataTableGanhos) => {
+
+    const dispactch = useAppDispatch();
 
     const [transacaoDialog, setTransacaoDialog] = useState<boolean>(false);
 
     const [selectedTransacao, setSelectedTransacao] = useState<any>(null);
     const [selectedTransacoes, setSelectedTransacoes] = useState<any[]>([]);
 
-    const somaValor = (lista: Transacao[]) => {
+    const somaValor = (lista: ITransacao[]) => {
         let valorTotal: number = 0;
         lista.forEach(transacao => {
             if (transacao?.valor)
@@ -38,13 +40,13 @@ const DataTableGanhos = (props: PropsDataTableGanhos) => {
         <ColumnGroup>
             <Row>
                 <Column footer="Total" colSpan={4} footerStyle={{ textAlign: 'left' }} />
-                <Column footer={formatCurrency(somaValor(props.transacoes))} colSpan={4} footerStyle={{ textAlign: 'right' }} />
+                <Column footer={formatCurrency(somaValor(props.transacoes))} colSpan={4} footerStyle={{ textAlign: 'left' }} />
             </Row>
         </ColumnGroup>
     );
 
-    const dataTemplate = (item: Transacao) => {
-        return item.data.toLocaleDateString("pt-BR", {
+    const dataTemplate = (item: ITransacao) => {
+        return new Date(item.data).toLocaleDateString("pt-BR", {
             day: "2-digit",
             month: "2-digit",
             year: "numeric"
@@ -85,18 +87,18 @@ const DataTableGanhos = (props: PropsDataTableGanhos) => {
             auxTransacoes[indexTransacao] = data
 
         }
-        props.updateTransacoes(auxTransacoes)
+        //props.updateTransacoes(auxTransacoes)
         setSelectedTransacao(null)
     }
 
     const deletarTransacoes = () => {
         let transacoes = props.transacoes.filter(dado => !selectedTransacoes.includes(dado))
-        props.updateTransacoes(transacoes)
+        //props.updateTransacoes(transacoes)
         setSelectedTransacoes([])
     }
 
     return (
-        <div id="tabela" className="col-4">
+        <div id="tabela">
             <div>
                 <h1>{props.titulo}</h1>
             </div>

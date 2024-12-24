@@ -1,25 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { Transacao } from "../database/mockDados";
+import { ITransacaoGastos } from "../database/mockDados";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
+import { useAppDispatch } from "../redux/hooks";
+import { adicionarEditarGastos } from "../pages/Home/homeSlice";
 
-declare interface PropsTransacaoGanhosDialog {
-    transacao: Transacao
-    updateTransacao: Function
+declare interface IPropsTransacaoGanhosDialog {
+    transacao: ITransacaoGastos
     dialogState: boolean
     setDialogState: Function
 }
-const TransacaoGastosDialog = (props: PropsTransacaoGanhosDialog) => {
-    const [transacaoData, setTransacaoData] = useState<any>(null);
 
-    const bancos = [
+declare interface IDropdown {
+    code: string,
+    name: string
+}
+
+const TransacaoGastosDialog = (props: IPropsTransacaoGanhosDialog) => {
+    const dispatch = useAppDispatch();
+
+    const [transacaoData, setTransacaoData] = useState<ITransacaoGastos>({} as ITransacaoGastos);
+
+
+
+    const bancos: IDropdown[] = [
         { name: 'Nubank', code: 'Nubank' },
         { name: 'Itau', code: 'Itau' },
         { name: 'Picpay', code: 'Picpay' }
+    ];
+
+    const devedores: IDropdown[] = [
+        { name: 'Wilson', code: 'Wilson' },
+        { name: 'Gabrielle', code: 'Gabrielle' },
+        { name: 'Terezinha', code: 'Terezinha' },
+        { name: 'Jocimar', code: 'Jocimar' },
+        { name: 'Caio', code: 'Caio' },
+    ];
+
+    const tipoGasto: IDropdown[] = [
+        { name: 'Debito', code: 'Debito' },
+        { name: 'Credito', code: 'Credito' }
     ];
 
     useEffect(() => {
@@ -32,20 +56,24 @@ const TransacaoGastosDialog = (props: PropsTransacaoGanhosDialog) => {
 
     const transactionDialogFooter = (
         <React.Fragment>
-            <Button label="Cancel" icon="pi pi-times" outlined onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" onClick={() => {
-                props.updateTransacao(transacaoData)
+            <Button label="Cancelar" icon="pi pi-times" outlined onClick={hideDialog} />
+            <Button label="Salvar" icon="pi pi-check" onClick={() => {
+                dispatch(adicionarEditarGastos(transacaoData))
                 props.setDialogState(false);
             }} />
         </React.Fragment>
     );
 
-    const handlerSelecionarBanco = () => {
-        if (transacaoData) {
-            let bancoSelecionado = bancos.find(item => item.code === transacaoData.banco)
-            return bancoSelecionado;
+    const handlerDropdown = (
+        transacao: any,
+        lista: IDropdown[],
+        alvo: keyof typeof transacao
+    ): IDropdown | undefined => {
+        if (transacao && alvo in transacao) {
+            return lista.find((item: IDropdown) => item.code === transacao[alvo]);
         }
-    }
+        return undefined;
+    };
 
     return (
 
@@ -57,14 +85,46 @@ const TransacaoGastosDialog = (props: PropsTransacaoGanhosDialog) => {
             className="p-fluid"
             footer={transactionDialogFooter}
             onHide={hideDialog}>
+            <div className="flex">
+                <div className="field">
+                    <label htmlFor="devedor" className="font-bold">
+                        Devedor
+                    </label>
+                    <Dropdown
+                        id="devedor"
+                        value={handlerDropdown(transacaoData, devedores, "devedor")}
+                        onChange={(e) => setTransacaoData({ ...transacaoData, devedor: e.target.value.code })}
+                        options={devedores}
+                        optionLabel="name"
+                        placeholder="Selecione o Devedor"
+                        className="w-full md:w-14rem" />
+                </div>
+                <div className="field ml-2">
+                    <label htmlFor="tipoGasto" className="font-bold">
+                        Tipo
+                    </label>
+                    <Dropdown
+                        id="tipoGasto"
+                        value={handlerDropdown(transacaoData, tipoGasto, "tipoGasto")}
+                        onChange={(e) => setTransacaoData({ ...transacaoData, tipoGasto: e.target.value.code })}
+                        options={tipoGasto}
+                        optionLabel="name"
+                        placeholder="Selecione o Tipo"
+                        className="w-full md:w-14rem" />
+                </div>
+            </div>
 
             <div className="field">
                 <label htmlFor="data" className="font-bold">
                     Data
                 </label>
-                <Calendar value={transacaoData?.data}
+                <Calendar value={new Date(transacaoData.data)}
                     dateFormat="dd/mm/yy"
-                    onChange={(e) => setTransacaoData({ ...transacaoData, data: e.target.value})} />
+                    onChange={(e) => {
+                        if (e.target.value) {
+                            setTransacaoData({ ...transacaoData, data: e.target.value.toISOString() })
+                        }
+                    }} />
             </div>
 
             <div className="field">
@@ -84,7 +144,7 @@ const TransacaoGastosDialog = (props: PropsTransacaoGanhosDialog) => {
                 </label>
                 <Dropdown
                     id="bancos"
-                    value={handlerSelecionarBanco()}
+                    value={handlerDropdown(transacaoData, bancos, "banco")}
                     onChange={(e) => setTransacaoData({ ...transacaoData, banco: e.target.value.code })}
                     options={bancos}
                     optionLabel="name"

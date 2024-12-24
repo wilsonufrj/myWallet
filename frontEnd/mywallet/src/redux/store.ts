@@ -4,7 +4,6 @@ import homeSlice from '../pages/Home/homeSlice'
 
 export const store = configureStore({
   reducer: {
-    wallet:walletReducer,
     home:homeSlice
   },
 })
