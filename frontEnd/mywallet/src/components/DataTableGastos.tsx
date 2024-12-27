@@ -131,7 +131,7 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
                         <Column field="responsavel"
                             filter
                             filterPlaceholder="Procurar por Responsavel"
-                            header="Responsavel"
+                            header="Responsável"
                             style={{ maxWidth: '15rem' }}
                             filterElement={ResponsavelRowFilterTemplate}
                             />
@@ -141,6 +141,7 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
 
                         <Column field="data"
                             header="Data"
+                            sortable
                             body={dataTemplate}
                             style={{ maxWidth: '10rem' }} />
 
