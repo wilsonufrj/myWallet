@@ -7,19 +7,26 @@ import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 
+import { useAppDispatch } from "../redux/hooks";
+import { adicionarEditarGanhos} from "../pages/Home/homeSlice";
+
 declare interface PropsTransacaoGanhosDialog {
     transacao: ITransacao
-    updateTransacao: Function
     dialogState: boolean
     setDialogState: Function
 }
 const TransacaoGanhosDialog = (props: PropsTransacaoGanhosDialog) => {
-    const [transacaoData, setTransacaoData] = useState<any>(null);
+
+    const dispatch = useAppDispatch();
+
+
+    const [transacaoData, setTransacaoData] = useState<ITransacao>({} as ITransacao);
 
     const bancos = [
         { name: 'Nubank', code: 'Nubank' },
         { name: 'Itau', code: 'Itau' },
-        { name: 'Picpay', code: 'Picpay' }
+        { name: 'Picpay', code: 'Picpay' },
+        { name: 'Banco do Brasil', code: 'BancoDoBrasil' }
     ];
 
     useEffect(() => {
@@ -34,7 +41,7 @@ const TransacaoGanhosDialog = (props: PropsTransacaoGanhosDialog) => {
         <React.Fragment>
             <Button label="Cancel" icon="pi pi-times" outlined onClick={hideDialog} />
             <Button label="Save" icon="pi pi-check" onClick={() => {
-                props.updateTransacao(transacaoData)
+                dispatch(adicionarEditarGanhos(transacaoData))
                 props.setDialogState(false);
             }} />
         </React.Fragment>
@@ -62,9 +69,13 @@ const TransacaoGanhosDialog = (props: PropsTransacaoGanhosDialog) => {
                 <label htmlFor="data" className="font-bold">
                     Data
                 </label>
-                <Calendar value={transacaoData?.data}
+                <Calendar value={new Date(transacaoData.data)}
                     dateFormat="dd/mm/yy"
-                    onChange={(e) => setTransacaoData({ ...transacaoData, data: e.target.value})} />
+                    onChange={(e) => {
+                        if (e.target.value) {
+                            setTransacaoData({ ...transacaoData, data: e.target.value.toISOString() })
+                        }
+                    }} />
             </div>
 
             <div className="field">

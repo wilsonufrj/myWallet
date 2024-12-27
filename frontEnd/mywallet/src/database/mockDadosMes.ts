@@ -1,6 +1,6 @@
 import {
     Ganhos,
-    GastosDebito,
+    Gastos,
     Investimentos,
     ITransacao,
     ITransacaoGastos
@@ -29,14 +29,15 @@ export const DadosMes: IDadosMes[] = [
     {
         nomeMes: "Janeiro",
         balanco: {
-            ganhosMes: 3800,
+            ganhosMes: Ganhos.reduce((soma, gasto) =>soma + (gasto.valor ?? 0),0),
             saldoMesSeguinte: 3800,
-            saldoInvestimentoMes: 1500,
-            saldoAtual:1300,
-            gasto:1000
+            saldoInvestimentoMes: Gastos.filter(item=> item.tipoGasto === "Investimento")
+                                    .reduce((soma, gasto) =>soma + (gasto.valor ?? 0),0) ,
+            saldoAtual:(Ganhos.reduce((soma, gasto) =>soma + (gasto.valor ?? 0),0) - Gastos.reduce((soma, gasto) =>soma + (gasto.valor ?? 0),0)),
+            gasto:Gastos.reduce((soma, gasto) =>soma + (gasto.valor ?? 0),0)
         },
         planilhas: {
-            gastos: [...GastosDebito],
+            gastos: [...Gastos],
             investimentos: [...Investimentos],
             ganhos: [...Ganhos]
         }
@@ -51,7 +52,7 @@ export const DadosMes: IDadosMes[] = [
             gasto:1000
         },
         planilhas: {
-            gastos: [...GastosDebito],
+            gastos: [...Gastos],
             investimentos: [...Investimentos],
             ganhos: [...Ganhos]
         }

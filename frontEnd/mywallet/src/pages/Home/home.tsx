@@ -8,8 +8,8 @@ import { RootState } from "../../redux/store";
 
 const Home = () => {
 
-    const dados= useSelector((state:RootState)=> state.home)
-    
+    const dados = useSelector((state: RootState) => state.home)
+
     return (
         <div className="p-4">
             <div id="Title">
@@ -27,7 +27,7 @@ const Home = () => {
                     <TabPanel header="Planilhas" leftIcon="pi pi-money-bill m-2">
                         <Planilhas dadosGanhos={dados?.planilhas?.ganhos}
                             dadosGastos={dados?.planilhas?.gastos}
-                            dadosInvestimento={dados?.planilhas?.investimentos} />
+                        />
                     </TabPanel>
                 </TabView>
             </div>

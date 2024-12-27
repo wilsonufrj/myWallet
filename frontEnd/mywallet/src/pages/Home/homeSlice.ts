@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IWallet } from "./walletSlice";
 import axios from "axios";
 import { IDadosMes } from "../../database/mockDadosMes";
-import { Ganhos, GastosDebito, Investimentos, ITransacao, ITransacaoGastos } from "../../database/mockDados";
+import { Ganhos, Gastos, Investimentos, ITransacao, ITransacaoGastos } from "../../database/mockDados";
 
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -18,7 +18,7 @@ const initialState: IDadosMes = {
         gasto: 1000
     },
     planilhas: {
-        gastos: [...GastosDebito],
+        gastos: [...Gastos],
         investimentos: [...Investimentos],
         ganhos: [...Ganhos]
     }
@@ -31,7 +31,7 @@ export const homeSlice = createSlice({
     initialState,
     reducers: {
         adicionarEditarGastos: (state: IDadosMes, action: PayloadAction<ITransacaoGastos>) => {
-            const auxGastos = [...state.planilhas.gastos, ];
+            const auxGastos = [...state.planilhas.gastos,];
 
             let indexTransacao = auxGastos.findIndex((transacao) => transacao.id === action.payload.id);
 
@@ -39,18 +39,22 @@ export const homeSlice = createSlice({
                 auxGastos.push(action.payload)
             } else {
                 auxGastos[indexTransacao] = action.payload
-    
+
             }
 
             const somaGastos = auxGastos.reduce((soma, gasto) => {
                 return soma + (gasto.valor ?? 0);
             }, 0);
 
+            const somaInvestimentos = auxGastos.filter(item => item.tipoGasto === "Investimento")
+                .reduce((soma, gasto) => soma + (gasto.valor ?? 0), 0)
+
             return {
                 ...state,
                 balanco: {
                     ...state.balanco,
-                    gasto: somaGastos,
+                    saldoInvestimentoMes:somaInvestimentos,
+                    gasto: somaGastos - somaInvestimentos,
                 },
                 planilhas: {
                     ...state.planilhas,
@@ -78,23 +82,62 @@ export const homeSlice = createSlice({
                 },
             };
         },
-        adicionarInvestimentos: (state, action: PayloadAction<ITransacao>) => {
+        adicionarEditarGanhos: (state, action: PayloadAction<ITransacao>) => {
+            const auxGanhos = [...state.planilhas.ganhos,];
 
+            let indexTransacao = auxGanhos.findIndex((transacao) => transacao.id === action.payload.id);
+
+            if (indexTransacao < 0) {
+                auxGanhos.push(action.payload)
+            } else {
+                auxGanhos[indexTransacao] = action.payload
+
+            }
+
+            const somaGanhos = auxGanhos.reduce((soma, gasto) => {
+                return soma + (gasto.valor ?? 0);
+            }, 0);
+
+            return {
+                ...state,
+                balanco: {
+                    ...state.balanco,
+                    ganhosMes: somaGanhos,
+                },
+                planilhas: {
+                    ...state.planilhas,
+                    ganhos: auxGanhos,
+                },
+            };
         },
-        removerInvestimentos: (state, action: PayloadAction<number>) => {
+        removerGanhos: (state, action: PayloadAction<number[]>) => {
+            const auxGanhos = state.planilhas
+                .ganhos
+                .filter(item => !action.payload.includes(item.id))
 
-        },
-        adicionarGanhos: (state, action: PayloadAction<ITransacao>) => {
+            const somaGastos = auxGanhos.reduce((soma, gasto) => {
+                return soma + (gasto.valor ?? 0);
+            }, 0);
 
-        },
-        removerGanhos: (state, action: PayloadAction<number>) => {
-
+            return {
+                ...state,
+                balanco: {
+                    ...state.balanco,
+                    ganhosMes: somaGastos,
+                },
+                planilhas: {
+                    ...state.planilhas,
+                    ganhos: auxGanhos,
+                },
+            };
         },
     }
 })
 
 export const { adicionarEditarGastos,
-    removerGastos
+    removerGastos,
+    adicionarEditarGanhos,
+    removerGanhos
 } = homeSlice.actions;
 
 export default homeSlice.reducer;

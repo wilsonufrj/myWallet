@@ -104,7 +104,7 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
                         }}
                         className="">
                         <Column selectionMode="multiple" exportable={false}></Column>
-                        <Column field="devedor" header="Devedor"></Column>
+                        <Column field="responsavel" header="Responsavel"></Column>
                         <Column field="tipoGasto" header="Tipo Gasto"></Column>
                         <Column field="data" header="Data" body={dataTemplate}></Column>
                         <Column field="descricao" header="Descrição" ></Column>

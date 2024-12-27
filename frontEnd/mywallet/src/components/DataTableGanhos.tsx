@@ -8,6 +8,7 @@ import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { Button } from "primereact/button";
 import { useAppDispatch } from "../redux/hooks";
+import { removerGanhos } from "../pages/Home/homeSlice";
 
 declare interface PropsDataTableGanhos {
     transacoes: ITransacao[]
@@ -16,7 +17,7 @@ declare interface PropsDataTableGanhos {
 
 const DataTableGanhos = (props: PropsDataTableGanhos) => {
 
-    const dispactch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
     const [transacaoDialog, setTransacaoDialog] = useState<boolean>(false);
 
@@ -77,23 +78,9 @@ const DataTableGanhos = (props: PropsDataTableGanhos) => {
         );
     };
 
-    const updateTransacao = (data: any) => {
-        let indexTransacao = props.transacoes.findIndex((transacao) => transacao.id === data.id);
-        let auxTransacoes = props.transacoes;
-
-        if (indexTransacao < 0) {
-            auxTransacoes.push(data)
-        } else {
-            auxTransacoes[indexTransacao] = data
-
-        }
-        //props.updateTransacoes(auxTransacoes)
-        setSelectedTransacao(null)
-    }
-
     const deletarTransacoes = () => {
-        let transacoes = props.transacoes.filter(dado => !selectedTransacoes.includes(dado))
-        //props.updateTransacoes(transacoes)
+        let transacoesSelecionadas = selectedTransacoes.map(transacao=> transacao.id)
+        dispatch(removerGanhos(transacoesSelecionadas))
         setSelectedTransacoes([])
     }
 
@@ -130,10 +117,9 @@ const DataTableGanhos = (props: PropsDataTableGanhos) => {
                     ? <TransacaoGanhosDialog dialogState={transacaoDialog}
                         setDialogState={setTransacaoDialog}
                         transacao={selectedTransacao}
-                        updateTransacao={updateTransacao} />
+                    />
                     : <></>
             }
-
 
         </div>)
 }

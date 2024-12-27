@@ -33,7 +33,7 @@ const TransacaoGastosDialog = (props: IPropsTransacaoGanhosDialog) => {
         { name: 'Picpay', code: 'Picpay' }
     ];
 
-    const devedores: IDropdown[] = [
+    const responsaveis: IDropdown[] = [
         { name: 'Wilson', code: 'Wilson' },
         { name: 'Gabrielle', code: 'Gabrielle' },
         { name: 'Terezinha', code: 'Terezinha' },
@@ -43,7 +43,8 @@ const TransacaoGastosDialog = (props: IPropsTransacaoGanhosDialog) => {
 
     const tipoGasto: IDropdown[] = [
         { name: 'Debito', code: 'Debito' },
-        { name: 'Credito', code: 'Credito' }
+        { name: 'Credito', code: 'Credito' },
+        { name: 'Investimento', code: 'Investimento' }
     ];
 
     useEffect(() => {
@@ -87,16 +88,16 @@ const TransacaoGastosDialog = (props: IPropsTransacaoGanhosDialog) => {
             onHide={hideDialog}>
             <div className="flex">
                 <div className="field">
-                    <label htmlFor="devedor" className="font-bold">
-                        Devedor
+                    <label htmlFor="responsavel" className="font-bold">
+                        Responsável
                     </label>
                     <Dropdown
-                        id="devedor"
-                        value={handlerDropdown(transacaoData, devedores, "devedor")}
-                        onChange={(e) => setTransacaoData({ ...transacaoData, devedor: e.target.value.code })}
-                        options={devedores}
+                        id="responsavel"
+                        value={handlerDropdown(transacaoData, responsaveis, "devedor")}
+                        onChange={(e) => setTransacaoData({ ...transacaoData, responsavel: e.target.value.code })}
+                        options={responsaveis}
                         optionLabel="name"
-                        placeholder="Selecione o Devedor"
+                        placeholder="Selecione o Responsável"
                         className="w-full md:w-14rem" />
                 </div>
                 <div className="field ml-2">

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ITransacao,GastosDebito } from "../database/mockDados";
+import { ITransacao,Gastos } from "../database/mockDados";
 import { Chart } from "primereact/chart";
 
 const BarChart = () => {
 
     const [chartData, setChartData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
-    const [dadosGastosDebito, setDadosGastosDebito] = useState(GastosDebito)
+    const [dadosGastos, setDadosGastos] = useState(Gastos)
 
     const ganhos = [3500, 300, ...Array(28).fill(0)];
 
@@ -20,7 +20,7 @@ const BarChart = () => {
             datasets: [
                 {
                     label: 'Gastos Débito',
-                    data: handleDataGrafico(dadosGastosDebito),
+                    data: handleDataGrafico(dadosGastos),
                     fill: false,
                     backgroundColor: documentStyle.getPropertyValue('--blue-500'),
                     borderColor: documentStyle.getPropertyValue('--blue-500'),
