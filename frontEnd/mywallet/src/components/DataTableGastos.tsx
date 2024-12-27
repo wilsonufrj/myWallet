@@ -1,7 +1,7 @@
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Toolbar } from "primereact/toolbar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ITransacao, ITransacaoGastos } from "../database/mockDados";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
@@ -32,8 +32,10 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
         'responsavel': { value: null, matchMode: FilterMatchMode.CONTAINS },
     });
 
+    useEffect(()=>{
+        setVisibleTransacoes(props.transacoes)
+    },[props.transacoes])
     
-
     const somaValor = (lista: ITransacaoGastos[]) => {
         return lista.reduce((total, transacao) => total + (transacao.valor ?? 0), 0);
     }
