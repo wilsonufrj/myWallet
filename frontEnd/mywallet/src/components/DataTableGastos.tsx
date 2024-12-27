@@ -9,9 +9,12 @@ import { Button } from "primereact/button";
 import TransacaoGastosDialog from "./TransacaoGastosDialog";
 import { useAppDispatch } from "../redux/hooks";
 import { removerGastos } from "../pages/Home/homeSlice";
+import { FilterMatchMode } from 'primereact/api';
+import { InputText } from "primereact/inputtext";
+
 
 declare interface PropsDataTableGanhos {
-    transacoes: ITransacao[]
+    transacoes: ITransacaoGastos[]
     titulo: string
 }
 
@@ -20,17 +23,19 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
     const dispatch = useAppDispatch();
 
     const [transacaoDialog, setTransacaoDialog] = useState<boolean>(false);
+    const [visibleTransacoes, setVisibleTransacoes] = useState<ITransacaoGastos[]>(props.transacoes);
 
     const [selectedTransacao, setSelectedTransacao] = useState<ITransacaoGastos>({} as ITransacaoGastos);
     const [selectedTransacoes, setSelectedTransacoes] = useState<ITransacaoGastos[]>([]);
 
-    const somaValor = (lista: ITransacao[]) => {
-        let valorTotal: number = 0;
-        lista.forEach(transacao => {
-            if (transacao?.valor)
-                valorTotal += transacao.valor
-        });
-        return valorTotal;
+    const [filters, setFilters] = useState({
+        'responsavel': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    });
+
+    
+
+    const somaValor = (lista: ITransacaoGastos[]) => {
+        return lista.reduce((total, transacao) => total + (transacao.valor ?? 0), 0);
     }
 
     const formatCurrency = (value: number) => {
@@ -41,7 +46,7 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
         <ColumnGroup>
             <Row>
                 <Column footer="Total" colSpan={6} footerStyle={{ textAlign: 'left' }} />
-                <Column footer={formatCurrency(somaValor(props.transacoes))} colSpan={1} footerStyle={{ textAlign: 'left' }} />
+                <Column footer={formatCurrency(somaValor(visibleTransacoes))} colSpan={1} footerStyle={{ textAlign: 'left' }} />
             </Row>
         </ColumnGroup>
     );
@@ -79,10 +84,23 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
     };
 
     const deletarTransacoes = () => {
-        let transacoesSelecionadas = selectedTransacoes.map(transacao=> transacao.id)
+        let transacoesSelecionadas = selectedTransacoes.map(transacao => transacao.id)
         dispatch(removerGastos(transacoesSelecionadas))
         setSelectedTransacoes([])
     }
+
+    const ResponsavelRowFilterTemplate = (options: any) => {
+        return (
+            <InputText
+                value={options.value || ''} 
+                onChange={(e) => {
+                    const filterValue = e.target.value;
+                    options.filterApplyCallback(filterValue);
+                }}
+                placeholder="Procurar por Responsável"
+            />
+        );
+    };
 
     return (
         <div id="tabela">
@@ -96,20 +114,45 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
                     <DataTable value={props.transacoes}
                         footerColumnGroup={footerGroupGanhos}
                         selection={selectedTransacoes}
-                        onSelectionChange={(e) => setSelectedTransacoes(e.value as ITransacaoGastos[])}
+                        onSelectionChange={(e) => setSelectedTransacoes(e.value)}
                         selectionMode="checkbox"
                         onRowDoubleClick={(e) => {
                             setTransacaoDialog(true);
                             setSelectedTransacao(e.data as ITransacaoGastos)
                         }}
-                        className="">
-                        <Column selectionMode="multiple" exportable={false}></Column>
-                        <Column field="responsavel" header="Responsavel"></Column>
-                        <Column field="tipoGasto" header="Tipo Gasto"></Column>
-                        <Column field="data" header="Data" body={dataTemplate}></Column>
-                        <Column field="descricao" header="Descrição" ></Column>
-                        <Column field="banco" header="Banco" ></Column>
-                        <Column field="valor" header="Valor" body={priceBodyTemplate}></Column>
+                        filters={filters}
+                        onValueChange={(filteredData) => setVisibleTransacoes(filteredData)}
+                        filterDisplay="row"
+                        emptyMessage="Nenhum resultado.">
+
+                        <Column selectionMode="multiple"
+                            exportable={false} />
+
+                        <Column field="responsavel"
+                            filter
+                            filterPlaceholder="Procurar por Responsavel"
+                            header="Responsavel"
+                            style={{ maxWidth: '15rem' }}
+                            filterElement={ResponsavelRowFilterTemplate}
+                            />
+
+                        <Column field="tipoGasto"
+                            header="Tipo Gasto" />
+
+                        <Column field="data"
+                            header="Data"
+                            body={dataTemplate}
+                            style={{ maxWidth: '10rem' }} />
+
+                        <Column field="descricao"
+                            header="Descrição" />
+
+                        <Column field="banco"
+                            header="Banco" />
+
+                        <Column field="valor"
+                            header="Valor"
+                            body={priceBodyTemplate} />
                     </DataTable>
                 </div>
             </div>
@@ -118,7 +161,7 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
                     ? <TransacaoGastosDialog dialogState={transacaoDialog}
                         setDialogState={setTransacaoDialog}
                         transacao={selectedTransacao}
-                     />
+                    />
                     : <></>
             }
 

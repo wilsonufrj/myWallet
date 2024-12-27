@@ -70,11 +70,15 @@ export const homeSlice = createSlice({
                 return soma + (gasto.valor ?? 0);
             }, 0);
 
+            const somaInvestimentos = auxGastos.filter(item => item.tipoGasto === "Investimento")
+                .reduce((soma, gasto) => soma + (gasto.valor ?? 0), 0)
+
             return {
                 ...state,
                 balanco: {
                     ...state.balanco,
-                    gasto: somaGastos,
+                    saldoInvestimentoMes:somaInvestimentos,
+                    gasto: somaGastos - somaInvestimentos
                 },
                 planilhas: {
                     ...state.planilhas,
