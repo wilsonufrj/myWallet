@@ -6,18 +6,14 @@ declare interface IProspPlanilhas {
     dadosGastos: any
 }
 
-const Planilhas = (props:IProspPlanilhas) => {
-
-    const dadosGanhos =props.dadosGanhos;
-    const dadosGastos = props.dadosGastos;
-
+const Planilhas = (props: IProspPlanilhas) => {
     return (
         <div className="grid">
             <div className="col-12">
-                <DataTableGanhos titulo="Ganhos" transacoes={dadosGanhos}/>
+                <DataTableGanhos titulo="Ganhos" transacoes={props.dadosGanhos} />
             </div>
             <div className="col-12">
-                <DataTableGastos titulo="Gastos" transacoes={dadosGastos}/>
+                <DataTableGastos titulo="Gastos" transacoes={props.dadosGastos} />
             </div>
         </div>
     )

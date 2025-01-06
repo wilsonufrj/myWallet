@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ITransacaoGastos } from "../database/mockDados";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -15,7 +15,7 @@ declare interface IPropsTransacaoGanhosDialog {
     setDialogState: Function
 }
 
-declare interface IDropdown {
+export declare interface IDropdown {
     code: string,
     name: string
 }
@@ -23,7 +23,7 @@ declare interface IDropdown {
 const TransacaoGastosDialog = (props: IPropsTransacaoGanhosDialog) => {
     const dispatch = useAppDispatch();
 
-    const [transacaoData, setTransacaoData] = useState<ITransacaoGastos>({} as ITransacaoGastos);
+    const [transacaoData, setTransacaoData] = useState<ITransacaoGastos>({ ...props.transacao });
 
 
 
@@ -43,13 +43,9 @@ const TransacaoGastosDialog = (props: IPropsTransacaoGanhosDialog) => {
 
     const tipoGasto: IDropdown[] = [
         { name: 'Debito', code: 'Debito' },
-        { name: 'Credito', code: 'Credito' },
+        { name: 'Crédito', code: 'Crédito' },
         { name: 'Investimento', code: 'Investimento' }
     ];
-
-    useEffect(() => {
-        setTransacaoData({ ...props.transacao })
-    }, [])
 
     const hideDialog = () => {
         props.setDialogState(false);
@@ -93,7 +89,7 @@ const TransacaoGastosDialog = (props: IPropsTransacaoGanhosDialog) => {
                     </label>
                     <Dropdown
                         id="responsavel"
-                        value={handlerDropdown(transacaoData, responsaveis, "devedor")}
+                        value={handlerDropdown(transacaoData, responsaveis, "responsavel")}
                         onChange={(e) => setTransacaoData({ ...transacaoData, responsavel: e.target.value.code })}
                         options={responsaveis}
                         optionLabel="name"

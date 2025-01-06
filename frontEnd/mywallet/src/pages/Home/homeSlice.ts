@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IWallet } from "./walletSlice";
 import axios from "axios";
 import { IDadosMes } from "../../database/mockDadosMes";
 import { Ganhos, Gastos, Investimentos, ITransacao, ITransacaoGastos } from "../../database/mockDados";
@@ -53,7 +52,7 @@ export const homeSlice = createSlice({
                 ...state,
                 balanco: {
                     ...state.balanco,
-                    saldoInvestimentoMes:somaInvestimentos,
+                    saldoInvestimentoMes: somaInvestimentos,
                     gasto: somaGastos - somaInvestimentos,
                 },
                 planilhas: {
@@ -77,7 +76,7 @@ export const homeSlice = createSlice({
                 ...state,
                 balanco: {
                     ...state.balanco,
-                    saldoInvestimentoMes:somaInvestimentos,
+                    saldoInvestimentoMes: somaInvestimentos,
                     gasto: somaGastos - somaInvestimentos
                 },
                 planilhas: {

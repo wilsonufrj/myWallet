@@ -1,41 +1,31 @@
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Toolbar } from "primereact/toolbar";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ITransacao, ITransacaoGastos } from "../database/mockDados";
-import { ColumnGroup } from "primereact/columngroup";
-import { Row } from "primereact/row";
 import { Button } from "primereact/button";
 import TransacaoGastosDialog from "./TransacaoGastosDialog";
 import { useAppDispatch } from "../redux/hooks";
 import { removerGastos } from "../pages/Home/homeSlice";
-import { FilterMatchMode } from 'primereact/api';
 import { InputText } from "primereact/inputtext";
+import { ColumnGroup } from "primereact/columngroup";
+import { Row } from "primereact/row";
 
 
-declare interface PropsDataTableGanhos {
+declare interface IPropsDataTableGanhos {
     transacoes: ITransacaoGastos[]
     titulo: string
 }
 
-const DataTableGastos = (props: PropsDataTableGanhos) => {
+const DataTableGastos: React.FC<IPropsDataTableGanhos> = (props) => {
 
     const dispatch = useAppDispatch();
 
     const [transacaoDialog, setTransacaoDialog] = useState<boolean>(false);
-    const [visibleTransacoes, setVisibleTransacoes] = useState<ITransacaoGastos[]>(props.transacoes);
 
     const [selectedTransacao, setSelectedTransacao] = useState<ITransacaoGastos>({} as ITransacaoGastos);
     const [selectedTransacoes, setSelectedTransacoes] = useState<ITransacaoGastos[]>([]);
 
-    const [filters, setFilters] = useState({
-        'responsavel': { value: null, matchMode: FilterMatchMode.CONTAINS },
-    });
-
-    useEffect(()=>{
-        setVisibleTransacoes(props.transacoes)
-    },[props.transacoes])
-    
     const somaValor = (lista: ITransacaoGastos[]) => {
         return lista.reduce((total, transacao) => total + (transacao.valor ?? 0), 0);
     }
@@ -48,7 +38,7 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
         <ColumnGroup>
             <Row>
                 <Column footer="Total" colSpan={6} footerStyle={{ textAlign: 'left' }} />
-                <Column footer={formatCurrency(somaValor(visibleTransacoes))} colSpan={1} footerStyle={{ textAlign: 'left' }} />
+                <Column footer={formatCurrency(somaValor(props.transacoes))} colSpan={1} footerStyle={{ textAlign: 'left' }} />
             </Row>
         </ColumnGroup>
     );
@@ -91,18 +81,7 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
         setSelectedTransacoes([])
     }
 
-    const ResponsavelRowFilterTemplate = (options: any) => {
-        return (
-            <InputText
-                value={options.value || ''} 
-                onChange={(e) => {
-                    const filterValue = e.target.value;
-                    options.filterApplyCallback(filterValue);
-                }}
-                placeholder="Procurar por Responsável"
-            />
-        );
-    };
+
 
     return (
         <div id="tabela">
@@ -114,7 +93,6 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
                     <Toolbar className="mb-4" start={leftToolbarTemplate}></Toolbar>
 
                     <DataTable value={props.transacoes}
-                        footerColumnGroup={footerGroupGanhos}
                         selection={selectedTransacoes}
                         onSelectionChange={(e) => setSelectedTransacoes(e.value)}
                         selectionMode="checkbox"
@@ -122,21 +100,15 @@ const DataTableGastos = (props: PropsDataTableGanhos) => {
                             setTransacaoDialog(true);
                             setSelectedTransacao(e.data as ITransacaoGastos)
                         }}
-                        filters={filters}
-                        onValueChange={(filteredData) => setVisibleTransacoes(filteredData)}
-                        filterDisplay="row"
-                        emptyMessage="Nenhum resultado.">
+                        footerColumnGroup={footerGroupGanhos}>
 
                         <Column selectionMode="multiple"
                             exportable={false} />
 
                         <Column field="responsavel"
-                            filter
-                            filterPlaceholder="Procurar por Responsavel"
                             header="Responsável"
                             style={{ maxWidth: '15rem' }}
-                            filterElement={ResponsavelRowFilterTemplate}
-                            />
+                        />
 
                         <Column field="tipoGasto"
                             header="Tipo Gasto" />

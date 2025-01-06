@@ -10,12 +10,12 @@ import { Button } from "primereact/button";
 import { useAppDispatch } from "../redux/hooks";
 import { removerGanhos } from "../pages/Home/homeSlice";
 
-declare interface PropsDataTableGanhos {
+declare interface IPropsDataTableGanhos {
     transacoes: ITransacao[]
     titulo: string
 }
 
-const DataTableGanhos = (props: PropsDataTableGanhos) => {
+const DataTableGanhos = (props: IPropsDataTableGanhos) => {
 
     const dispatch = useAppDispatch();
 
@@ -37,14 +37,15 @@ const DataTableGanhos = (props: PropsDataTableGanhos) => {
         return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     };
 
-    const footerGroupGanhos = (
-        <ColumnGroup>
+    const footerGroupGanhos = () => {
+        return (<ColumnGroup>
             <Row>
                 <Column footer="Total" colSpan={4} footerStyle={{ textAlign: 'left' }} />
                 <Column footer={formatCurrency(somaValor(props.transacoes))} colSpan={4} footerStyle={{ textAlign: 'left' }} />
             </Row>
         </ColumnGroup>
-    );
+        );
+    }
 
     const dataTemplate = (item: ITransacao) => {
         return new Date(item.data).toLocaleDateString("pt-BR", {
@@ -79,7 +80,7 @@ const DataTableGanhos = (props: PropsDataTableGanhos) => {
     };
 
     const deletarTransacoes = () => {
-        let transacoesSelecionadas = selectedTransacoes.map(transacao=> transacao.id)
+        let transacoesSelecionadas = selectedTransacoes.map(transacao => transacao.id)
         dispatch(removerGanhos(transacoesSelecionadas))
         setSelectedTransacoes([])
     }
