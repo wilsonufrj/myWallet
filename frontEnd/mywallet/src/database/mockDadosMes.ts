@@ -1,7 +1,6 @@
 import {
     Ganhos,
     Gastos,
-    Investimentos,
     ITransacao,
     ITransacaoGastos
 } from "./mockDados";
@@ -10,13 +9,12 @@ export declare interface IBalanco {
     ganhosMes: number
     saldoMesSeguinte: number
     saldoInvestimentoMes: number,
-    saldoAtual:number,
-    gasto:number
+    saldoAtual: number,
+    gasto: number
 }
 
 export declare interface IPlanilha {
     gastos: ITransacaoGastos[]
-    investimentos: ITransacao[]
     ganhos: ITransacao[]
 }
 export declare interface IDadosMes {
@@ -29,16 +27,15 @@ export const DadosMes: IDadosMes[] = [
     {
         nomeMes: "Janeiro",
         balanco: {
-            ganhosMes: Ganhos.reduce((soma, gasto) =>soma + (gasto.valor ?? 0),0),
+            ganhosMes: Ganhos.reduce((soma, gasto) => soma + (gasto.valor ?? 0), 0),
             saldoMesSeguinte: 3800,
-            saldoInvestimentoMes: Gastos.filter(item=> item.tipoGasto === "Investimento")
-                                    .reduce((soma, gasto) =>soma + (gasto.valor ?? 0),0) ,
-            saldoAtual:(Ganhos.reduce((soma, gasto) =>soma + (gasto.valor ?? 0),0) - Gastos.reduce((soma, gasto) =>soma + (gasto.valor ?? 0),0)),
-            gasto:Gastos.reduce((soma, gasto) =>soma + (gasto.valor ?? 0),0)
+            saldoInvestimentoMes: Gastos.filter(item => item.tipoGasto === "Investimento")
+                .reduce((soma, gasto) => soma + (gasto.valor ?? 0), 0),
+            saldoAtual: (Ganhos.reduce((soma, gasto) => soma + (gasto.valor ?? 0), 0) - Gastos.reduce((soma, gasto) => soma + (gasto.valor ?? 0), 0)),
+            gasto: Gastos.reduce((soma, gasto) => soma + (gasto.valor ?? 0), 0)
         },
         planilhas: {
             gastos: [...Gastos],
-            investimentos: [...Investimentos],
             ganhos: [...Ganhos]
         }
     },
@@ -48,12 +45,11 @@ export const DadosMes: IDadosMes[] = [
             ganhosMes: 5900,
             saldoMesSeguinte: 7000,
             saldoInvestimentoMes: 4000,
-            saldoAtual:900,
-            gasto:1000
+            saldoAtual: 900,
+            gasto: 1000
         },
         planilhas: {
             gastos: [...Gastos],
-            investimentos: [...Investimentos],
             ganhos: [...Ganhos]
         }
     }

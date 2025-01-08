@@ -19,11 +19,13 @@ const Home = () => {
                 </div>
                 <TabView>
                     <TabPanel header="Balanço" leftIcon="pi pi-calculator m-2">
-                        <Balanco ganhosMes={dados.balanco.ganhosMes}
+                        <Balanco
+                            ganhosMes={dados.balanco.ganhosMes}
                             gasto={dados.balanco.gasto}
                             saldoAtual={dados.balanco.saldoAtual}
                             saldoInvestimentoMes={dados.balanco?.saldoInvestimentoMes}
-                            saldoMesSeguinte={dados.balanco.saldoMesSeguinte} />
+                            saldoMesSeguinte={dados.balanco.saldoMesSeguinte}
+                            dadosGastos={dados.planilhas.gastos} />
                     </TabPanel>
                     <TabPanel header="Planilhas" leftIcon="pi pi-money-bill m-2">
                         <Planilhas dadosGanhos={dados.planilhas.ganhos}

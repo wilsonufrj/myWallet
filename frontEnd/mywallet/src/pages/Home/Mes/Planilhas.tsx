@@ -1,9 +1,10 @@
 import DataTableGanhos from "../../../components/DataTableGanhos";
 import DataTableGastos from "../../../components/DataTableGastos";
+import { ITransacao, ITransacaoGastos } from "../../../database/mockDados";
 
 declare interface IProspPlanilhas {
-    dadosGanhos: any
-    dadosGastos: any
+    dadosGanhos: ITransacao[],
+    dadosGastos: ITransacaoGastos[]
 }
 
 const Planilhas = (props: IProspPlanilhas) => {

@@ -1,13 +1,15 @@
 import { Card } from "primereact/card";
 import PieChart from "../../../components/PieChart";
 import BarChart from "../../../components/BarChart";
+import { ITransacaoGastos } from "../../../database/mockDados";
 
 declare interface IProspBalanco {
     ganhosMes: number,
     saldoMesSeguinte: number,
     saldoInvestimentoMes: number,
     saldoAtual: number,
-    gasto: number
+    gasto: number,
+    dadosGastos: ITransacaoGastos[]
 }
 
 const Balanco = (props: IProspBalanco) => {
@@ -20,7 +22,7 @@ const Balanco = (props: IProspBalanco) => {
         <div className="card">
             <div className="flex mb-5">
                 <div className="w-6">
-                    <BarChart />
+                    <BarChart gastos={props.dadosGastos} />
                 </div>
                 <div className="w-6 flex justify-content-center">
                     <PieChart />

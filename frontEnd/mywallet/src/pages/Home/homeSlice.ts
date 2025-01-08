@@ -1,24 +1,64 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IDadosMes } from "../../database/mockDadosMes";
-import { Ganhos, Gastos, Investimentos, ITransacao, ITransacaoGastos } from "../../database/mockDados";
+import { IBalanco, IDadosMes } from "../../database/mockDadosMes";
+import { Ganhos, Gastos, ITransacao, ITransacaoGastos } from "../../database/mockDados";
 
 import type { PayloadAction } from '@reduxjs/toolkit'
 
+const somaValor = (lista: ITransacao[]) => {
+    return lista.reduce((total: number, transacao) => total + (transacao.valor ?? 0), 0);
+}
+
+const somaValorGastos = (lista: ITransacaoGastos[], filtro: string, pago?: boolean) => {
+    if (pago) {
+        return lista
+            .filter(item => item.tipoGasto === filtro)
+            .filter(item => item.responsavel === "Wilson")
+            .filter(item => item.status !== "Pago")
+            .reduce((total: number, transacao) => total + (transacao.valor ?? 0), 0);
+    }
+    if (pago === false) {
+        return lista
+            .filter(item => item.tipoGasto === filtro)
+            .filter(item => item.responsavel === "Wilson")
+            .filter(item => item.status === "Pago")
+            .reduce((total: number, transacao) => total + (transacao.valor ?? 0), 0);
+    }
+
+    return lista
+        .filter(item => item.tipoGasto === filtro)
+        .filter(item => item.responsavel === "Wilson")
+        .reduce((total: number, transacao) => total + (transacao.valor ?? 0), 0);
+}
+
+const atualizaBalanco = (estadoAtual: IDadosMes,
+    listaGanhos: ITransacao[],
+    listaGastos: ITransacaoGastos[]): IBalanco => {
+
+    let auxBalanco = { ...estadoAtual.balanco }
+
+    let somaGanhos = somaValor(listaGanhos);
+    let somaDebito = somaValorGastos(listaGastos, "Debito");
+    let somaCreditoNaoPagos = somaValorGastos(listaGastos, "Crédito", true);
+    let somaCreditosPagos = somaValorGastos(listaGastos, "Crédito", false);
+    let somaInvestimento = somaValorGastos(listaGastos, "Investimento");
+
+    auxBalanco.saldoAtual = somaGanhos - somaInvestimento - somaDebito - somaCreditosPagos;
+    auxBalanco.saldoInvestimentoMes = somaInvestimento
+    auxBalanco.saldoMesSeguinte = somaGanhos - somaCreditoNaoPagos
+    auxBalanco.gasto = somaDebito + somaCreditoNaoPagos + somaInvestimento
+    auxBalanco.ganhosMes = somaGanhos
+
+
+    return auxBalanco;
+}
 
 const initialState: IDadosMes = {
 
     nomeMes: "Janeiro",
-    balanco: {
-        ganhosMes: 3800,
-        saldoMesSeguinte: 3800,
-        saldoInvestimentoMes: 1500,
-        saldoAtual: 1300,
-        gasto: 1000
-    },
+    balanco: atualizaBalanco({} as IDadosMes, Ganhos, Gastos),
     planilhas: {
         gastos: [...Gastos],
-        investimentos: [...Investimentos],
         ganhos: [...Ganhos]
     }
 }
@@ -41,20 +81,9 @@ export const homeSlice = createSlice({
 
             }
 
-            const somaGastos = auxGastos.reduce((soma, gasto) => {
-                return soma + (gasto.valor ?? 0);
-            }, 0);
-
-            const somaInvestimentos = auxGastos.filter(item => item.tipoGasto === "Investimento")
-                .reduce((soma, gasto) => soma + (gasto.valor ?? 0), 0)
-
             return {
                 ...state,
-                balanco: {
-                    ...state.balanco,
-                    saldoInvestimentoMes: somaInvestimentos,
-                    gasto: somaGastos - somaInvestimentos,
-                },
+                balanco: atualizaBalanco(state, state.planilhas.ganhos, auxGastos),
                 planilhas: {
                     ...state.planilhas,
                     gastos: auxGastos,
@@ -65,20 +94,9 @@ export const homeSlice = createSlice({
             const auxGastos = state.planilhas
                 .gastos.filter(item => !action.payload.includes(item.id))
 
-            const somaGastos = auxGastos.reduce((soma, gasto) => {
-                return soma + (gasto.valor ?? 0);
-            }, 0);
-
-            const somaInvestimentos = auxGastos.filter(item => item.tipoGasto === "Investimento")
-                .reduce((soma, gasto) => soma + (gasto.valor ?? 0), 0)
-
             return {
                 ...state,
-                balanco: {
-                    ...state.balanco,
-                    saldoInvestimentoMes: somaInvestimentos,
-                    gasto: somaGastos - somaInvestimentos
-                },
+                balanco: atualizaBalanco(state, state.planilhas.ganhos, auxGastos),
                 planilhas: {
                     ...state.planilhas,
                     gastos: auxGastos,
@@ -97,16 +115,10 @@ export const homeSlice = createSlice({
 
             }
 
-            const somaGanhos = auxGanhos.reduce((soma, gasto) => {
-                return soma + (gasto.valor ?? 0);
-            }, 0);
 
             return {
                 ...state,
-                balanco: {
-                    ...state.balanco,
-                    ganhosMes: somaGanhos,
-                },
+                balanco: atualizaBalanco(state, auxGanhos, state.planilhas.gastos),
                 planilhas: {
                     ...state.planilhas,
                     ganhos: auxGanhos,
@@ -118,16 +130,9 @@ export const homeSlice = createSlice({
                 .ganhos
                 .filter(item => !action.payload.includes(item.id))
 
-            const somaGastos = auxGanhos.reduce((soma, gasto) => {
-                return soma + (gasto.valor ?? 0);
-            }, 0);
-
             return {
                 ...state,
-                balanco: {
-                    ...state.balanco,
-                    ganhosMes: somaGastos,
-                },
+                balanco: atualizaBalanco(state, auxGanhos, state.planilhas.gastos),
                 planilhas: {
                     ...state.planilhas,
                     ganhos: auxGanhos,
