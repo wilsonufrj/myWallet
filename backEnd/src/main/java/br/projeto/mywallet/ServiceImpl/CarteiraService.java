@@ -5,7 +5,6 @@ import br.projeto.mywallet.Mappers.CarteiraMapper;
 import br.projeto.mywallet.Model.Carteira;
 import br.projeto.mywallet.Service.ICarteiraService;
 import br.projeto.mywallet.repository.ICarteiraRepository;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

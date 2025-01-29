@@ -23,6 +23,10 @@ public class BancoService implements IBancoService {
     @Override
     public BancoDTO criarBanco(BancoDTO banco) {
         
+        if(bancoRepository.findAll().stream().anyMatch(bancoAux -> bancoAux.getNome().equals(banco.getNome()))){
+            throw new RuntimeException("Banco ja existente na base de dados");
+        }
+        
         Banco auxBanco = BancoMapper.INSTANCE.toEntity(banco);
         
         return BancoMapper.INSTANCE
@@ -66,4 +70,6 @@ public class BancoService implements IBancoService {
         
         bancoRepository.delete(BancoMapper.INSTANCE.toEntity(bancoDTO)); 
     }
+    
+    
 }

@@ -3,6 +3,8 @@ package br.projeto.mywallet.Model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
@@ -19,6 +21,8 @@ import java.util.Set;
 public class Carteira {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+
     private Long id;
     
     @Column(name = "nome",
