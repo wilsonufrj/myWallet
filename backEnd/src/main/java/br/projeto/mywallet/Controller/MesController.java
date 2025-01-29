@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Controller;
 
+import br.projeto.mywallet.DTO.MesDTO;
 import br.projeto.mywallet.Model.Mes;
 import br.projeto.mywallet.Service.IMesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,13 @@ public class MesController {
     private IMesService mesService;
 
     @PostMapping
-    public ResponseEntity<Mes> criarMes(@RequestBody Mes mes) {
-        return ResponseEntity.ok(mesService.criarMes(mes));
+    public ResponseEntity<MesDTO> criarMes(@RequestBody MesDTO mesDTO) {
+        return ResponseEntity.ok(mesService.criarMes(mesDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Mes> atualizarMes(@PathVariable Long id, @RequestBody Mes mes) {
-        return ResponseEntity.ok(mesService.atualizarMes(id, mes));
+    public ResponseEntity<MesDTO> atualizarMes(@PathVariable Long id, @RequestBody MesDTO mesDTO) {
+        return ResponseEntity.ok(mesService.atualizarMes(id, mesDTO));
     }
 
     @DeleteMapping("/{id}")
@@ -32,12 +33,12 @@ public class MesController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Mes> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<MesDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(mesService.buscarPorId(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Mes>> listarTodos() {
+    public ResponseEntity<List<MesDTO>> listarTodos() {
         return ResponseEntity.ok(mesService.listarTodos());
     }
 }

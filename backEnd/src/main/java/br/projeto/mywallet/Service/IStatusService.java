@@ -1,12 +1,12 @@
 package br.projeto.mywallet.Service;
 
-import br.projeto.mywallet.Model.Status;
+import br.projeto.mywallet.DTO.StatusDTO;
 import java.util.List;
 
 public interface IStatusService {
-    Status criarStatus(Status status);
-    Status atualizarStatus(Long id, Status status);
+    StatusDTO criarStatus(StatusDTO status);
+    StatusDTO atualizarStatus(Long id, StatusDTO status);
     void deletarStatus(Long id);
-    Status buscarPorId(Long id);
-    List<Status> listarTodos();
+    StatusDTO buscarPorId(Long id);
+    List<StatusDTO> listarTodos();
 }

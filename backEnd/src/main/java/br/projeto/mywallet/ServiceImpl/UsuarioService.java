@@ -1,8 +1,11 @@
 package br.projeto.mywallet.ServiceImpl;
 
+import br.projeto.mywallet.DTO.UsuarioDTO;
+import br.projeto.mywallet.Mappers.UsuarioMapper;
 import br.projeto.mywallet.Model.Usuario;
 import br.projeto.mywallet.Service.IUsuarioService;
 import br.projeto.mywallet.repository.IUsuarioRepository;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,46 +15,47 @@ import java.util.Optional;
 @Service
 public class UsuarioService implements IUsuarioService {
 
+    private final UsuarioMapper usuarioMapper = Mappers.getMapper(UsuarioMapper.class);
+
     @Autowired
     private IUsuarioRepository usuarioRepository;
 
     @Override
-    public Usuario criarUsuario(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
+        Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
+        return usuarioMapper.toDTO(usuarioRepository.save(usuario));
     }
 
     @Override
-    public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
-        Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
-        if (usuarioExistente.isPresent()) {
-            Usuario usuario = usuarioExistente.get();
-            usuario.setNome(usuarioAtualizado.getNome());
-            usuario.setDataNascimento(usuarioAtualizado.getDataNascimento());
-            usuario.setEmail(usuarioAtualizado.getEmail());
-            usuario.setSenha(usuarioAtualizado.getSenha());
-            usuario.setCateiras(usuarioAtualizado.getCateiras());
-            return usuarioRepository.save(usuario);
-        }
-        throw new RuntimeException("Usuário com o ID " + id + " não encontrado.");
+    public UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioAtualizado) {
+        UsuarioDTO usuarioDTO = buscarPorId(id);
+
+        usuarioDTO.setNome(usuarioAtualizado.getNome());
+        usuarioDTO.setDataNascimento(usuarioAtualizado.getDataNascimento());
+        usuarioDTO.setEmail(usuarioAtualizado.getEmail());
+        usuarioDTO.setSenha(usuarioAtualizado.getSenha());
+        usuarioDTO.setCarteiras(usuarioAtualizado.getCarteiras());
+
+        return usuarioMapper.toDTO(usuarioRepository.save(usuarioMapper.toEntity(usuarioDTO)));
     }
 
     @Override
     public void deletarUsuario(Long id) {
-        if (usuarioRepository.existsById(id)) {
-            usuarioRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Usuário com o ID " + id + " não encontrado.");
-        }
+        UsuarioDTO usuarioDTO = buscarPorId(id);
+        usuarioRepository.delete(usuarioMapper.toEntity(usuarioDTO));
     }
 
     @Override
-    public Usuario buscarPorId(Long id) {
-        return usuarioRepository.findById(id).orElseThrow(() -> 
-            new RuntimeException("Usuário com o ID " + id + " não encontrado."));
+    public UsuarioDTO buscarPorId(Long id) {
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+        return usuario.map(usuarioMapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Usuário com ID " + id + " não encontrado."));
     }
 
     @Override
-    public List<Usuario> listarTodos() {
-        return usuarioRepository.findAll();
+    public List<UsuarioDTO> listarTodos() {
+        return usuarioRepository.findAll().stream()
+                .map(usuarioMapper::toDTO)
+                .toList();
     }
 }

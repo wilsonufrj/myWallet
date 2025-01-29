@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Controller;
 
+import br.projeto.mywallet.DTO.TransacaoDTO;
 import br.projeto.mywallet.Model.Transacao;
 import br.projeto.mywallet.Service.ITransacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,12 @@ public class TransacaoController {
     private ITransacaoService transacaoService;
 
     @PostMapping
-    public ResponseEntity<Transacao> criarTransacao(@RequestBody Transacao transacao) {
+    public ResponseEntity<TransacaoDTO> criarTransacao(@RequestBody TransacaoDTO transacao) {
         return ResponseEntity.ok(transacaoService.criarTransacao(transacao));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Transacao> atualizarTransacao(@PathVariable Long id, @RequestBody Transacao transacaoAtualizada) {
+    public ResponseEntity<TransacaoDTO> atualizarTransacao(@PathVariable Long id, @RequestBody TransacaoDTO transacaoAtualizada) {
         return ResponseEntity.ok(transacaoService.atualizarTransacao(id, transacaoAtualizada));
     }
 
@@ -32,12 +33,12 @@ public class TransacaoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Transacao> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<TransacaoDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(transacaoService.buscarPorId(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Transacao>> listarTodas() {
+    public ResponseEntity<List<TransacaoDTO>> listarTodas() {
         return ResponseEntity.ok(transacaoService.listarTodas());
     }
 }

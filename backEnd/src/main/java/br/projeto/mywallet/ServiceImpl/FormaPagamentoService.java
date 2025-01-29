@@ -1,8 +1,11 @@
 package br.projeto.mywallet.ServiceImpl;
 
+import br.projeto.mywallet.DTO.FormaPagamentoDTO;
+import br.projeto.mywallet.Mappers.FormaPagamentoMapper;
 import br.projeto.mywallet.Model.FormaPagamento;
 import br.projeto.mywallet.Service.IFormaPagamentoService;
 import br.projeto.mywallet.repository.IFormaPagamentoRepository;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,36 +15,46 @@ import java.util.Optional;
 @Service
 public class FormaPagamentoService implements IFormaPagamentoService {
 
+    private final FormaPagamentoMapper formaPagamentoMapper = Mappers.getMapper(FormaPagamentoMapper.class);
+
     @Autowired
     private IFormaPagamentoRepository formaPagamentoRepository;
 
     @Override
-    public FormaPagamento criarFormaPagamento(FormaPagamento formaPagamento) {
-        return formaPagamentoRepository.save(formaPagamento); // Salva no banco de dados
+    public FormaPagamentoDTO criarFormaPagamento(FormaPagamentoDTO formaPagamentoDTO) {
+        FormaPagamento formaPagamento = formaPagamentoMapper.toEntity(formaPagamentoDTO);
+        return formaPagamentoMapper.toDTO(formaPagamentoRepository.save(formaPagamento));
     }
 
     @Override
-    public FormaPagamento buscarFormaPagamentoPorId(Long id) {
+    public FormaPagamentoDTO buscarFormaPagamentoPorId(Long id) {
         Optional<FormaPagamento> formaPagamento = formaPagamentoRepository.findById(id);
-        return formaPagamento.orElseThrow(() -> new RuntimeException("Forma de pagamento não encontrada com ID: " + id));
+        return formaPagamento.map(formaPagamentoMapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Forma de pagamento não encontrada com ID: " + id));
     }
 
     @Override
-    public List<FormaPagamento> listarTodasFormasPagamento() {
-        return formaPagamentoRepository.findAll();
+    public List<FormaPagamentoDTO> listarTodasFormasPagamento() {
+        return formaPagamentoRepository.findAll().stream()
+                .map(formaPagamentoMapper::toDTO)
+                .toList();
     }
 
     @Override
-    public FormaPagamento atualizarFormaPagamento(Long id, FormaPagamento formaPagamentoAtualizada) {
-        FormaPagamento formaPagamento = buscarFormaPagamentoPorId(id); // Verifica se existe
-        formaPagamento.setNome(formaPagamentoAtualizada.getNome());
-        formaPagamento.setTransacoes(formaPagamentoAtualizada.getTransacoes());
-        return formaPagamentoRepository.save(formaPagamento); // Atualiza e salva
+    public FormaPagamentoDTO atualizarFormaPagamento(Long id, FormaPagamentoDTO formaPagamentoAtualizada) {
+        FormaPagamentoDTO formaPagamentoDTO = buscarFormaPagamentoPorId(id);
+
+        formaPagamentoDTO.setNome(formaPagamentoAtualizada.getNome());
+        formaPagamentoDTO.setTransacoes(formaPagamentoAtualizada.getTransacoes());
+
+        return formaPagamentoMapper.toDTO(
+                formaPagamentoRepository.save(formaPagamentoMapper.toEntity(formaPagamentoDTO))
+        );
     }
 
     @Override
     public void deletarFormaPagamento(Long id) {
-        FormaPagamento formaPagamento = buscarFormaPagamentoPorId(id); // Verifica se existe
-        formaPagamentoRepository.delete(formaPagamento); // Deleta do banco de dados
+        FormaPagamentoDTO formaPagamentoDTO = buscarFormaPagamentoPorId(id);
+        formaPagamentoRepository.delete(formaPagamentoMapper.toEntity(formaPagamentoDTO));
     }
 }

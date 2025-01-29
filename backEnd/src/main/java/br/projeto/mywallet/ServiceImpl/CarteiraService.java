@@ -1,8 +1,11 @@
 package br.projeto.mywallet.ServiceImpl;
 
+import br.projeto.mywallet.DTO.CarteiraDTO;
+import br.projeto.mywallet.Mappers.CarteiraMapper;
 import br.projeto.mywallet.Model.Carteira;
 import br.projeto.mywallet.Service.ICarteiraService;
 import br.projeto.mywallet.repository.ICarteiraRepository;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,37 +15,47 @@ import java.util.Optional;
 @Service
 public class CarteiraService implements ICarteiraService {
 
+    private final CarteiraMapper carteiraMapper = Mappers.getMapper(CarteiraMapper.class);
+
     @Autowired
     private ICarteiraRepository carteiraRepository;
 
     @Override
-    public Carteira criarCarteira(Carteira carteira) {
-        return carteiraRepository.save(carteira); // Salva a carteira no banco de dados
+    public CarteiraDTO criarCarteira(CarteiraDTO carteiraDTO) {
+        Carteira carteira = carteiraMapper.toEntity(carteiraDTO);
+        return carteiraMapper.toDTO(carteiraRepository.save(carteira));
     }
 
     @Override
-    public Carteira buscarCarteiraPorId(Long id) {
+    public CarteiraDTO buscarCarteiraPorId(Long id) {
         Optional<Carteira> carteira = carteiraRepository.findById(id);
-        return carteira.orElseThrow(() -> new RuntimeException("Carteira não encontrada com ID: " + id));
+        return carteira.map(carteiraMapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Carteira não encontrada com ID: " + id));
     }
 
     @Override
-    public List<Carteira> listarTodasCarteiras() {
-        return carteiraRepository.findAll();
+    public List<CarteiraDTO> listarTodasCarteiras() {
+        return carteiraRepository.findAll().stream()
+                .map(carteiraMapper::toDTO)
+                .toList();
     }
 
     @Override
-    public Carteira atualizarCarteira(Long id, Carteira carteiraAtualizada) {
-        Carteira carteira = buscarCarteiraPorId(id); // Verifica se a carteira existe
-        carteira.setNome(carteiraAtualizada.getNome());
-        carteira.setMeses(carteiraAtualizada.getMeses());
-        carteira.setUsuarios(carteiraAtualizada.getUsuarios());
-        return carteiraRepository.save(carteira); // Atualiza e salva
+    public CarteiraDTO atualizarCarteira(Long id, CarteiraDTO carteiraAtualizada) {
+        CarteiraDTO carteiraDTO = buscarCarteiraPorId(id);
+
+        carteiraDTO.setNome(carteiraAtualizada.getNome());
+        carteiraDTO.setMeses(carteiraAtualizada.getMeses());
+        carteiraDTO.setUsuarios(carteiraAtualizada.getUsuarios());
+
+        return carteiraMapper.toDTO(
+                carteiraRepository.save(carteiraMapper.toEntity(carteiraDTO))
+        );
     }
 
     @Override
     public void deletarCarteira(Long id) {
-        Carteira carteira = buscarCarteiraPorId(id); // Verifica se a carteira existe
-        carteiraRepository.delete(carteira); // Remove do banco de dados
+        CarteiraDTO carteiraDTO = buscarCarteiraPorId(id);
+        carteiraRepository.delete(carteiraMapper.toEntity(carteiraDTO));
     }
 }

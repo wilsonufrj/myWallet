@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Controller;
 
+import br.projeto.mywallet.DTO.ResponsavelDTO;
 import br.projeto.mywallet.Model.Responsavel;
 import br.projeto.mywallet.Service.IResponsavelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,13 @@ public class ResponsavelController {
     private IResponsavelService responsavelService;
 
     @PostMapping
-    public ResponseEntity<Responsavel> criarResponsavel(@RequestBody Responsavel responsavel) {
-        return ResponseEntity.ok(responsavelService.criarResponsavel(responsavel));
+    public ResponseEntity<ResponsavelDTO> criarResponsavel(@RequestBody ResponsavelDTO responsavelDTO) {
+        return ResponseEntity.ok(responsavelService.criarResponsavel(responsavelDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Responsavel> atualizarResponsavel(@PathVariable Long id, @RequestBody Responsavel responsavel) {
-        return ResponseEntity.ok(responsavelService.atualizarResponsavel(id, responsavel));
+    public ResponseEntity<ResponsavelDTO> atualizarResponsavel(@PathVariable Long id, @RequestBody ResponsavelDTO responsavelDTO) {
+        return ResponseEntity.ok(responsavelService.atualizarResponsavel(id, responsavelDTO));
     }
 
     @DeleteMapping("/{id}")
@@ -32,12 +33,12 @@ public class ResponsavelController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Responsavel> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ResponsavelDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(responsavelService.buscarPorId(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Responsavel>> listarTodos() {
+    public ResponseEntity<List<ResponsavelDTO>> listarTodos() {
         return ResponseEntity.ok(responsavelService.listarTodos());
     }
 }

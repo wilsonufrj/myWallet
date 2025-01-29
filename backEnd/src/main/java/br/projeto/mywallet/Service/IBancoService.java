@@ -1,12 +1,16 @@
 package br.projeto.mywallet.Service;
 
-import br.projeto.mywallet.Model.Banco;
+import br.projeto.mywallet.DTO.BancoDTO;
 import java.util.List;
 
 public interface IBancoService {
-    Banco criarBanco(Banco banco); // Criar
-    Banco buscarBancoPorId(Long id); // Ler por ID
-    List<Banco> listarTodosBancos(); // Ler todos
-    Banco atualizarBanco(Long id, Banco banco); // Atualizar
+    BancoDTO criarBanco(BancoDTO banco); // Criar
+    
+    BancoDTO buscarBancoPorId(Long id); // Ler por ID
+    
+    List<BancoDTO> listarTodosBancos(); // Ler todos
+    
+    BancoDTO atualizarBanco(Long id, BancoDTO banco); // Atualizar
+    
     void deletarBanco(Long id); // Deletar
 }

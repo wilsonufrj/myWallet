@@ -1,12 +1,12 @@
 package br.projeto.mywallet.Service;
 
-import br.projeto.mywallet.Model.Mes;
+import br.projeto.mywallet.DTO.MesDTO;
 import java.util.List;
 
 public interface IMesService {
-    Mes criarMes(Mes mes);
-    Mes atualizarMes(Long id, Mes mes);
+    MesDTO criarMes(MesDTO mesDTO);
+    MesDTO atualizarMes(Long id, MesDTO mesDTO);
     void deletarMes(Long id);
-    Mes buscarPorId(Long id);
-    List<Mes> listarTodos();
+    MesDTO buscarPorId(Long id);
+    List<MesDTO> listarTodos();
 }

@@ -1,12 +1,12 @@
 package br.projeto.mywallet.Service;
 
-import br.projeto.mywallet.Model.TipoTransacao;
+import br.projeto.mywallet.DTO.TipoTransacaoDTO;
 import java.util.List;
 
 public interface ITipoTransacaoService {
-    TipoTransacao criarTipoTransacao(TipoTransacao tipoTransacao);
-    TipoTransacao atualizarTipoTransacao(Long id, TipoTransacao tipoTransacao);
+    TipoTransacaoDTO criarTipoTransacao(TipoTransacaoDTO tipoTransacaoDTO);
+    TipoTransacaoDTO atualizarTipoTransacao(Long id, TipoTransacaoDTO tipoTransacaoDTO);
     void deletarTipoTransacao(Long id);
-    TipoTransacao buscarPorId(Long id);
-    List<TipoTransacao> listarTodos();
+    TipoTransacaoDTO buscarPorId(Long id);
+    List<TipoTransacaoDTO> listarTodos();
 }

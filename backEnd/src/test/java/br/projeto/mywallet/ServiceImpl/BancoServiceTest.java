@@ -1,5 +1,7 @@
 package br.projeto.mywallet.ServiceImpl;
 
+import br.projeto.mywallet.DTO.BancoDTO;
+import br.projeto.mywallet.Mappers.BancoMapper;
 import br.projeto.mywallet.Model.Banco;
 import br.projeto.mywallet.repository.IBancoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,15 +15,18 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.mapstruct.factory.Mappers;
 import static org.mockito.Mockito.*;
 
 class BancoServiceTest {
-
+    
     @InjectMocks
     private BancoService bancoService;
 
     @Mock
     private IBancoRepository bancoRepository;
+    
+    private final BancoMapper bancoMapper = Mappers.getMapper(BancoMapper.class);
 
     private Banco banco;
 
@@ -38,10 +43,10 @@ class BancoServiceTest {
     void criarBanco_DeveSalvarEBancoRetornado() {
         when(bancoRepository.save(any(Banco.class))).thenReturn(banco);
 
-        Banco bancoCriado = bancoService.criarBanco(banco);
+        BancoDTO bancoCriado = bancoService.criarBanco(bancoMapper.toDTO(banco));
 
         assertNotNull(bancoCriado);
-        assertEquals("Banco Teste", bancoCriado.getNomeBanco());
+        assertEquals("Banco Teste", bancoCriado.getNome());
         verify(bancoRepository, times(1)).save(banco);
     }
 
@@ -49,10 +54,10 @@ class BancoServiceTest {
     void buscarBancoPorId_DeveRetornarBancoQuandoEncontrado() {
         when(bancoRepository.findById(1L)).thenReturn(Optional.of(banco));
 
-        Banco bancoEncontrado = bancoService.buscarBancoPorId(1L);
+        BancoDTO bancoEncontrado = bancoService.buscarBancoPorId(1L);
 
         assertNotNull(bancoEncontrado);
-        assertEquals("Banco Teste", bancoEncontrado.getNomeBanco());
+        assertEquals("Banco Teste", bancoEncontrado.getNome());
         verify(bancoRepository, times(1)).findById(1L);
     }
 
@@ -74,7 +79,7 @@ class BancoServiceTest {
         bancos.add(banco);
         when(bancoRepository.findAll()).thenReturn(bancos);
 
-        List<Banco> resultado = bancoService.listarTodosBancos();
+        List<BancoDTO> resultado = bancoService.listarTodosBancos();
 
         assertNotNull(resultado);
         assertEquals(1, resultado.size());
@@ -90,10 +95,10 @@ class BancoServiceTest {
         when(bancoRepository.findById(1L)).thenReturn(Optional.of(banco));
         when(bancoRepository.save(any(Banco.class))).thenReturn(bancoAtualizado);
 
-        Banco resultado = bancoService.atualizarBanco(1L, bancoAtualizado);
+        BancoDTO resultado = bancoService.atualizarBanco(1L, bancoMapper.toDTO(bancoAtualizado));
 
         assertNotNull(resultado);
-        assertEquals("Banco Atualizado", resultado.getNomeBanco());
+        assertEquals("Banco Atualizado", resultado.getNome());
         verify(bancoRepository, times(1)).findById(1L);
         verify(bancoRepository, times(1)).save(banco);
     }
@@ -107,7 +112,7 @@ class BancoServiceTest {
         when(bancoRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            bancoService.atualizarBanco(1L, bancoAtualizado);
+            bancoService.atualizarBanco(1L, bancoMapper.toDTO(bancoAtualizado));
         });
 
         assertEquals("Banco não encontrado com ID: 1", exception.getMessage());

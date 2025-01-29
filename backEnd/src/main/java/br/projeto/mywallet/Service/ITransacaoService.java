@@ -1,12 +1,13 @@
 package br.projeto.mywallet.Service;
 
+import br.projeto.mywallet.DTO.TransacaoDTO;
 import br.projeto.mywallet.Model.Transacao;
 import java.util.List;
 
 public interface ITransacaoService {
-    Transacao criarTransacao(Transacao transacao);
-    Transacao atualizarTransacao(Long id, Transacao transacaoAtualizada);
+    TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO);
+    TransacaoDTO atualizarTransacao(Long id, TransacaoDTO transacaoAtualizadaDTO);
     void deletarTransacao(Long id);
-    Transacao buscarPorId(Long id);
-    List<Transacao> listarTodas();
+    TransacaoDTO buscarPorId(Long id);
+    List<TransacaoDTO> listarTodas();
 }

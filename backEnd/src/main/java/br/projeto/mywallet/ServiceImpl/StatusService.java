@@ -1,8 +1,11 @@
 package br.projeto.mywallet.ServiceImpl;
 
+import br.projeto.mywallet.DTO.StatusDTO;
+import br.projeto.mywallet.Mappers.StatusMapper;
 import br.projeto.mywallet.Model.Status;
 import br.projeto.mywallet.Service.IStatusService;
 import br.projeto.mywallet.repository.IStatusRepository;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,43 +15,44 @@ import java.util.Optional;
 @Service
 public class StatusService implements IStatusService {
 
+    private final StatusMapper statusMapper = Mappers.getMapper(StatusMapper.class);
+
     @Autowired
     private IStatusRepository statusRepository;
 
     @Override
-    public Status criarStatus(Status status) {
-        return statusRepository.save(status);
+    public StatusDTO criarStatus(StatusDTO statusDTO) {
+        Status status = statusMapper.toEntity(statusDTO);
+        return statusMapper.toDTO(statusRepository.save(status));
     }
 
     @Override
-    public Status atualizarStatus(Long id, Status statusAtualizado) {
-        Optional<Status> statusExistente = statusRepository.findById(id);
-        if (statusExistente.isPresent()) {
-            Status status = statusExistente.get();
-            status.setNome(statusAtualizado.getNome());
-            status.setTransacoes(statusAtualizado.getTransacoes());
-            return statusRepository.save(status);
-        }
-        throw new RuntimeException("Status com o ID " + id + " não encontrado.");
+    public StatusDTO atualizarStatus(Long id, StatusDTO statusAtualizado) {
+        StatusDTO statusDTO = buscarPorId(id);
+
+        statusDTO.setNome(statusAtualizado.getNome());
+        statusDTO.setTransacoes(statusAtualizado.getTransacoes());
+
+        return statusMapper.toDTO(statusRepository.save(statusMapper.toEntity(statusDTO)));
     }
 
     @Override
     public void deletarStatus(Long id) {
-        if (statusRepository.existsById(id)) {
-            statusRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Status com o ID " + id + " não encontrado.");
-        }
+        StatusDTO statusDTO = buscarPorId(id);
+        statusRepository.delete(statusMapper.toEntity(statusDTO));
     }
 
     @Override
-    public Status buscarPorId(Long id) {
-        return statusRepository.findById(id).orElseThrow(() -> 
-            new RuntimeException("Status com o ID " + id + " não encontrado."));
+    public StatusDTO buscarPorId(Long id) {
+        Optional<Status> status = statusRepository.findById(id);
+        return status.map(statusMapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Status com o ID " + id + " não encontrado."));
     }
 
     @Override
-    public List<Status> listarTodos() {
-        return statusRepository.findAll();
+    public List<StatusDTO> listarTodos() {
+        return statusRepository.findAll().stream()
+                .map(statusMapper::toDTO)
+                .toList();
     }
 }

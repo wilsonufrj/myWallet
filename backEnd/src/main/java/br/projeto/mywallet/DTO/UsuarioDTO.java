@@ -1,12 +1,5 @@
-package br.projeto.mywallet.Model;
+package br.projeto.mywallet.DTO;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -14,47 +7,23 @@ import java.util.Set;
  *
  * @author wilsonramos
  */
-@Entity
-@Table(name = "Usuario")
-public class Usuario {
+public class UsuarioDTO {
     
-    @Id
     private Long id;
-    
-    @Column(name = "nome",
-            nullable = false)
+   
     private String nome;
     
-    @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
-    
-    @Column(name = "email",
-            nullable = false)
+  
     private String email;
     
-    @Column(name = "senha",
-            nullable = false)
     private String senha;
     
-    @ManyToMany
-    @JoinTable(
-        name = "Usuario_Carteira",
-        joinColumns = @JoinColumn(name = "usuario_id"), 
-        inverseJoinColumns = @JoinColumn(name = "carteira_id")
-    )
-    private Set<Carteira> carteiras;
-            
-    public Usuario() {
-    }
+    private Set<CarteiraDTO> carteiras;
+    
+    public UsuarioDTO(){}
 
-    public Usuario(
-            Long id,
-            String nome,
-            LocalDate dataNascimento,
-            String email,
-            String senha,
-            Set<Carteira> carteiras) {
-        
+    public UsuarioDTO(Long id, String nome, LocalDate dataNascimento, String email, String senha, Set<CarteiraDTO> carteiras) {
         this.id = id;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
@@ -103,12 +72,13 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Set<Carteira> getCateiras() {
+    public Set<CarteiraDTO> getCarteiras() {
         return carteiras;
     }
 
-    public void setCateiras(Set<Carteira> carteiras) {
+    public void setCarteiras(Set<CarteiraDTO> carteiras) {
         this.carteiras = carteiras;
     }
+    
     
 }

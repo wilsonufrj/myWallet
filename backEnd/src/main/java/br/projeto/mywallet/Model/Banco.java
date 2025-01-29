@@ -29,9 +29,7 @@ public class Banco {
     )
     private List<Transacao> transcacoes;
     
-    public Banco(){
-        
-    }
+    public Banco(){}
 
     public Banco(Long id, String nome) {
         this.id = id;

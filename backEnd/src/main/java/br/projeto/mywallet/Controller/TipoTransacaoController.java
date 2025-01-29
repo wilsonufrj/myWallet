@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Controller;
 
+import br.projeto.mywallet.DTO.TipoTransacaoDTO;
 import br.projeto.mywallet.Model.TipoTransacao;
 import br.projeto.mywallet.Service.ITipoTransacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,12 @@ public class TipoTransacaoController {
     private ITipoTransacaoService tipoTransacaoService;
 
     @PostMapping
-    public ResponseEntity<TipoTransacao> criarTipoTransacao(@RequestBody TipoTransacao tipoTransacao) {
+    public ResponseEntity<TipoTransacaoDTO> criarTipoTransacao(@RequestBody TipoTransacaoDTO tipoTransacao) {
         return ResponseEntity.ok(tipoTransacaoService.criarTipoTransacao(tipoTransacao));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TipoTransacao> atualizarTipoTransacao(@PathVariable Long id, @RequestBody TipoTransacao tipoTransacao) {
+    public ResponseEntity<TipoTransacaoDTO> atualizarTipoTransacao(@PathVariable Long id, @RequestBody TipoTransacaoDTO tipoTransacao) {
         return ResponseEntity.ok(tipoTransacaoService.atualizarTipoTransacao(id, tipoTransacao));
     }
 
@@ -32,12 +33,12 @@ public class TipoTransacaoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TipoTransacao> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<TipoTransacaoDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(tipoTransacaoService.buscarPorId(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<TipoTransacao>> listarTodos() {
+    public ResponseEntity<List<TipoTransacaoDTO>> listarTodos() {
         return ResponseEntity.ok(tipoTransacaoService.listarTodos());
     }
 }

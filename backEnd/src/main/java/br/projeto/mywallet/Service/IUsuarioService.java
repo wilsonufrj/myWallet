@@ -1,12 +1,13 @@
 package br.projeto.mywallet.Service;
 
+import br.projeto.mywallet.DTO.UsuarioDTO;
 import br.projeto.mywallet.Model.Usuario;
 import java.util.List;
 
 public interface IUsuarioService {
-    Usuario criarUsuario(Usuario usuario);
-    Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado);
+    UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO);
+    UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioAtualizadoDTO);
     void deletarUsuario(Long id);
-    Usuario buscarPorId(Long id);
-    List<Usuario> listarTodos();
+    UsuarioDTO buscarPorId(Long id);
+    List<UsuarioDTO> listarTodos();
 }

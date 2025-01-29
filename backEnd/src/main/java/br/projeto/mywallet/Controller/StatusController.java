@@ -1,5 +1,6 @@
 package br.projeto.mywallet.Controller;
 
+import br.projeto.mywallet.DTO.StatusDTO;
 import br.projeto.mywallet.Model.Status;
 import br.projeto.mywallet.Service.IStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,12 @@ public class StatusController {
     private IStatusService statusService;
 
     @PostMapping
-    public ResponseEntity<Status> criarStatus(@RequestBody Status status) {
+    public ResponseEntity<StatusDTO> criarStatus(@RequestBody StatusDTO status) {
         return ResponseEntity.ok(statusService.criarStatus(status));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Status> atualizarStatus(@PathVariable Long id, @RequestBody Status status) {
+    public ResponseEntity<StatusDTO> atualizarStatus(@PathVariable Long id, @RequestBody StatusDTO status) {
         return ResponseEntity.ok(statusService.atualizarStatus(id, status));
     }
 
@@ -32,12 +33,12 @@ public class StatusController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Status> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<StatusDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(statusService.buscarPorId(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Status>> listarTodos() {
+    public ResponseEntity<List<StatusDTO>> listarTodos() {
         return ResponseEntity.ok(statusService.listarTodos());
     }
 }

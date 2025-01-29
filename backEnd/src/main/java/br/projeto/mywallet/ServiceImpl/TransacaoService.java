@@ -1,8 +1,11 @@
 package br.projeto.mywallet.ServiceImpl;
 
+import br.projeto.mywallet.DTO.TransacaoDTO;
+import br.projeto.mywallet.Mappers.TransacaoMapper;
 import br.projeto.mywallet.Model.Transacao;
 import br.projeto.mywallet.Service.ITransacaoService;
 import br.projeto.mywallet.repository.ITransacaoRepository;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,51 +15,52 @@ import java.util.Optional;
 @Service
 public class TransacaoService implements ITransacaoService {
 
+    private final TransacaoMapper transacaoMapper = Mappers.getMapper(TransacaoMapper.class);
+
     @Autowired
     private ITransacaoRepository transacaoRepository;
 
     @Override
-    public Transacao criarTransacao(Transacao transacao) {
-        return transacaoRepository.save(transacao);
+    public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO) {
+        Transacao transacao = transacaoMapper.toEntity(transacaoDTO);
+        return transacaoMapper.toDTO(transacaoRepository.save(transacao));
     }
 
     @Override
-    public Transacao atualizarTransacao(Long id, Transacao transacaoAtualizada) {
-        Optional<Transacao> transacaoExistente = transacaoRepository.findById(id);
-        if (transacaoExistente.isPresent()) {
-            Transacao transacao = transacaoExistente.get();
-            transacao.setData(transacaoAtualizada.getData());
-            transacao.setDescricao(transacaoAtualizada.getDescricao());
-            transacao.setValor(transacaoAtualizada.getValor());
-            transacao.setQuantasVezes(transacaoAtualizada.getQuantasVezes());
-            transacao.setBanco(transacaoAtualizada.getBanco());
-            transacao.setFormaPagamento(transacaoAtualizada.getFormaPagamento());
-            transacao.setStatus(transacaoAtualizada.getStatus());
-            transacao.setResponsavel(transacaoAtualizada.getResponsavel());
-            transacao.setMes(transacaoAtualizada.getMes());
-            transacao.setTipoTransacao(transacaoAtualizada.getTipoTransacao());
-            return transacaoRepository.save(transacao);
-        }
-        throw new RuntimeException("Transação com ID " + id + " não encontrada.");
+    public TransacaoDTO atualizarTransacao(Long id, TransacaoDTO transacaoAtualizada) {
+        TransacaoDTO transacaoDTO = buscarPorId(id);
+
+        transacaoDTO.setData(transacaoAtualizada.getData());
+        transacaoDTO.setDescricao(transacaoAtualizada.getDescricao());
+        transacaoDTO.setValor(transacaoAtualizada.getValor());
+        transacaoDTO.setQuantasVezes(transacaoAtualizada.getQuantasVezes());
+        transacaoDTO.setBanco(transacaoAtualizada.getBanco());
+        transacaoDTO.setFormaPagamento(transacaoAtualizada.getFormaPagamento());
+        transacaoDTO.setStatus(transacaoAtualizada.getStatus());
+        transacaoDTO.setResponsavel(transacaoAtualizada.getResponsavel());
+        transacaoDTO.setMes(transacaoAtualizada.getMes());
+        transacaoDTO.setTipoTransacao(transacaoAtualizada.getTipoTransacao());
+
+        return transacaoMapper.toDTO(transacaoRepository.save(transacaoMapper.toEntity(transacaoDTO)));
     }
 
     @Override
     public void deletarTransacao(Long id) {
-        if (transacaoRepository.existsById(id)) {
-            transacaoRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Transação com ID " + id + " não encontrada.");
-        }
+        TransacaoDTO transacaoDTO = buscarPorId(id);
+        transacaoRepository.delete(transacaoMapper.toEntity(transacaoDTO));
     }
 
     @Override
-    public Transacao buscarPorId(Long id) {
-        return transacaoRepository.findById(id).orElseThrow(() -> 
-            new RuntimeException("Transação com ID " + id + " não encontrada."));
+    public TransacaoDTO buscarPorId(Long id) {
+        Optional<Transacao> transacao = transacaoRepository.findById(id);
+        return transacao.map(transacaoMapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("Transação com ID " + id + " não encontrada."));
     }
 
     @Override
-    public List<Transacao> listarTodas() {
-        return transacaoRepository.findAll();
+    public List<TransacaoDTO> listarTodas() {
+        return transacaoRepository.findAll().stream()
+                .map(transacaoMapper::toDTO)
+                .toList();
     }
 }
