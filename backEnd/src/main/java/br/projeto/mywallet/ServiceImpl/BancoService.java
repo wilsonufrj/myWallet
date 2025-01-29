@@ -7,7 +7,6 @@ import br.projeto.mywallet.Service.IBancoService;
 import br.projeto.mywallet.repository.IBancoRepository;
 import java.util.List;
 import java.util.Optional;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +17,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class BancoService implements IBancoService {
     
-    private final BancoMapper bancoMapper = Mappers.getMapper(BancoMapper.class);
-    
     @Autowired
     private IBancoRepository bancoRepository;
     
     @Override
     public BancoDTO criarBanco(BancoDTO banco) {
-        Banco auxBanco = bancoMapper.toEntity(banco);
-        return bancoMapper.toDTO(bancoRepository.save(auxBanco));
+        
+        Banco auxBanco = BancoMapper.INSTANCE.toEntity(banco);
+        
+        return BancoMapper.INSTANCE
+                .toDTO(bancoRepository.save(auxBanco));
     }
 
     @Override
@@ -34,34 +34,36 @@ public class BancoService implements IBancoService {
         
         Optional<Banco> banco = bancoRepository.findById(id);
         
-        return banco.isPresent()
-                ?bancoMapper.toDTO(banco.get())
-                :null;
+        return banco.map(BancoMapper.INSTANCE::toDTO)
+                .orElseThrow(() -> new RuntimeException("Banco não encontrado com ID: " + id));
     }
 
     @Override
     public List<BancoDTO> listarTodosBancos() {
         
         return bancoRepository.findAll().stream()
-                .map(bancoMapper::toDTO)
+                .map(BancoMapper.INSTANCE::toDTO)
                 .toList();
     }
 
     @Override
     public BancoDTO atualizarBanco(Long id, BancoDTO bancoAtualizado) {
+        
         BancoDTO bancoDTO = buscarBancoPorId(id); 
         
         bancoDTO.setNome(bancoAtualizado.getNome());
         bancoDTO.setTranscacoes(bancoAtualizado.getTranscacoes());
         
-        return bancoMapper.toDTO(
-                bancoRepository.save(bancoMapper.toEntity(bancoDTO))
+        return BancoMapper.INSTANCE
+                .toDTO(bancoRepository.save(BancoMapper.INSTANCE.toEntity(bancoDTO))
         );
     }
 
     @Override
     public void deletarBanco(Long id) {
+        
         BancoDTO bancoDTO = buscarBancoPorId(id);
-        bancoRepository.delete(bancoMapper.toEntity(bancoDTO)); 
+        
+        bancoRepository.delete(BancoMapper.INSTANCE.toEntity(bancoDTO)); 
     }
 }

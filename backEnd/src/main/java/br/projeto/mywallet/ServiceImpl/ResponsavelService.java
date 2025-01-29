@@ -14,16 +14,14 @@ import java.util.Optional;
 
 @Service
 public class ResponsavelService implements IResponsavelService {
-
-    private final ResponsavelMapper responsavelMapper = Mappers.getMapper(ResponsavelMapper.class);
-
+    
     @Autowired
     private IResponsavelRepository responsavelRepository;
 
     @Override
     public ResponsavelDTO criarResponsavel(ResponsavelDTO responsavelDTO) {
-        Responsavel responsavel = responsavelMapper.toEntity(responsavelDTO);
-        return responsavelMapper.toDTO(responsavelRepository.save(responsavel));
+        Responsavel responsavel = ResponsavelMapper.INSTANCE.toEntity(responsavelDTO);
+        return ResponsavelMapper.INSTANCE.toDTO(responsavelRepository.save(responsavel));
     }
 
     @Override
@@ -33,26 +31,26 @@ public class ResponsavelService implements IResponsavelService {
         responsavelDTO.setNome(responsavelAtualizado.getNome());
         responsavelDTO.setTransacoes(responsavelAtualizado.getTransacoes());
 
-        return responsavelMapper.toDTO(responsavelRepository.save(responsavelMapper.toEntity(responsavelDTO)));
+        return ResponsavelMapper.INSTANCE.toDTO(responsavelRepository.save(ResponsavelMapper.INSTANCE.toEntity(responsavelDTO)));
     }
 
     @Override
     public void deletarResponsavel(Long id) {
         ResponsavelDTO responsavelDTO = buscarPorId(id);
-        responsavelRepository.delete(responsavelMapper.toEntity(responsavelDTO));
+        responsavelRepository.delete(ResponsavelMapper.INSTANCE.toEntity(responsavelDTO));
     }
 
     @Override
     public ResponsavelDTO buscarPorId(Long id) {
         Optional<Responsavel> responsavel = responsavelRepository.findById(id);
-        return responsavel.map(responsavelMapper::toDTO)
+        return responsavel.map(ResponsavelMapper.INSTANCE::toDTO)
                 .orElseThrow(() -> new RuntimeException("Responsável com o ID " + id + " não encontrado."));
     }
 
     @Override
     public List<ResponsavelDTO> listarTodos() {
         return responsavelRepository.findAll().stream()
-                .map(responsavelMapper::toDTO)
+                .map(ResponsavelMapper.INSTANCE::toDTO)
                 .toList();
     }
 }

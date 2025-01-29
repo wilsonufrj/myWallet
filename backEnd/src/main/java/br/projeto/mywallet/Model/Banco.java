@@ -44,11 +44,11 @@ public class Banco {
         this.id = id;
     }
 
-    public String getNomeBanco() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNomeBanco(String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 

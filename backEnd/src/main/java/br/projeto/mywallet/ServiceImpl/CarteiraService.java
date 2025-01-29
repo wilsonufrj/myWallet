@@ -15,47 +15,51 @@ import java.util.Optional;
 @Service
 public class CarteiraService implements ICarteiraService {
 
-    private final CarteiraMapper carteiraMapper = Mappers.getMapper(CarteiraMapper.class);
-
     @Autowired
     private ICarteiraRepository carteiraRepository;
 
     @Override
     public CarteiraDTO criarCarteira(CarteiraDTO carteiraDTO) {
-        Carteira carteira = carteiraMapper.toEntity(carteiraDTO);
-        return carteiraMapper.toDTO(carteiraRepository.save(carteira));
+        Carteira carteira = CarteiraMapper.INSTANCE.toEntity(carteiraDTO);
+        return CarteiraMapper.INSTANCE.toDTO(carteiraRepository.save(carteira));
     }
 
     @Override
     public CarteiraDTO buscarCarteiraPorId(Long id) {
+        
         Optional<Carteira> carteira = carteiraRepository.findById(id);
-        return carteira.map(carteiraMapper::toDTO)
+        
+        return carteira.map(CarteiraMapper.INSTANCE::toDTO)
                 .orElseThrow(() -> new RuntimeException("Carteira não encontrada com ID: " + id));
     }
 
     @Override
     public List<CarteiraDTO> listarTodasCarteiras() {
+        
         return carteiraRepository.findAll().stream()
-                .map(carteiraMapper::toDTO)
+                .map(CarteiraMapper.INSTANCE::toDTO)
                 .toList();
     }
 
     @Override
     public CarteiraDTO atualizarCarteira(Long id, CarteiraDTO carteiraAtualizada) {
+        
         CarteiraDTO carteiraDTO = buscarCarteiraPorId(id);
 
         carteiraDTO.setNome(carteiraAtualizada.getNome());
         carteiraDTO.setMeses(carteiraAtualizada.getMeses());
         carteiraDTO.setUsuarios(carteiraAtualizada.getUsuarios());
 
-        return carteiraMapper.toDTO(
-                carteiraRepository.save(carteiraMapper.toEntity(carteiraDTO))
+        return CarteiraMapper.INSTANCE
+                .toDTO(carteiraRepository.save(CarteiraMapper.INSTANCE.toEntity(carteiraDTO))
         );
     }
 
     @Override
     public void deletarCarteira(Long id) {
+        
         CarteiraDTO carteiraDTO = buscarCarteiraPorId(id);
-        carteiraRepository.delete(carteiraMapper.toEntity(carteiraDTO));
+        
+        carteiraRepository.delete(CarteiraMapper.INSTANCE.toEntity(carteiraDTO));
     }
 }

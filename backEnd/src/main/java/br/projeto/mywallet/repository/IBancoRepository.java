@@ -6,11 +6,13 @@ package br.projeto.mywallet.repository;
 
 import br.projeto.mywallet.Model.Banco;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author wilsonramos
  */
+@Repository
 public interface IBancoRepository extends JpaRepository<Banco, Long>{
     
 }

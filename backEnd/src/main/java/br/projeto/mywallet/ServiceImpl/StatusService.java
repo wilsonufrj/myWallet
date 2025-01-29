@@ -15,15 +15,13 @@ import java.util.Optional;
 @Service
 public class StatusService implements IStatusService {
 
-    private final StatusMapper statusMapper = Mappers.getMapper(StatusMapper.class);
-
     @Autowired
     private IStatusRepository statusRepository;
 
     @Override
     public StatusDTO criarStatus(StatusDTO statusDTO) {
-        Status status = statusMapper.toEntity(statusDTO);
-        return statusMapper.toDTO(statusRepository.save(status));
+        Status status = StatusMapper.INSTANCE.toEntity(statusDTO);
+        return StatusMapper.INSTANCE.toDTO(statusRepository.save(status));
     }
 
     @Override
@@ -33,26 +31,26 @@ public class StatusService implements IStatusService {
         statusDTO.setNome(statusAtualizado.getNome());
         statusDTO.setTransacoes(statusAtualizado.getTransacoes());
 
-        return statusMapper.toDTO(statusRepository.save(statusMapper.toEntity(statusDTO)));
+        return StatusMapper.INSTANCE.toDTO(statusRepository.save(StatusMapper.INSTANCE.toEntity(statusDTO)));
     }
 
     @Override
     public void deletarStatus(Long id) {
         StatusDTO statusDTO = buscarPorId(id);
-        statusRepository.delete(statusMapper.toEntity(statusDTO));
+        statusRepository.delete(StatusMapper.INSTANCE.toEntity(statusDTO));
     }
 
     @Override
     public StatusDTO buscarPorId(Long id) {
         Optional<Status> status = statusRepository.findById(id);
-        return status.map(statusMapper::toDTO)
+        return status.map(StatusMapper.INSTANCE::toDTO)
                 .orElseThrow(() -> new RuntimeException("Status com o ID " + id + " não encontrado."));
     }
 
     @Override
     public List<StatusDTO> listarTodos() {
         return statusRepository.findAll().stream()
-                .map(statusMapper::toDTO)
+                .map(StatusMapper.INSTANCE::toDTO)
                 .toList();
     }
 }

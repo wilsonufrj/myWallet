@@ -15,15 +15,16 @@ import java.util.Optional;
 @Service
 public class TipoTransacaoService implements ITipoTransacaoService {
 
-    private final TipoTransacaoMapper tipoTransacaoMapper = Mappers.getMapper(TipoTransacaoMapper.class);
-
     @Autowired
     private ITipoTransacaoRepository tipoTransacaoRepository;
 
     @Override
     public TipoTransacaoDTO criarTipoTransacao(TipoTransacaoDTO tipoTransacaoDTO) {
-        TipoTransacao tipoTransacao = tipoTransacaoMapper.toEntity(tipoTransacaoDTO);
-        return tipoTransacaoMapper.toDTO(tipoTransacaoRepository.save(tipoTransacao));
+        
+        TipoTransacao tipoTransacao = TipoTransacaoMapper.INSTANCE.toEntity(tipoTransacaoDTO);
+        
+        return TipoTransacaoMapper.INSTANCE
+                .toDTO(tipoTransacaoRepository.save(tipoTransacao));
     }
 
     @Override
@@ -33,26 +34,31 @@ public class TipoTransacaoService implements ITipoTransacaoService {
         tipoDTO.setNome(tipoTransacaoAtualizado.getNome());
         tipoDTO.setTransacoes(tipoTransacaoAtualizado.getTransacoes());
 
-        return tipoTransacaoMapper.toDTO(tipoTransacaoRepository.save(tipoTransacaoMapper.toEntity(tipoDTO)));
+        return TipoTransacaoMapper.INSTANCE
+                .toDTO(tipoTransacaoRepository.save(TipoTransacaoMapper.INSTANCE.toEntity(tipoDTO)));
     }
 
     @Override
     public void deletarTipoTransacao(Long id) {
+        
         TipoTransacaoDTO tipoDTO = buscarPorId(id);
-        tipoTransacaoRepository.delete(tipoTransacaoMapper.toEntity(tipoDTO));
+        tipoTransacaoRepository.delete(TipoTransacaoMapper.INSTANCE.toEntity(tipoDTO));
     }
 
     @Override
     public TipoTransacaoDTO buscarPorId(Long id) {
+        
         Optional<TipoTransacao> tipoTransacao = tipoTransacaoRepository.findById(id);
-        return tipoTransacao.map(tipoTransacaoMapper::toDTO)
+        
+        return tipoTransacao.map(TipoTransacaoMapper.INSTANCE::toDTO)
                 .orElseThrow(() -> new RuntimeException("Tipo de Transação com o ID " + id + " não encontrado."));
     }
 
     @Override
     public List<TipoTransacaoDTO> listarTodos() {
+        
         return tipoTransacaoRepository.findAll().stream()
-                .map(tipoTransacaoMapper::toDTO)
+                .map(TipoTransacaoMapper.INSTANCE::toDTO)
                 .toList();
     }
 }

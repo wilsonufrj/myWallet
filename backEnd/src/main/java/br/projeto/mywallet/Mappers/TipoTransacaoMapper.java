@@ -7,6 +7,7 @@ package br.projeto.mywallet.Mappers;
 import br.projeto.mywallet.DTO.TipoTransacaoDTO;
 import br.projeto.mywallet.Model.TipoTransacao;
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 /**
  *
@@ -14,6 +15,9 @@ import org.mapstruct.Mapper;
  */
 @Mapper(uses = TransacaoMapper.class)
 public interface TipoTransacaoMapper {
+    
+    TipoTransacaoMapper INSTANCE = Mappers.getMapper(TipoTransacaoMapper.class);
+
     
     TipoTransacaoDTO toDTO(TipoTransacao tipoTransacao);
     
