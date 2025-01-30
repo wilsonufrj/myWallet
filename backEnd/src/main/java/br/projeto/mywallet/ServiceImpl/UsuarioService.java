@@ -5,6 +5,7 @@ import br.projeto.mywallet.Mappers.UsuarioMapper;
 import br.projeto.mywallet.Model.Usuario;
 import br.projeto.mywallet.Service.IUsuarioService;
 import br.projeto.mywallet.repository.IUsuarioRepository;
+import java.util.HashSet;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
+        
+        usuarioDTO.setCarteiras(new HashSet<>());
         
         Usuario usuario = UsuarioMapper.INSTANCE.toEntity(usuarioDTO);
         

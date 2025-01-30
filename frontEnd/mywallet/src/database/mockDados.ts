@@ -32,7 +32,14 @@ export const Ganhos: ITransacao[] = [
 
 
 export const Gastos: ITransacaoGastos[] = [
-    { id: 1, status: "Nao_Pago", data: new Date("2025-01-29").toISOString(), descricao: "Gasto aleatório 1", valor: 500.00, banco: "Nubank", responsavel: "Wilson", tipoGasto: "Crédito" },
+    {
+        id: 1, status: "Nao_Pago",
+        data: new Date("2025-01-29").toISOString(),
+        descricao: "Gasto aleatório 1",
+        valor: 500.00, banco: "Nubank",
+        responsavel: "Wilson",
+        tipoGasto: "Crédito"
+    },
     { id: 2, status: "Pago", data: new Date("2025-01-06").toISOString(), descricao: "Gasto aleatório 2", valor: 300.00, banco: "Nubank", responsavel: "Wilson", tipoGasto: "Crédito" },
 ];
 

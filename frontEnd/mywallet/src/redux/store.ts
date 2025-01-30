@@ -1,10 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import walletReducer from '../pages/Home/walletSlice' 
 import homeSlice from '../pages/Home/homeSlice'
 
 export const store = configureStore({
   reducer: {
-    home:homeSlice
+    home: homeSlice
   },
 })
 
