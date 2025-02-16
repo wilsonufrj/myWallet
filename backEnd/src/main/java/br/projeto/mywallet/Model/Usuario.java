@@ -10,15 +10,21 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  *
  * @author wilsonramos
  */
+@Data
 @Entity
 @Table(name = "Usuario")
-public class Usuario {
+public class Usuario implements UserDetails {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
@@ -66,52 +72,40 @@ public class Usuario {
         this.carteiras = carteiras;
     }
 
-    public Long getId() {
-        return id;
+
+     @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(()->"read");
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public String getPassword() {
+        return this.senha;
     }
 
-    public String getNome() {
-        return nome;
+    @Override
+    public String getUsername() {
+        return this.nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public Set<Carteira> getCateiras() {
-        return carteiras;
-    }
-
-    public void setCateiras(Set<Carteira> carteiras) {
-        this.carteiras = carteiras;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
     
 }

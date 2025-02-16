@@ -1,8 +1,8 @@
 -- Inserindo Usuários
 INSERT INTO Usuario (id,nome, data_nascimento, email, senha)
 VALUES
-(1,'Wilson', '1990-05-15', 'wilson@example.com', 'teste123'),
-(2,'Gabrielle', '1995-08-25', 'gabrielle@example.com', 'teste123');
+(1,'wilson', '1990-05-15', 'wilson@example.com', '$2y$10$oUSvobVua2UJLGEK/HHHIuxl1HZ9E8d8dZuOGtpOnVxqfNn68zeGO'),
+(2,'gabrielle', '1995-08-25', 'gabrielle@example.com', '$2y$10$oUSvobVua2UJLGEK/HHHIuxl1HZ9E8d8dZuOGtpOnVxqfNn68zeGO');
 
 -- Inserindo Bancos
 INSERT INTO Banco (nome)
