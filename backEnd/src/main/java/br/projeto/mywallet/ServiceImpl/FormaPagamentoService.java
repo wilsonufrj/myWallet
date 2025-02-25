@@ -15,27 +15,29 @@ import java.util.Optional;
 @Service
 public class FormaPagamentoService implements IFormaPagamentoService {
 
-
     @Autowired
     private IFormaPagamentoRepository formaPagamentoRepository;
 
+    @Autowired
+    private FormaPagamentoMapper formaPagamentoMapper = FormaPagamentoMapper.INSTANCE;
+
     @Override
     public FormaPagamentoDTO criarFormaPagamento(FormaPagamentoDTO formaPagamentoDTO) {
-        FormaPagamento formaPagamento = FormaPagamentoMapper.INSTANCE.toEntity(formaPagamentoDTO);
-        return FormaPagamentoMapper.INSTANCE.toDTO(formaPagamentoRepository.save(formaPagamento));
+        FormaPagamento formaPagamento = formaPagamentoMapper.toEntity(formaPagamentoDTO);
+        return formaPagamentoMapper.toDTO(formaPagamentoRepository.save(formaPagamento));
     }
 
     @Override
     public FormaPagamentoDTO buscarFormaPagamentoPorId(Long id) {
         Optional<FormaPagamento> formaPagamento = formaPagamentoRepository.findById(id);
-        return formaPagamento.map(FormaPagamentoMapper.INSTANCE::toDTO)
+        return formaPagamento.map(formaPagamentoMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Forma de pagamento não encontrada com ID: " + id));
     }
 
     @Override
     public List<FormaPagamentoDTO> listarTodasFormasPagamento() {
         return formaPagamentoRepository.findAll().stream()
-                .map(FormaPagamentoMapper.INSTANCE::toDTO)
+                .map(formaPagamentoMapper::toDTO)
                 .toList();
     }
 
@@ -46,14 +48,14 @@ public class FormaPagamentoService implements IFormaPagamentoService {
         formaPagamentoDTO.setNome(formaPagamentoAtualizada.getNome());
         formaPagamentoDTO.setTransacoes(formaPagamentoAtualizada.getTransacoes());
 
-        return FormaPagamentoMapper.INSTANCE.toDTO(
-                formaPagamentoRepository.save(FormaPagamentoMapper.INSTANCE.toEntity(formaPagamentoDTO))
+        return formaPagamentoMapper.toDTO(
+                formaPagamentoRepository.save(formaPagamentoMapper.toEntity(formaPagamentoDTO))
         );
     }
 
     @Override
     public void deletarFormaPagamento(Long id) {
         FormaPagamentoDTO formaPagamentoDTO = buscarFormaPagamentoPorId(id);
-        formaPagamentoRepository.delete(FormaPagamentoMapper.INSTANCE.toEntity(formaPagamentoDTO));
+        formaPagamentoRepository.delete(formaPagamentoMapper.toEntity(formaPagamentoDTO));
     }
 }

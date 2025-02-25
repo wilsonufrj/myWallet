@@ -17,13 +17,16 @@ public class TransacaoService implements ITransacaoService {
 
     @Autowired
     private ITransacaoRepository transacaoRepository;
-
+    
+    @Autowired
+    private TransacaoMapper transacaoMapper = TransacaoMapper.INSTANCE;
+    
     @Override
     public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO) {
         
-        Transacao transacao = TransacaoMapper.INSTANCE.toEntity(transacaoDTO);
+        Transacao transacao = transacaoMapper.toEntity(transacaoDTO);
         
-        return TransacaoMapper.INSTANCE
+        return transacaoMapper
                 .toDTO(transacaoRepository.save(transacao));
     }
 
@@ -43,8 +46,8 @@ public class TransacaoService implements ITransacaoService {
         transacaoDTO.setMes(transacaoAtualizada.getMes());
         transacaoDTO.setTipoTransacao(transacaoAtualizada.getTipoTransacao());
 
-        return TransacaoMapper.INSTANCE
-                .toDTO(transacaoRepository.save(TransacaoMapper.INSTANCE.toEntity(transacaoDTO)));
+        return transacaoMapper
+                .toDTO(transacaoRepository.save(transacaoMapper.toEntity(transacaoDTO)));
     }
 
     @Override
@@ -52,7 +55,7 @@ public class TransacaoService implements ITransacaoService {
         
         TransacaoDTO transacaoDTO = buscarPorId(id);
         
-        transacaoRepository.delete(TransacaoMapper.INSTANCE.toEntity(transacaoDTO));
+        transacaoRepository.delete(transacaoMapper.toEntity(transacaoDTO));
     }
 
     @Override
@@ -60,7 +63,7 @@ public class TransacaoService implements ITransacaoService {
         
         Optional<Transacao> transacao = transacaoRepository.findById(id);
         
-        return transacao.map(TransacaoMapper.INSTANCE::toDTO)
+        return transacao.map(transacaoMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Transação com ID " + id + " não encontrada."));
     }
 
@@ -68,7 +71,7 @@ public class TransacaoService implements ITransacaoService {
     public List<TransacaoDTO> listarTodas() {
         
         return transacaoRepository.findAll().stream()
-                .map(TransacaoMapper.INSTANCE::toDTO)
+                .map(transacaoMapper::toDTO)
                 .toList();
     }
 }

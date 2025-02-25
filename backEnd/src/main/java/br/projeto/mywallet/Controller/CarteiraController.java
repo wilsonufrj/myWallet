@@ -27,6 +27,11 @@ public class CarteiraController {
         return ResponseEntity.ok(carteiraService.buscarCarteiraPorId(id));
     }
 
+    @GetMapping("/usuario")
+    public ResponseEntity<List<CarteiraDTO>> buscaCarteiraPorUsuario(@RequestBody String nomeUsuario){
+        return ResponseEntity.ok(carteiraService.buscaCarteiraPorUsuario(nomeUsuario));
+    }
+    
     // Listar todas as carteiras
     @GetMapping
     public ResponseEntity<List<CarteiraDTO>> listarTodasCarteiras() {

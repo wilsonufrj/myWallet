@@ -9,5 +9,6 @@ public interface IUsuarioService {
     UsuarioDTO atualizarUsuario(Long id, UsuarioDTO usuarioAtualizadoDTO);
     void deletarUsuario(Long id);
     UsuarioDTO buscarPorId(Long id);
+    Usuario buscaUsuarioPorNome(String nome);
     List<UsuarioDTO> listarTodos();
 }

@@ -16,27 +16,30 @@ public class CarteiraService implements ICarteiraService {
 
     @Autowired
     private ICarteiraRepository carteiraRepository;
-
+    
+    @Autowired
+    private CarteiraMapper carteiraMapper = CarteiraMapper.INSTANCE;
+    
     @Override
     public CarteiraDTO criarCarteira(CarteiraDTO carteiraDTO) {
-        Carteira carteira = CarteiraMapper.INSTANCE.toEntity(carteiraDTO);
-        return CarteiraMapper.INSTANCE.toDTO(carteiraRepository.save(carteira));
+        Carteira carteira = carteiraMapper.toEntity(carteiraDTO);
+        return carteiraMapper.toDTO(carteiraRepository.save(carteira));
     }
 
     @Override
     public CarteiraDTO buscarCarteiraPorId(Long id) {
         
         Optional<Carteira> carteira = carteiraRepository.findById(id);
-        
-        return carteira.map(CarteiraMapper.INSTANCE::toDTO)
-                .orElseThrow(() -> new RuntimeException("Carteira não encontrada com ID: " + id));
+        return carteira.isEmpty()
+                ? null
+                :carteiraMapper.toDTO(carteira.get());
     }
 
     @Override
     public List<CarteiraDTO> listarTodasCarteiras() {
         
         return carteiraRepository.findAll().stream()
-                .map(CarteiraMapper.INSTANCE::toDTO)
+                .map(carteiraMapper::toDTO)
                 .toList();
     }
 
@@ -49,8 +52,8 @@ public class CarteiraService implements ICarteiraService {
         carteiraDTO.setMeses(carteiraAtualizada.getMeses());
         carteiraDTO.setUsuarios(carteiraAtualizada.getUsuarios());
 
-        return CarteiraMapper.INSTANCE
-                .toDTO(carteiraRepository.save(CarteiraMapper.INSTANCE.toEntity(carteiraDTO))
+        return carteiraMapper
+                .toDTO(carteiraRepository.save(carteiraMapper.toEntity(carteiraDTO))
         );
     }
 
@@ -59,6 +62,16 @@ public class CarteiraService implements ICarteiraService {
         
         CarteiraDTO carteiraDTO = buscarCarteiraPorId(id);
         
-        carteiraRepository.delete(CarteiraMapper.INSTANCE.toEntity(carteiraDTO));
+        carteiraRepository.delete(carteiraMapper.toEntity(carteiraDTO));
+    }
+
+    @Override
+    public List<CarteiraDTO> buscaCarteiraPorUsuario(String nomeUsuario) {
+        List<Carteira> carteiras = carteiraRepository.findAll();
+        
+        return carteiras.stream()
+                .filter(carteira-> carteira.getUsuarios().stream().anyMatch(usuario-> usuario.getUsername().equals(nomeUsuario)))
+                .map(carteiraMapper::toDTO)
+                .toList();
     }
 }

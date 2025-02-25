@@ -78,6 +78,40 @@ public class Usuario implements UserDetails {
         return List.of(()->"read");
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<Carteira> getCarteiras() {
+        return carteiras;
+    }
+
+    public void setCarteiras(Set<Carteira> carteiras) {
+        this.carteiras = carteiras;
+    }
+    
+    
+    
     @Override
     public String getPassword() {
         return this.senha;

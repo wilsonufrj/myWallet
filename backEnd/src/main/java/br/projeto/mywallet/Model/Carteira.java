@@ -77,4 +77,18 @@ public class Carteira {
     public void setMeses(List<Mes> meses) {
         this.meses = meses;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Carteira{");
+        sb.append("id=").append(id);
+        sb.append(", nome=").append(nome);
+        sb.append(", usuarios=").append(usuarios);
+        sb.append(", meses=").append(meses);
+        sb.append('}');
+        return sb.toString();
+    }
+    
+    
 }

@@ -14,14 +14,17 @@ import java.util.Optional;
 
 @Service
 public class ResponsavelService implements IResponsavelService {
-    
+
     @Autowired
     private IResponsavelRepository responsavelRepository;
 
+    @Autowired
+    private ResponsavelMapper responsavelMapper = ResponsavelMapper.INSTANCE;
+
     @Override
     public ResponsavelDTO criarResponsavel(ResponsavelDTO responsavelDTO) {
-        Responsavel responsavel = ResponsavelMapper.INSTANCE.toEntity(responsavelDTO);
-        return ResponsavelMapper.INSTANCE.toDTO(responsavelRepository.save(responsavel));
+        Responsavel responsavel = responsavelMapper.toEntity(responsavelDTO);
+        return responsavelMapper.toDTO(responsavelRepository.save(responsavel));
     }
 
     @Override
@@ -31,26 +34,26 @@ public class ResponsavelService implements IResponsavelService {
         responsavelDTO.setNome(responsavelAtualizado.getNome());
         responsavelDTO.setTransacoes(responsavelAtualizado.getTransacoes());
 
-        return ResponsavelMapper.INSTANCE.toDTO(responsavelRepository.save(ResponsavelMapper.INSTANCE.toEntity(responsavelDTO)));
+        return responsavelMapper.toDTO(responsavelRepository.save(responsavelMapper.toEntity(responsavelDTO)));
     }
 
     @Override
     public void deletarResponsavel(Long id) {
         ResponsavelDTO responsavelDTO = buscarPorId(id);
-        responsavelRepository.delete(ResponsavelMapper.INSTANCE.toEntity(responsavelDTO));
+        responsavelRepository.delete(responsavelMapper.toEntity(responsavelDTO));
     }
 
     @Override
     public ResponsavelDTO buscarPorId(Long id) {
         Optional<Responsavel> responsavel = responsavelRepository.findById(id);
-        return responsavel.map(ResponsavelMapper.INSTANCE::toDTO)
+        return responsavel.map(responsavelMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Responsável com o ID " + id + " não encontrado."));
     }
 
     @Override
     public List<ResponsavelDTO> listarTodos() {
         return responsavelRepository.findAll().stream()
-                .map(ResponsavelMapper.INSTANCE::toDTO)
+                .map(responsavelMapper::toDTO)
                 .toList();
     }
 }

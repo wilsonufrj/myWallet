@@ -17,11 +17,14 @@ public class MesService implements IMesService {
 
     @Autowired
     private IMesRepository mesRepository;
-
+    
+    @Autowired
+    private MesMapper mesMapper = MesMapper.INSTANCE;
+    
     @Override
     public MesDTO criarMes(MesDTO mesDTO) {
-        Mes mes = MesMapper.INSTANCE.toEntity(mesDTO);
-        return MesMapper.INSTANCE.toDTO(mesRepository.save(mes));
+        Mes mes = mesMapper.toEntity(mesDTO);
+        return mesMapper.toDTO(mesRepository.save(mes));
     }
 
     @Override
@@ -33,26 +36,26 @@ public class MesService implements IMesService {
         mesDTO.setCarteira(mesAtualizado.getCarteira());
         mesDTO.setTransacoes(mesAtualizado.getTransacoes());
 
-        return MesMapper.INSTANCE.toDTO(mesRepository.save(MesMapper.INSTANCE.toEntity(mesDTO)));
+        return mesMapper.toDTO(mesRepository.save(mesMapper.toEntity(mesDTO)));
     }
 
     @Override
     public void deletarMes(Long id) {
         MesDTO mesDTO = buscarPorId(id);
-        mesRepository.delete(MesMapper.INSTANCE.toEntity(mesDTO));
+        mesRepository.delete(mesMapper.toEntity(mesDTO));
     }
 
     @Override
     public MesDTO buscarPorId(Long id) {
         Optional<Mes> mes = mesRepository.findById(id);
-        return mes.map(MesMapper.INSTANCE::toDTO)
+        return mes.map(mesMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Mês com o ID " + id + " não encontrado."));
     }
 
     @Override
     public List<MesDTO> listarTodos() {
         return mesRepository.findAll().stream()
-                .map(MesMapper.INSTANCE::toDTO)
+                .map(mesMapper::toDTO)
                 .toList();
     }
 }

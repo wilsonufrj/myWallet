@@ -19,14 +19,17 @@ public class UsuarioService implements IUsuarioService {
     @Autowired
     private IUsuarioRepository usuarioRepository;
 
+    @Autowired
+    private UsuarioMapper usuarioMapper = UsuarioMapper.INSTANCE;
+    
     @Override
     public UsuarioDTO criarUsuario(UsuarioDTO usuarioDTO) {
         
         usuarioDTO.setCarteiras(new HashSet<>());
         
-        Usuario usuario = UsuarioMapper.INSTANCE.toEntity(usuarioDTO);
+        Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
         
-        return UsuarioMapper.INSTANCE
+        return usuarioMapper
                 .toDTO(usuarioRepository.save(usuario));
     }
 
@@ -41,8 +44,8 @@ public class UsuarioService implements IUsuarioService {
         usuarioDTO.setSenha(usuarioAtualizado.getSenha());
         usuarioDTO.setCarteiras(usuarioAtualizado.getCarteiras());
 
-        return UsuarioMapper.INSTANCE
-                .toDTO(usuarioRepository.save(UsuarioMapper.INSTANCE.toEntity(usuarioDTO)));
+        return usuarioMapper
+                .toDTO(usuarioRepository.save(usuarioMapper.toEntity(usuarioDTO)));
     }
 
     @Override
@@ -50,7 +53,7 @@ public class UsuarioService implements IUsuarioService {
         
         UsuarioDTO usuarioDTO = buscarPorId(id);
         
-        usuarioRepository.delete(UsuarioMapper.INSTANCE.toEntity(usuarioDTO));
+        usuarioRepository.delete(usuarioMapper.toEntity(usuarioDTO));
     }
 
     @Override
@@ -58,7 +61,7 @@ public class UsuarioService implements IUsuarioService {
         
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         
-        return usuario.map(UsuarioMapper.INSTANCE::toDTO)
+        return usuario.map(usuarioMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Usuário com ID " + id + " não encontrado."));
     }
 
@@ -66,7 +69,17 @@ public class UsuarioService implements IUsuarioService {
     public List<UsuarioDTO> listarTodos() {
         
         return usuarioRepository.findAll().stream()
-                .map(UsuarioMapper.INSTANCE::toDTO)
+                .map(usuarioMapper::toDTO)
                 .toList();
+    }
+
+    @Override
+    public Usuario buscaUsuarioPorNome(String nome) {
+        return usuarioRepository.findAll()
+                .stream()
+                .filter(usuario-> usuario.getUsername().equals(nome))
+                .findFirst()
+                .get();
+                
     }
 }

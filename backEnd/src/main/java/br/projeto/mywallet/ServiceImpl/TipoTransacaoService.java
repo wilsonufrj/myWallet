@@ -18,12 +18,15 @@ public class TipoTransacaoService implements ITipoTransacaoService {
     @Autowired
     private ITipoTransacaoRepository tipoTransacaoRepository;
 
+    @Autowired
+    private TipoTransacaoMapper tipoTransacaoMapper = TipoTransacaoMapper.INSTANCE;
+
     @Override
     public TipoTransacaoDTO criarTipoTransacao(TipoTransacaoDTO tipoTransacaoDTO) {
-        
-        TipoTransacao tipoTransacao = TipoTransacaoMapper.INSTANCE.toEntity(tipoTransacaoDTO);
-        
-        return TipoTransacaoMapper.INSTANCE
+
+        TipoTransacao tipoTransacao = tipoTransacaoMapper.toEntity(tipoTransacaoDTO);
+
+        return tipoTransacaoMapper
                 .toDTO(tipoTransacaoRepository.save(tipoTransacao));
     }
 
@@ -34,31 +37,31 @@ public class TipoTransacaoService implements ITipoTransacaoService {
         tipoDTO.setNome(tipoTransacaoAtualizado.getNome());
         tipoDTO.setTransacoes(tipoTransacaoAtualizado.getTransacoes());
 
-        return TipoTransacaoMapper.INSTANCE
-                .toDTO(tipoTransacaoRepository.save(TipoTransacaoMapper.INSTANCE.toEntity(tipoDTO)));
+        return tipoTransacaoMapper
+                .toDTO(tipoTransacaoRepository.save(tipoTransacaoMapper.toEntity(tipoDTO)));
     }
 
     @Override
     public void deletarTipoTransacao(Long id) {
-        
+
         TipoTransacaoDTO tipoDTO = buscarPorId(id);
-        tipoTransacaoRepository.delete(TipoTransacaoMapper.INSTANCE.toEntity(tipoDTO));
+        tipoTransacaoRepository.delete(tipoTransacaoMapper.toEntity(tipoDTO));
     }
 
     @Override
     public TipoTransacaoDTO buscarPorId(Long id) {
-        
+
         Optional<TipoTransacao> tipoTransacao = tipoTransacaoRepository.findById(id);
-        
-        return tipoTransacao.map(TipoTransacaoMapper.INSTANCE::toDTO)
+
+        return tipoTransacao.map(tipoTransacaoMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("Tipo de Transação com o ID " + id + " não encontrado."));
     }
 
     @Override
     public List<TipoTransacaoDTO> listarTodos() {
-        
+
         return tipoTransacaoRepository.findAll().stream()
-                .map(TipoTransacaoMapper.INSTANCE::toDTO)
+                .map(tipoTransacaoMapper::toDTO)
                 .toList();
     }
 }
