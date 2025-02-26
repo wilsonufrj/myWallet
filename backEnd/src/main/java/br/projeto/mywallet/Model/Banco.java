@@ -30,7 +30,7 @@ public class Banco {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<Transacao> transcacoes;
+    private List<Transacao> transacoes;
     
     public Banco(){}
 
@@ -55,13 +55,12 @@ public class Banco {
         this.nome = nome;
     }
 
-    public List<Transacao> getTranscacoes() {
-        return transcacoes;
+    public List<Transacao> getTransacoes() {
+        return transacoes;
     }
 
-    public void setTranscacoes(List<Transacao> transcacoes) {
-        this.transcacoes = transcacoes;
+    public void setTransacoes(List<Transacao> transacoes) {
+        this.transacoes = transacoes;
     }
-    
     
 }

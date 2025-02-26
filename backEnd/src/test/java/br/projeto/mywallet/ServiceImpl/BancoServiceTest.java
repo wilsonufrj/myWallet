@@ -38,11 +38,11 @@ class BancoDTOServiceTest {
         // Arrange
         BancoDTO bancoDTO = new BancoDTO();
         bancoDTO.setNome("Banco Teste");
-        bancoDTO.setTranscacoes(new ArrayList<>());
+        bancoDTO.setTransacoes(new ArrayList<>());
 
         Banco banco = new Banco();
         banco.setNome("Banco Teste");
-        banco.setTranscacoes(new ArrayList<>());
+        banco.setTransacoes(new ArrayList<>());
 
         when(bancoRepository.save(any(Banco.class))).thenReturn(banco);
 
@@ -60,7 +60,7 @@ class BancoDTOServiceTest {
         // Arrange
         Banco banco = new Banco();
         banco.setNome("Banco Teste");
-        banco.setTranscacoes(new ArrayList<>());
+        banco.setTransacoes(new ArrayList<>());
 
         when(bancoRepository.findById(1L)).thenReturn(Optional.of(banco));
 
@@ -88,11 +88,11 @@ class BancoDTOServiceTest {
         // Arrange
         Banco banco1 = new Banco();
         banco1.setNome("Banco 1");
-        banco1.setTranscacoes(new ArrayList<>());
+        banco1.setTransacoes(new ArrayList<>());
 
         Banco banco2 = new Banco();
         banco2.setNome("Banco 2");
-        banco2.setTranscacoes(new ArrayList<>());
+        banco2.setTransacoes(new ArrayList<>());
 
         List<Banco> bancos = List.of(banco1, banco2);
 
@@ -112,15 +112,15 @@ class BancoDTOServiceTest {
         // Arrange
         Banco banco = new Banco();
         banco.setNome("Banco Original");
-        banco.setTranscacoes(new ArrayList<>());
+        banco.setTransacoes(new ArrayList<>());
         
         Banco bancoAtualizado = new Banco();
         bancoAtualizado.setNome("Banco Atualizado");
-        bancoAtualizado.setTranscacoes(new ArrayList<>());
+        bancoAtualizado.setTransacoes(new ArrayList<>());
         
         BancoDTO bancoDTOAtualizado = new BancoDTO();
         bancoDTOAtualizado.setNome("Banco Atualizado");
-        bancoDTOAtualizado.setTranscacoes(new ArrayList<>());
+        bancoDTOAtualizado.setTransacoes(new ArrayList<>());
 
         when(bancoRepository.findById(1L)).thenReturn(Optional.of(banco));
         when(bancoRepository.save(any(Banco.class))).thenReturn(bancoAtualizado);
@@ -139,7 +139,7 @@ class BancoDTOServiceTest {
     void atualizarBancoDTO_DeveLancarExcecaoQuandoBancoDTONaoEncontrado() {
         BancoDTO bancoAtualizado = new BancoDTO();
         bancoAtualizado.setNome("BancoDTO Atualizado");
-        bancoAtualizado.setTranscacoes(new ArrayList<>());
+        bancoAtualizado.setTransacoes(new ArrayList<>());
 
         when(bancoRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -156,7 +156,7 @@ class BancoDTOServiceTest {
         // Arrange
         Banco banco = new Banco();
         banco.setNome("Banco Teste");
-        banco.setTranscacoes(new ArrayList<>());
+        banco.setTransacoes(new ArrayList<>());
 
         when(bancoRepository.findById(1L)).thenReturn(Optional.of(banco));
         doNothing().when(bancoRepository).delete(any(Banco.class));

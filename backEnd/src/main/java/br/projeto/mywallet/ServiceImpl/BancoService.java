@@ -59,7 +59,7 @@ public class BancoService implements IBancoService {
         BancoDTO bancoDTO = buscarBancoPorId(id);
 
         bancoDTO.setNome(bancoAtualizado.getNome());
-        bancoDTO.setTranscacoes(bancoAtualizado.getTranscacoes());
+        bancoDTO.setTransacoes(bancoAtualizado.getTransacoes());
 
         return bancoMapper
                 .toDTO(bancoRepository.save(bancoMapper.toEntity(bancoDTO))

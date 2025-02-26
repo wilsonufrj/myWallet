@@ -6,7 +6,6 @@ import br.projeto.mywallet.Model.Usuario;
 import br.projeto.mywallet.Service.IUsuarioService;
 import br.projeto.mywallet.repository.IUsuarioRepository;
 import java.util.HashSet;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

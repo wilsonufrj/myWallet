@@ -11,14 +11,14 @@ public class BancoDTO {
     
     private String nome;
    
-    private List<TransacaoDTO> transcacoes;
+    private List<TransacaoDTO> transacoes;
     
     public BancoDTO(){}
 
-    public BancoDTO(Long id, String nome, List<TransacaoDTO> transcacoes) {
+    public BancoDTO(Long id, String nome, List<TransacaoDTO> transacoes) {
         this.id = id;
         this.nome = nome;
-        this.transcacoes = transcacoes;
+        this.transacoes = transacoes;
     }
 
     public Long getId() {
@@ -37,13 +37,12 @@ public class BancoDTO {
         this.nome = nome;
     }
 
-    public List<TransacaoDTO> getTranscacoes() {
-        return transcacoes;
+    public List<TransacaoDTO> getTransacoes() {
+        return transacoes;
     }
 
-    public void setTranscacoes(List<TransacaoDTO> transcacoes) {
-        this.transcacoes = transcacoes;
+    public void setTransacoes(List<TransacaoDTO> transacoes) {
+        this.transacoes = transacoes;
     }
-    
     
 }
