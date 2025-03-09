@@ -15,20 +15,14 @@ public class UsuarioController {
     @Autowired
     private IUsuarioService usuarioService;
 
-    @PostMapping
+    @PostMapping("/criar-usuario")
     public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody UsuarioDTO usuario) {
         return ResponseEntity.ok(usuarioService.criarUsuario(usuario));
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuarioAtualizado) {
-        return ResponseEntity.ok(usuarioService.atualizarUsuario(id, usuarioAtualizado));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
-        usuarioService.deletarUsuario(id);
-        return ResponseEntity.noContent().build();
+    
+    @PostMapping("/login")
+    public ResponseEntity<UsuarioDTO> loginUsuario(@RequestBody UsuarioDTO usuario) throws Exception{
+        return ResponseEntity.ok(usuarioService.login(usuario));
     }
 
     @GetMapping("/{id}")

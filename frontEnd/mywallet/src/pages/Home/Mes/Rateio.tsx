@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-import { ITransacao, ITransacaoGastos } from "../../../database/mockDados";
 import { IDropdown } from "../../../components/TransacaoGastosDialog";
 import { Dropdown } from "primereact/dropdown";
 import { ColumnGroup } from "primereact/columngroup";
@@ -13,7 +12,19 @@ import { adicionarEditarGastos } from "../homeSlice";
 declare interface IPropsRateio {
     gastos: ITransacaoGastos[]
 }
+export interface ITransacao {
+    id: number;
+    data: string;
+    descricao: string;
+    valor: number;
+    tipoGasto: string;
+    banco: string;
+    status: string;
+}
 
+export interface ITransacaoGastos extends ITransacao {
+    responsavel: string;
+}
 const Rateio: React.FC<IPropsRateio> = (props) => {
 
     const dispatch = useAppDispatch();

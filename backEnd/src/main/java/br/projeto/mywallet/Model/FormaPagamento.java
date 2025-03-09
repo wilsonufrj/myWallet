@@ -16,14 +16,14 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "FormaPagamento")
+@Table(name = "forma_pagamento")
 public class FormaPagamento {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
     
-    @Column(name = "nome_forma_pagamento")
+    @Column(name = "nome")
     private String nome;
     
     @OneToMany(

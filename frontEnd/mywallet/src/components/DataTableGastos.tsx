@@ -2,7 +2,6 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Toolbar } from "primereact/toolbar";
 import React, { useState } from "react";
-import { ITransacao, ITransacaoGastos } from "../database/mockDados";
 import { Button } from "primereact/button";
 import TransacaoGastosDialog from "./TransacaoGastosDialog";
 import { useAppDispatch } from "../redux/hooks";
@@ -10,6 +9,7 @@ import { removerGastos } from "../pages/Home/homeSlice";
 import { InputText } from "primereact/inputtext";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
+import { ITransacao, ITransacaoGastos } from "../pages/Home/Mes/Rateio";
 
 
 declare interface IPropsDataTableGanhos {

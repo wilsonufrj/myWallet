@@ -4,38 +4,27 @@ import Planilhas from "./Mes/Planilhas";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Rateio from "./Mes/Rateio";
+import { useEffect } from "react";
+import { useAppDispatch } from "../../redux/hooks";
+import { getDadosUsuario } from "./homeSlice";
+import { Card } from "primereact/card";
 
 
 
 const Home = () => {
 
-    const dados = useSelector((state: RootState) => state.home)
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(getDadosUsuario())
+    })
 
     return (
         <div className="p-4">
-            <div id="Title">
-                <div className="flex justify-content-center font-bold text-5xl m-5">
-                    <span>{dados?.nomeMes}</span>
+            <div className="grid">
+                <div className="col-3">
+                    <Card title="Janeiro"></Card>
                 </div>
-                <TabView>
-                    <TabPanel header="Balanço" leftIcon="pi pi-calculator m-2">
-                        <Balanco
-                            ganhosMes={dados.balanco.ganhosMes}
-                            gasto={dados.balanco.gasto}
-                            saldoAtual={dados.balanco.saldoAtual}
-                            saldoInvestimentoMes={dados.balanco?.saldoInvestimentoMes}
-                            saldoMesSeguinte={dados.balanco.saldoMesSeguinte}
-                            dadosGastos={dados.planilhas.gastos} />
-                    </TabPanel>
-                    <TabPanel header="Planilhas" leftIcon="pi pi-money-bill m-2">
-                        <Planilhas dadosGanhos={dados.planilhas.ganhos}
-                            dadosGastos={dados.planilhas.gastos}
-                        />
-                    </TabPanel>
-                    <TabPanel header="Rateio" leftIcon="pi pi-percentage m-2">
-                        <Rateio gastos={dados.planilhas.gastos} />
-                    </TabPanel>
-                </TabView>
             </div>
         </div>
     )

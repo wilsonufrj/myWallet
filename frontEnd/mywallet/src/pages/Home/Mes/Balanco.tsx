@@ -1,7 +1,7 @@
 import { Card } from "primereact/card";
 import PieChart from "../../../components/PieChart";
 import BarChart from "../../../components/BarChart";
-import { ITransacaoGastos } from "../../../database/mockDados";
+import { ITransacaoGastos } from "./Rateio";
 
 declare interface IProspBalanco {
     ganhosMes: number,

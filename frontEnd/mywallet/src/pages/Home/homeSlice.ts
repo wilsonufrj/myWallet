@@ -1,9 +1,38 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { IBalanco, IDadosMes } from "../../database/mockDadosMes";
-import { Ganhos, Gastos, ITransacao, ITransacaoGastos } from "../../database/mockDados";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { Usuario } from "../../Domain/Usuario";
+import { RootState } from "../../redux/store";
+import axios from "axios";
+
+interface ITransacao {
+    id: number;
+    descricao: string;
+    valor: number;
+    data: string;
+}
+
+interface ITransacaoGastos extends ITransacao {
+    tipoGasto: string;
+    responsavel: string;
+    status: string;
+}
+
+interface IBalanco {
+    saldoAtual: number;
+    saldoInvestimentoMes: number;
+    saldoMesSeguinte: number;
+    gasto: number;
+    ganhosMes: number;
+}
+
+interface IDadosMes {
+    nomeMes: string;
+    balanco: IBalanco;
+    planilhas: {
+        gastos: ITransacaoGastos[];
+        ganhos: ITransacao[];
+    };
+}
 
 const somaValor = (lista: ITransacao[]) => {
     return lista.reduce((total: number, transacao) => total + (transacao.valor ?? 0), 0);
@@ -56,14 +85,21 @@ const atualizaBalanco = (estadoAtual: IDadosMes,
 const initialState: IDadosMes = {
 
     nomeMes: "Janeiro",
-    balanco: atualizaBalanco({} as IDadosMes, Ganhos, Gastos),
+    balanco: {} as IBalanco,
     planilhas: {
-        gastos: [...Gastos],
-        ganhos: [...Ganhos]
+        gastos: [],
+        ganhos: []
     }
 }
 
+export const getDadosUsuario = createAsyncThunk("getDadosUsuario", async (_, { getState }) => {
+    const state = getState() as RootState;
+    const idUsuario: number = state.auth.idUsuario;
 
+    const response = await axios.get(`http://localhost:8082/api/carteira/${idUsuario}`);
+
+    return response.data;
+})
 
 export const homeSlice = createSlice({
     name: "home",
@@ -139,6 +175,11 @@ export const homeSlice = createSlice({
                 },
             };
         },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(getDadosUsuario.fulfilled, (state, action: PayloadAction<Usuario>) => {
+            console.log("Adicionando/Atualizando Gastos", action.payload)
+        })
     }
 })
 

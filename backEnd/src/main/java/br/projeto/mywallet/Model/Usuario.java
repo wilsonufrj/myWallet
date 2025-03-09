@@ -1,5 +1,7 @@
 package br.projeto.mywallet.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,49 +12,44 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
-import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  *
  * @author wilsonramos
  */
-@Data
 @Entity
-@Table(name = "Usuario")
-public class Usuario implements UserDetails {
-    
+@Table(name = "usuario")
+public class Usuario {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "nome",
             nullable = false)
     private String nome;
-    
+
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
-    
+
     @Column(name = "email",
             nullable = false)
     private String email;
-    
+
     @Column(name = "senha",
             nullable = false)
     private String senha;
-    
-    @ManyToMany
+
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-        name = "Usuario_Carteira",
-        joinColumns = @JoinColumn(name = "usuario_id"), 
-        inverseJoinColumns = @JoinColumn(name = "carteira_id")
+            name = "usuario_carteira",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "carteira_id")
     )
+    @JsonIgnoreProperties("usuarios")
     private Set<Carteira> carteiras;
-            
+
     public Usuario() {
     }
 
@@ -63,7 +60,7 @@ public class Usuario implements UserDetails {
             String email,
             String senha,
             Set<Carteira> carteiras) {
-        
+
         this.id = id;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
@@ -72,18 +69,28 @@ public class Usuario implements UserDetails {
         this.carteiras = carteiras;
     }
 
-
-     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(()->"read");
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public LocalDate getDataNascimento() {
@@ -109,37 +116,14 @@ public class Usuario implements UserDetails {
     public void setCarteiras(Set<Carteira> carteiras) {
         this.carteiras = carteiras;
     }
-    
-    
-    
-    @Override
-    public String getPassword() {
-        return this.senha;
-    }
 
-    @Override
-    public String getUsername() {
-        return this.nome;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
+    public void adicionarCarteira(Carteira carteira) {
+        this.carteiras.add(carteira);
+        carteira.getUsuarios().add(this);
     }
     
+     public void removerCarteira(Carteira carteira) {
+        this.carteiras.remove(carteira);
+        carteira.getUsuarios().remove(this);
+    }
 }

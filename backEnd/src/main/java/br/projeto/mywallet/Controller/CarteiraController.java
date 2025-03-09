@@ -7,46 +7,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 @RestController
-@RequestMapping("/api/carteiras")
+@RequestMapping("/api/carteira")
 public class CarteiraController {
 
     @Autowired
     private ICarteiraService carteiraService;
 
-    // Criar nova carteira
-    @PostMapping
-    public ResponseEntity<CarteiraDTO> criarCarteira(@RequestBody CarteiraDTO carteiraDTO) {
-        return ResponseEntity.ok(carteiraService.criarCarteira(carteiraDTO));
+    @PostMapping("/{usuarioId}")
+    public ResponseEntity<CarteiraDTO> criarCarteira(@PathVariable Long usuarioId, @RequestBody CarteiraDTO carteiraDTO) throws Exception {
+        return ResponseEntity.ok(carteiraService.criarCarteira(usuarioId, carteiraDTO));
     }
 
-    // Buscar carteira por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<CarteiraDTO> buscarCarteiraPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(carteiraService.buscarCarteiraPorId(id));
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<List<CarteiraDTO>> buscaCarteirasPorIDUsuario(@PathVariable Long idUsuario) {
+        return ResponseEntity.ok(carteiraService.buscaCarteiraPorIDUsuario(idUsuario));
     }
 
-    @GetMapping("/usuario")
-    public ResponseEntity<List<CarteiraDTO>> buscaCarteiraPorUsuario(@RequestBody String nomeUsuario){
-        return ResponseEntity.ok(carteiraService.buscaCarteiraPorUsuario(nomeUsuario));
-    }
-    
-    // Listar todas as carteiras
-    @GetMapping
-    public ResponseEntity<List<CarteiraDTO>> listarTodasCarteiras() {
-        return ResponseEntity.ok(carteiraService.listarTodasCarteiras());
-    }
-
-    // Atualizar carteira
-    @PutMapping("/{id}")
-    public ResponseEntity<CarteiraDTO> atualizarCarteira(@PathVariable Long id, @RequestBody CarteiraDTO carteiraAtualizada) {
-        return ResponseEntity.ok(carteiraService.atualizarCarteira(id, carteiraAtualizada));
-    }
-
-    // Deletar carteira
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarCarteira(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarCarteira(@PathVariable Long id) throws Exception {
         carteiraService.deletarCarteira(id);
         return ResponseEntity.noContent().build();
     }

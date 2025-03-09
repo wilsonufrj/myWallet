@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ITransacaoGastos } from "../database/mockDados";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputNumber } from "primereact/inputnumber";
@@ -8,6 +7,7 @@ import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 import { useAppDispatch } from "../redux/hooks";
 import { adicionarEditarGastos } from "../pages/Home/homeSlice";
+import { ITransacaoGastos } from "../pages/Home/Mes/Rateio";
 
 declare interface IPropsTransacaoGanhosDialog {
     transacao: ITransacaoGastos
@@ -155,7 +155,7 @@ const TransacaoGastosDialog = (props: IPropsTransacaoGanhosDialog) => {
                     </label>
                     <InputNumber id="valor"
                         value={transacaoData?.valor}
-                        onValueChange={(e) => setTransacaoData({ ...transacaoData, valor: e.target.value })}
+                        onValueChange={(e) => console.log("Deve fazer alguma coisa também")}
                         mode="currency"
                         currency="BRL"
                         locale="pt-BR" />

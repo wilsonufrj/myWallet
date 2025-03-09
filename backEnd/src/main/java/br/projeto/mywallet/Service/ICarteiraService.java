@@ -1,19 +1,14 @@
 package br.projeto.mywallet.Service;
 
 import br.projeto.mywallet.DTO.CarteiraDTO;
+
 import java.util.List;
 
 public interface ICarteiraService {
 
-    CarteiraDTO criarCarteira(CarteiraDTO carteira);
+    CarteiraDTO criarCarteira(Long usuarioId, CarteiraDTO carteira) throws Exception;
 
-    CarteiraDTO buscarCarteiraPorId(Long id); 
+    List<CarteiraDTO> buscaCarteiraPorIDUsuario(Long idUsuario);
 
-    List<CarteiraDTO> buscaCarteiraPorUsuario(String nomeUsuario);
-
-    List<CarteiraDTO> listarTodasCarteiras(); 
-
-    CarteiraDTO atualizarCarteira(Long id, CarteiraDTO carteiraDTO); 
-
-    void deletarCarteira(Long id); 
+    void deletarCarteira(Long id) throws Exception;
 }

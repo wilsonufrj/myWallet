@@ -3,12 +3,12 @@ import { DataTable } from "primereact/datatable";
 import { Toolbar } from "primereact/toolbar";
 import React, { useState } from "react";
 import TransacaoGanhosDialog from "./TransacaoGanhosDialog";
-import { ITransacao } from "../database/mockDados";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { Button } from "primereact/button";
 import { useAppDispatch } from "../redux/hooks";
 import { removerGanhos } from "../pages/Home/homeSlice";
+import { ITransacao } from "../pages/Home/Mes/Rateio";
 
 declare interface IPropsDataTableGanhos {
     transacoes: ITransacao[]

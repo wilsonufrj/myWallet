@@ -17,7 +17,7 @@ import java.util.List;
  * @author wilsonramos
  */
 @Entity
-@Table(name = "Mes")
+@Table(name = "mes")
 public class Mes {
     
     @Id

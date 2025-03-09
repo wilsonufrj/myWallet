@@ -15,7 +15,7 @@ import java.util.List;
  * @author wilsonramos
  */
 @Entity
-@Table(name = "Responsavel")
+@Table(name = "responsavel")
 public class Responsavel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 

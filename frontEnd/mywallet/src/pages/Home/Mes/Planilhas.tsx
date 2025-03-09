@@ -1,6 +1,6 @@
 import DataTableGanhos from "../../../components/DataTableGanhos";
 import DataTableGastos from "../../../components/DataTableGastos";
-import { ITransacao, ITransacaoGastos } from "../../../database/mockDados";
+import { ITransacao, ITransacaoGastos } from "./Rateio";
 
 declare interface IProspPlanilhas {
     dadosGanhos: ITransacao[],

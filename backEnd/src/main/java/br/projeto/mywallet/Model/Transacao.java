@@ -15,7 +15,7 @@ import java.time.LocalDate;
  * @author wilsonramos
  */
 @Entity
-@Table(name = "Transacao" )
+@Table(name = "transacao" )
 public class Transacao {
     
     @Id
