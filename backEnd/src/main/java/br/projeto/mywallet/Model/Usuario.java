@@ -41,12 +41,7 @@ public class Usuario {
             nullable = false)
     private String senha;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "usuario_carteira",
-            joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "carteira_id")
-    )
+    @ManyToMany(mappedBy = "usuarios")
     @JsonIgnoreProperties("usuarios")
     private Set<Carteira> carteiras;
 

@@ -3,17 +3,17 @@ package br.projeto.mywallet.ServiceImpl;
 import br.projeto.mywallet.DTO.CarteiraDTO;
 import br.projeto.mywallet.Mappers.CarteiraMapper;
 import br.projeto.mywallet.Model.Carteira;
+import br.projeto.mywallet.Model.Mes;
 import br.projeto.mywallet.Model.Usuario;
 import br.projeto.mywallet.Service.ICarteiraService;
 import br.projeto.mywallet.repository.ICarteiraRepository;
 import br.projeto.mywallet.repository.IUsuarioRepository;
-import java.util.HashSet;
+
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,26 +56,10 @@ public class CarteiraService implements ICarteiraService {
                 });
 
         carteira.setUsuarios(usuarios);
+        //carteira.setMeses(List.of(new Mes("Março",2025,new ArrayList<>())));
 
-        Carteira carteiraSaved = carteiraRepository.save(carteira);
-        
-        carteiraSaved.getUsuarios().stream()
-                .forEach(usuario -> {
-                    Usuario auxUsuario;
-                    try {
-                        auxUsuario = usuarioRepository.findById(usuarioId)
-                                .orElseThrow(() -> new Exception("Usuario não encontrado"));
 
-                        usuario.adicionarCarteira(carteiraSaved);
-                        usuarioRepository.save(auxUsuario);
-
-                    } catch (Exception ex) {
-                        Logger.getLogger(CarteiraService.class.getName()).log(Level.SEVERE, null, ex.getMessage());
-                    }
-
-                });
-
-        return carteiraMapper.toDTO(carteiraSaved);
+        return carteiraMapper.toDTO(carteiraRepository.save(carteira));
     }
 
 
@@ -85,6 +69,7 @@ public class CarteiraService implements ICarteiraService {
                 .orElseThrow(()-> new Exception("Usuario não encontrado"));
 
         carteira.getUsuarios()
+                .stream()
                 .forEach(usuario -> {
                     usuario.removerCarteira(carteira);
 

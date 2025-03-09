@@ -1,51 +1,49 @@
 package br.projeto.mywallet.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author wilsonramos
  */
 @Entity
 @Table(name = "carteira")
 public class Carteira {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "nome",
-            nullable = false )
+            nullable = false)
     private String nome;
-    
-    @ManyToMany(mappedBy = "carteiras") // Relacionamento bidirecional
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "usuario_carteira",
+            joinColumns = @JoinColumn(name = "carteira_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
     private Set<Usuario> usuarios;
-    
+
     @OneToMany(mappedBy = "carteira",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<Mes> meses;
-    
-    public Carteira(){}
+
+    public Carteira() {
+    }
 
     public Carteira(Long id, String nome, Set<Usuario> usuarios, List<Mes> meses) {
         this.id = id;
         this.nome = nome;
         this.usuarios = usuarios;
         this.meses = meses;
-    }    
-    
+    }
+
     public Long getId() {
         return id;
     }
@@ -89,6 +87,6 @@ public class Carteira {
         sb.append('}');
         return sb.toString();
     }
-    
-    
+
+
 }

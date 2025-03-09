@@ -45,6 +45,13 @@ public class Mes {
         
     }
 
+    public Mes(String nome, Integer ano, List<Transacao> transacoes) {
+        this.nome = nome;
+        this.ano = ano;
+        this.carteira = carteira;
+        this.transacoes = transacoes;
+    }
+
     public Mes(Long id, String nome, Integer ano, Carteira carteira, List<Transacao> transacoes) {
         this.id = id;
         this.nome = nome;
