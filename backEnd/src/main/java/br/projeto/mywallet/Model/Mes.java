@@ -45,7 +45,7 @@ public class Mes {
         
     }
 
-    public Mes(String nome, Integer ano, List<Transacao> transacoes) {
+    public Mes(String nome, Integer ano,Carteira carteira, List<Transacao> transacoes) {
         this.nome = nome;
         this.ano = ano;
         this.carteira = carteira;

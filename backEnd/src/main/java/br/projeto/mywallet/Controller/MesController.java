@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/meses")
+@RequestMapping("/api/mes")
 public class MesController {
 
     @Autowired
     private IMesService mesService;
 
     @PostMapping
-    public ResponseEntity<MesDTO> criarMes(@RequestBody MesDTO mesDTO) {
+    public ResponseEntity<MesDTO> criarMes(@RequestBody MesDTO mesDTO) throws Exception{
         return ResponseEntity.ok(mesService.criarMes(mesDTO));
     }
 
@@ -30,15 +30,5 @@ public class MesController {
     public ResponseEntity<Void> deletarMes(@PathVariable Long id) {
         mesService.deletarMes(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<MesDTO> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(mesService.buscarPorId(id));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<MesDTO>> listarTodos() {
-        return ResponseEntity.ok(mesService.listarTodos());
     }
 }

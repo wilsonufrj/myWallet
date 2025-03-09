@@ -2,8 +2,10 @@ package br.projeto.mywallet.ServiceImpl;
 
 import br.projeto.mywallet.DTO.MesDTO;
 import br.projeto.mywallet.Mappers.MesMapper;
+import br.projeto.mywallet.Model.Carteira;
 import br.projeto.mywallet.Model.Mes;
 import br.projeto.mywallet.Service.IMesService;
+import br.projeto.mywallet.repository.ICarteiraRepository;
 import br.projeto.mywallet.repository.IMesRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,22 @@ public class MesService implements IMesService {
 
     @Autowired
     private IMesRepository mesRepository;
-    
+
+    @Autowired
+    private ICarteiraRepository carteiraRepository;
+
     @Autowired
     private MesMapper mesMapper = MesMapper.INSTANCE;
     
     @Override
-    public MesDTO criarMes(MesDTO mesDTO) {
+    public MesDTO criarMes(MesDTO mesDTO) throws Exception{
+
+        Carteira carteira = carteiraRepository.findById(mesDTO.getCarteira().getId())
+                .orElseThrow(()-> new Exception("Carteira não encontrada"));
+
         Mes mes = mesMapper.toEntity(mesDTO);
+        mes.setCarteira(carteira);
+
         return mesMapper.toDTO(mesRepository.save(mes));
     }
 
@@ -41,8 +52,7 @@ public class MesService implements IMesService {
 
     @Override
     public void deletarMes(Long id) {
-        MesDTO mesDTO = buscarPorId(id);
-        mesRepository.delete(mesMapper.toEntity(mesDTO));
+        mesRepository.deleteById(id);
     }
 
     @Override

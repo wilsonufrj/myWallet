@@ -9,6 +9,7 @@ import br.projeto.mywallet.Service.ICarteiraService;
 import br.projeto.mywallet.repository.ICarteiraRepository;
 import br.projeto.mywallet.repository.IUsuarioRepository;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class CarteiraService implements ICarteiraService {
@@ -56,7 +58,9 @@ public class CarteiraService implements ICarteiraService {
                 });
 
         carteira.setUsuarios(usuarios);
-        //carteira.setMeses(List.of(new Mes("Março",2025,new ArrayList<>())));
+
+        LocalDate dataAtual = LocalDate.now();
+        carteira.setMeses(List.of(new Mes(dataAtual.getMonth().name(),dataAtual.getYear(),carteira,new ArrayList<>())));
 
 
         return carteiraMapper.toDTO(carteiraRepository.save(carteira));
@@ -68,13 +72,11 @@ public class CarteiraService implements ICarteiraService {
         Carteira carteira = carteiraRepository.findById(id)
                 .orElseThrow(()-> new Exception("Usuario não encontrado"));
 
-        carteira.getUsuarios()
-                .stream()
-                .forEach(usuario -> {
-                    usuario.removerCarteira(carteira);
+        Set<Usuario> usuarios = new HashSet<>(carteira.getUsuarios());
 
-                    usuarioRepository.save(usuario);
-                });
+        usuarios.forEach(usuario -> usuario.removerCarteira(carteira));
+
+        usuarioRepository.saveAll(usuarios);
 
         carteiraRepository.deleteById(id);
     }
