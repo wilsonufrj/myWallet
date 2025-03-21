@@ -28,15 +28,16 @@ public class TransacaoDTO {
     
     
     private ResponsavelDTO responsavel;
-    
-    
+
     private MesDTO mes;
     
     private TipoTransacaoDTO tipoTransacao;
-    
+
+    private Boolean isReceita;
+
     public TransacaoDTO(){}
 
-    public TransacaoDTO(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, BancoDTO banco, FormaPagamentoDTO formaPagamento, StatusDTO status, ResponsavelDTO responsavel, MesDTO mes, TipoTransacaoDTO tipoTransacao) {
+    public TransacaoDTO(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, BancoDTO banco, FormaPagamentoDTO formaPagamento, StatusDTO status, ResponsavelDTO responsavel, MesDTO mes, TipoTransacaoDTO tipoTransacao, Boolean isReceita) {
         this.id = id;
         this.data = data;
         this.descricao = descricao;
@@ -48,6 +49,7 @@ public class TransacaoDTO {
         this.responsavel = responsavel;
         this.mes = mes;
         this.tipoTransacao = tipoTransacao;
+        this.isReceita = isReceita;
     }
 
     public Long getId() {
@@ -137,6 +139,12 @@ public class TransacaoDTO {
     public void setTipoTransacao(TipoTransacaoDTO tipoTransacao) {
         this.tipoTransacao = tipoTransacao;
     }
-    
-    
+
+    public Boolean getReceita() {
+        return isReceita;
+    }
+
+    public void setReceita(Boolean receita) {
+        isReceita = receita;
+    }
 }

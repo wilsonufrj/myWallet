@@ -9,6 +9,8 @@ import { Calendar } from "primereact/calendar";
 import { useAppDispatch } from "../redux/hooks";
 import { adicionarEditarGanhos } from "../pages/Home/homeSlice";
 import { ITransacao } from "../pages/Home/Mes/Rateio";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 declare interface PropsTransacaoGanhosDialog {
     transacao: ITransacao
@@ -19,18 +21,21 @@ const TransacaoGanhosDialog = (props: PropsTransacaoGanhosDialog) => {
 
     const dispatch = useAppDispatch();
 
-
+    const { id } = useParams<{ id: string }>();
     const [transacaoData, setTransacaoData] = useState<ITransacao>({} as ITransacao);
-
-    const bancos = [
-        { name: 'Nubank', code: 'Nubank' },
-        { name: 'Itau', code: 'Itau' },
-        { name: 'Picpay', code: 'Picpay' },
-        { name: 'Banco do Brasil', code: 'BancoDoBrasil' }
-    ];
+    const [bancos, setBancos] = useState<any[]>([]);
 
     useEffect(() => {
         setTransacaoData({ ...props.transacao })
+
+        axios.get("http://localhost:8082/api/banco")
+            .then(response => response.data.map((item: any) => {
+                return {
+                    name: item.nome,
+                    code: item.id
+                }
+            }))
+            .then(data => setBancos(data));
     }, [])
 
     const hideDialog = () => {
@@ -41,7 +46,20 @@ const TransacaoGanhosDialog = (props: PropsTransacaoGanhosDialog) => {
         <React.Fragment>
             <Button label="Cancel" icon="pi pi-times" outlined onClick={hideDialog} />
             <Button label="Save" icon="pi pi-check" onClick={() => {
-                dispatch(adicionarEditarGanhos(transacaoData))
+                axios.post("http://localhost:8082/api/transacao", {
+                    data: transacaoData.data,
+                    descricao: transacaoData.descricao,
+                    valor: transacaoData.valor,
+                    quantasVezes: 0,
+                    banco: { id: transacaoData.banco },
+                    formaPagamento: { id: 1 },
+                    status: { id: 1 },
+                    responsavel: { id: id },
+                    mes: { id: id },
+                    tipoTransacao: { id: 1 },
+                    isReceita: true
+                })
+                setTransacaoData({} as ITransacao);
                 props.setDialogState(false);
             }} />
         </React.Fragment>

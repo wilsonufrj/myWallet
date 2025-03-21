@@ -2,9 +2,9 @@ package br.projeto.mywallet.ServiceImpl;
 
 import br.projeto.mywallet.DTO.TransacaoDTO;
 import br.projeto.mywallet.Mappers.TransacaoMapper;
-import br.projeto.mywallet.Model.Transacao;
+import br.projeto.mywallet.Model.*;
 import br.projeto.mywallet.Service.ITransacaoService;
-import br.projeto.mywallet.repository.ITransacaoRepository;
+import br.projeto.mywallet.repository.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,15 +17,51 @@ public class TransacaoService implements ITransacaoService {
 
     @Autowired
     private ITransacaoRepository transacaoRepository;
-    
+
+    @Autowired
+    private IBancoRepository bancoRepository;
+
+    @Autowired
+    private IFormaPagamentoRepository formaPagamentoRepository;
+
+    @Autowired
+    private IStatusRepository statusRepository;
+
+    @Autowired
+    private IResponsavelRepository responsavelRepository;
+
+    @Autowired
+    private IMesRepository mesRepository;
+
+    @Autowired
+    private ITipoTransacaoRepository tipoTransacaoRepository;
+
     @Autowired
     private TransacaoMapper transacaoMapper = TransacaoMapper.INSTANCE;
     
     @Override
-    public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO) {
+    public TransacaoDTO criarTransacao(TransacaoDTO transacaoDTO) throws Exception{
         
         Transacao transacao = transacaoMapper.toEntity(transacaoDTO);
-        
+
+        Banco banco = bancoRepository.findById(transacao.getBanco().getId())
+                .orElseThrow(()-> new Exception("Banco nao encontrado"));
+
+        FormaPagamento formaPagamento = formaPagamentoRepository.findById(transacao.getFormaPagamento().getId())
+                .orElseThrow(()-> new Exception("Forma de pagamento nao encontrada"));
+
+        Status status = statusRepository.findById(transacao.getStatus().getId())
+                .orElseThrow(()-> new Exception("Status nao encontrado"));
+
+        Responsavel responsavel = responsavelRepository.findById(transacao.getResponsavel().getId())
+                .orElseThrow(()-> new Exception("Responsavel nao encontrado"));
+
+        transacao.setBanco(banco);
+        transacao.setFormaPagamento(formaPagamento);
+        transacao.setStatus(status);
+        transacao.setResponsavel(responsavel);
+        transacao.setReceita(true);
+
         return transacaoMapper
                 .toDTO(transacaoRepository.save(transacao));
     }

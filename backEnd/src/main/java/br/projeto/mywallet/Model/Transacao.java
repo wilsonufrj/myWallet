@@ -8,59 +8,63 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 import java.time.LocalDate;
 
 /**
- *
  * @author wilsonramos
  */
 @Entity
-@Table(name = "transacao" )
+@Table(name = "transacao")
 public class Transacao {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "data")
     private LocalDate data;
-    
+
     @Column(name = "descricao")
     private String descricao;
-    
+
     @Column(name = "valor")
     private Float valor;
-    
+
     @Column(name = "quantas_vezes")
     private Integer quantasVezes;
-    
+
+    @Column(name = "receita")
+    private Boolean isReceita;
+
     @ManyToOne
     @JoinColumn(name = "banco_id", nullable = false)
     private Banco banco;
-    
+
     @ManyToOne
-    @JoinColumn(name = "forma_pagamento_id",nullable = false)
+    @JoinColumn(name = "forma_pagamento_id", nullable = false)
     private FormaPagamento formaPagamento;
-    
+
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
-    
+
     @ManyToOne
     @JoinColumn(name = "responsavel_id", nullable = false)
     private Responsavel responsavel;
-    
+
     @ManyToOne
     @JoinColumn(name = "mes_id", nullable = false)
     private Mes mes;
-    
+
     @ManyToOne
     @JoinColumn(name = "tipo_transacao_id", nullable = false)
     private TipoTransacao tipoTransacao;
-    
-    public Transacao(){}
 
-    public Transacao(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, Banco banco, FormaPagamento formaPagamento, Status status, Responsavel responsavel, Mes mes, TipoTransacao tipoTransacao) {
+    public Transacao() {
+    }
+
+    public Transacao(Long id, LocalDate data, String descricao, Float valor, Integer quantasVezes, Boolean isReceita, Banco banco, FormaPagamento formaPagamento, Status status, Responsavel responsavel, Mes mes, TipoTransacao tipoTransacao) {
         this.id = id;
         this.data = data;
         this.descricao = descricao;
@@ -72,6 +76,7 @@ public class Transacao {
         this.responsavel = responsavel;
         this.mes = mes;
         this.tipoTransacao = tipoTransacao;
+        this.isReceita = isReceita;
     }
 
     public Long getId() {
@@ -161,6 +166,12 @@ public class Transacao {
     public void setTipoTransacao(TipoTransacao tipoTransacao) {
         this.tipoTransacao = tipoTransacao;
     }
-    
-    
+
+    public Boolean getReceita() {
+        return isReceita;
+    }
+
+    public void setReceita(Boolean receita) {
+        isReceita = receita;
+    }
 }

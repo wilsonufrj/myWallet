@@ -68,6 +68,7 @@ CREATE TABLE transacao (
     descricao VARCHAR(255) NOT NULL,
     valor FLOAT NOT NULL,
     quantas_vezes INT NOT NULL,
+    receita BOOLEAN NOT NULL,
     banco_id INT NOT NULL,
     forma_pagamento_id INT NOT NULL,
     status_id INT NOT NULL,

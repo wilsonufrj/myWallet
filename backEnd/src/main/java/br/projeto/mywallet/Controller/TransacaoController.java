@@ -18,7 +18,11 @@ public class TransacaoController {
 
     @PostMapping
     public ResponseEntity<TransacaoDTO> criarTransacao(@RequestBody TransacaoDTO transacao) {
-        return ResponseEntity.ok(transacaoService.criarTransacao(transacao));
+        try{
+            return ResponseEntity.ok(transacaoService.criarTransacao(transacao));
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")

@@ -21,7 +21,7 @@ public interface TransacaoMapper {
 
     TransacaoMapper INSTANCE = Mappers.getMapper(TransacaoMapper.class);
     
-    @Mapping(target = "banco", ignore = true)
+   // @Mapping(target = "banco", ignore = true)
     TransacaoDTO toDTO(Transacao transacao);
     
     @Mapping(target = "banco", ignore = true)
