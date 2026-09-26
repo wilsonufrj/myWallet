@@ -2,6 +2,8 @@ package br.projeto.mywallet.ServiceImpl;
 
 import br.projeto.mywallet.DTO.BancoDTO;
 import br.projeto.mywallet.Model.Banco;
+import br.projeto.mywallet.exception.BancoJaExisteException;
+import br.projeto.mywallet.exception.BancoNaoEncontradoException;
 import br.projeto.mywallet.repository.IBancoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,6 +58,24 @@ class BancoDTOServiceTest {
     }
 
     @Test
+    void criarBanco_QuandoNomeJaExistir_DeveLancarBancoJaExisteException() {
+        BancoDTO bancoDTO = new BancoDTO();
+        bancoDTO.setNome("Banco Teste");
+
+        Banco bancoExistente = new Banco();
+        bancoExistente.setNome("Banco Teste");
+
+        when(bancoRepository.findAll()).thenReturn(List.of(bancoExistente));
+
+        BancoJaExisteException exception = assertThrows(
+                BancoJaExisteException.class,
+                () -> bancoService.criarBanco(bancoDTO));
+
+        assertEquals("Banco já existente na base de dados: Banco Teste", exception.getMessage());
+        verify(bancoRepository, never()).save(any(Banco.class));
+    }
+
+    @Test
     void buscarBancoPorId_QuandoExistir_DeveRetornarBancoDTO() {
         // Arrange
         Banco banco = new Banco();
@@ -79,7 +99,11 @@ class BancoDTOServiceTest {
         when(bancoRepository.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> bancoService.buscarBancoPorId(1L));
+        BancoNaoEncontradoException exception = assertThrows(
+                BancoNaoEncontradoException.class,
+                () -> bancoService.buscarBancoPorId(1L));
+
+        assertEquals("Banco não encontrado com ID: 1", exception.getMessage());
         verify(bancoRepository, times(1)).findById(1L);
     }
 
@@ -143,7 +167,7 @@ class BancoDTOServiceTest {
 
         when(bancoRepository.findById(1L)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        BancoNaoEncontradoException exception = assertThrows(BancoNaoEncontradoException.class, () -> {
             bancoService.atualizarBanco(1L, bancoAtualizado);
         });
 

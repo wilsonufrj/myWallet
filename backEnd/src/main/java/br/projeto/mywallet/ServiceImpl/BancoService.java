@@ -4,9 +4,10 @@ import br.projeto.mywallet.DTO.BancoDTO;
 import br.projeto.mywallet.Mappers.BancoMapper;
 import br.projeto.mywallet.Model.Banco;
 import br.projeto.mywallet.Service.IBancoService;
+import br.projeto.mywallet.exception.BancoJaExisteException;
+import br.projeto.mywallet.exception.BancoNaoEncontradoException;
 import br.projeto.mywallet.repository.IBancoRepository;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class BancoService implements IBancoService {
     public BancoDTO criarBanco(BancoDTO banco) {
 
         if (bancoRepository.findAll().stream().anyMatch(bancoAux -> bancoAux.getNome().equals(banco.getNome()))) {
-            throw new RuntimeException("Banco ja existente na base de dados");
+            throw new BancoJaExisteException(banco.getNome());
         }
 
         Banco auxBanco = bancoMapper.toEntity(banco);
@@ -40,7 +41,7 @@ public class BancoService implements IBancoService {
     public BancoDTO buscarBancoPorId(Long id) {
 
         Banco banco = bancoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Banco não encontrado com ID: " + id));
+            .orElseThrow(() -> new BancoNaoEncontradoException(id));
             
         return bancoMapper.toDTO(banco);
     }
