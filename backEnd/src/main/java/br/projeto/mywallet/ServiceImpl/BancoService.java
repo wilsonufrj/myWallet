@@ -39,10 +39,10 @@ public class BancoService implements IBancoService {
     @Override
     public BancoDTO buscarBancoPorId(Long id) {
 
-        Optional<Banco> banco = bancoRepository.findById(id);
-
-        return banco.map(bancoMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("Banco não encontrado com ID: " + id));
+        Banco banco = bancoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Banco não encontrado com ID: " + id));
+            
+        return bancoMapper.toDTO(banco);
     }
 
     @Override
